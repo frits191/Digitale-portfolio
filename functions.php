@@ -23,6 +23,7 @@ class functions {
         return $DBconnect;
     }
     
+    function executeQuery($SQLstring) {
         $DBconnect = $this->connect();
         $QueryResult = mysqli_query($DBconnect, $SQLString);
         if ($QueryResult === false) {
