@@ -26,3 +26,8 @@ $functions->FUNCTIENAAM();
 *Hoe roep ik mijn functie toe binnen functies.php?
 Als je in het bestand functions.php een eerder gemaakte functie nodig hebt gebruik je het volgende:
 $this->FUNCTIENAAM();
+
+<*Database SQL*>
+Om een query uit te voeren gebruik je de volgende functionaliteit:
+$SQLstring = "SQL HIER"; //Gebruik de volledige tabel naam in je sql, de fucntie kan table names niet lezen.
+$QueryResult = $functions->executeQuery($SQLstring);
