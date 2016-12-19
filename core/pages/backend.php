@@ -12,13 +12,7 @@ echo "<head>";
 	echo '<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>';
 echo "</head>";
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/Digitale-portfolio/core/layout/headerbackend.php';
+require_once "core/layout/headerbackend.php";
 
-echo "<div id='container'>";
-	echo "<div id='content'>";
-
-	echo "</div>";
-echo "</div>";
-
-require_once $_SERVER['DOCUMENT_ROOT'] . '/Digitale-portfolio/core/layout/footerbackend.php';
+require_once "core/layout/footerbackend.php";
 ?>
