@@ -4,6 +4,9 @@ Project digitale portfolio door de
 <//Korte beschrijving//>
 Alle pagina's worden opgeroepen in de index.php, alle functies komen in functions.php.
 
+<*Nieuwe pagina aanmaken*>
+Creer een nieuwe pagina en geef dit een bijpassende naam (bijvoorbeeld de naam van de student), en zet deze in de core files.
+
 <*Database login*>
 Login: INF1H
 ww: stenden
