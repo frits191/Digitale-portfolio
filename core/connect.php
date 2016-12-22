@@ -1,6 +1,6 @@
 <?php
 $db_name = "Digitaal_Portfolio";
-$DBconnect = mysqli_connect("192.168.178.25", "INF1H", "stenden1", 'Digitaal_Portfolio');
+$DBconnect = mysqli_connect("localhost", "INF1H", "stenden1");
 //connect to the database
 if ($DBconnect === FALSE) {
 	echo "<p>Unable to connect to the database server.</p>"
