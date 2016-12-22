@@ -1,9 +1,4 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <title>Digitaal Portfolio</title>
@@ -14,30 +9,32 @@ and open the template in the editor.
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     </head>
-    <body>
-        <div id="header">
-            <div id="mainblock">
+    <?php
+        echo "<body>";
+        echo "<div id='header'>";
+            echo "<div id='mainblock'>";
 			
 			
-                <img id='logo' src='../images/header-logo.png' alt='logo'/>
+                echo "<img id='logo' src='../images/header-logo.png' alt='logo'/>";
 			   
-            </div>
-            <div id="userblock">
-                <p>
-                    U bent ingelogd als:<br/>
-                    (Sample text)<br/>
-                    <br/>                    
-                    <a id="userlink" href="">Uitloggen</a>
-                </p>
-            </div>
-            <div id="downblock">
-                <div class="item-add">
-                     <img src="../images/header-maptoevoegen.png" alt="map"/> 
-                </div>
-                <div class="item-add">
-                    <img src="../images/header-itemtoevoegen.png" alt="item"/>
-                </div>
-            </div>
-        </div>
-    </body>
+            echo "</div>";
+            echo "<div id='userblock'>";
+               echo " <p>";
+                    echo "U bent ingelogd als:<br/>";
+                    echo "(Sample text)<br/>";
+                    echo "<br/>             "       ;
+                    echo "<a id='userlink' href=''>Uitloggen</a>";
+                echo "</p>";
+            echo "</div>";
+            echo "<div id='downblock'>";
+                echo "<div class='item-add'>";
+                     echo "<img src='../images/header-maptoevoegen.png' alt='map'/>" ;
+                echo "</div>";
+                echo "<div class='item-add'>";
+                    echo "<img src='../images/header-itemtoevoegen.png' alt='item'/>";
+                echo "</div>";
+            echo "</div>";
+        echo "</div>";
+    echo "</body>";
+    ?>
 </html>
