@@ -16,11 +16,13 @@
     <IncludeDebugInformation>false</IncludeDebugInformation>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="backend.php" />
     <Compile Include="core\connect.php" />
+    <Compile Include="core\layout\footerbackend.php" />
     <Compile Include="core\layout\footer.php" />
+    <Compile Include="core\layout\headerbackend.php" />
     <Compile Include="core\layout\header.php" />
     <Compile Include="core\pages\bram.php" />
-    <Compile Include="core\pages\backend.php" />
     <Compile Include="core\pages\dennis.php" />
     <Compile Include="core\pages\home.php" />
     <Compile Include="core\pages\jasper.php" />

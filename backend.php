@@ -5,9 +5,9 @@ echo "<div id='container'>";
 		require ('core/layout/headerbackend.php');
 
 		if (isset($_SESSION["ID"])) {
-			if (isset($SESSIOn["email"])) {
+			if (isset($SESSION["email"])) {
 				$ID = $_SESSION["ID"];
-				$email = $_SESSIOn["email"];
+				$email = $_SESSION["email"];
 			} else {
 				header ('Location: index.php?page=home');
 				exit();

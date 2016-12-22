@@ -29,5 +29,5 @@ $this->FUNCTIENAAM();
 
 <*Database SQL*>
 Om een query uit te voeren gebruik je de volgende functionaliteit:
-$SQLstring = "SQL HIER"; //Gebruik de volledige tabel naam in je sql, de fucntie kan table names niet lezen.
+$SQLstring = "SQL HIER"; //Gebruik de volledige tabel naam in je sql, de functie kan table names niet lezen.
 $QueryResult = $functions->executeQuery($SQLstring);
