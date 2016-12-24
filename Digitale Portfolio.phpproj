@@ -1,9 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Name>Digitale Portfolio</Name>
-    <ProjectGuid>{d395cf28-1d60-442a-abea-878e0f08ec88}</ProjectGuid>
+    <ProjectGuid>{c328ae09-a373-4aa8-a378-bf8e60750b6d}</ProjectGuid>
     <RootNamespace>
     </RootNamespace>
     <OutputType>Library</OutputType>
@@ -16,20 +15,40 @@
     <IncludeDebugInformation>false</IncludeDebugInformation>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="backend.php" />
-    <Compile Include="core\connect.php" />
-    <Compile Include="core\layout\footerbackend.php" />
+    <Compile Include="core\images\background.png" />
+    <Compile Include="core\images\header-achtergrond.png" />
+    <Compile Include="core\images\header-balk.png" />
+    <Compile Include="core\images\header-itemtoevoegen.png" />
+    <Compile Include="core\images\header-logo.png" />
+    <Compile Include="core\images\header-maptoevoegen.png" />
+    <Compile Include="core\images\new-layout-portfolio-backend_0001_Word-logo.png" />
+    <Compile Include="core\images\new-layout-portfolio-backend_0002_Map-icon--kopie.png" />
+    <Compile Include="core\images\new-layout-portfolio-backend_0008_Logo.png" />
+    <Compile Include="core\images\new-layout-portfolio-backend_0014_Prullenmand-kopie-5.png" />
+    <Compile Include="core\images\new-layout-portfolio-backend_0015_Publisch-icon-kopie-5.png" />
+    <Compile Include="core\images\new-layout-portfolio-backend_0025_Publisch-icon.png" />
+    <Compile Include="core\images\new-layout-portfolio-backend_0031_Vorm-1.png" />
+    <Compile Include="core\images\new-layout-portfolio-backend_0033_new-folder.png" />
+    <Compile Include="core\images\new-layout-portfolio-backend_0034_item-teovoegen.png" />
+    <Compile Include="core\images\new-layout-portfolio-backend_0049_Menu-rechts.png" />
     <Compile Include="core\layout\footer.php" />
-    <Compile Include="core\layout\headerbackend.php" />
+    <Compile Include="core\layout\footerbackend.php" />
+    <Compile Include="core\layout\header.css" />
     <Compile Include="core\layout\header.php" />
+    <Compile Include="core\layout\headerbackend.php" />
+    <Compile Include="core\layout\menu.css" />
+    <Compile Include="core\layout\menubackend.php" />
     <Compile Include="core\pages\bram.php" />
     <Compile Include="core\pages\dennis.php" />
     <Compile Include="core\pages\home.php" />
     <Compile Include="core\pages\jasper.php" />
     <Compile Include="core\pages\julian.php" />
+    <Compile Include="core\pages\maarten.php" />
     <Compile Include="core\pages\maurice.php" />
     <Compile Include="core\pages\rick.php" />
     <Compile Include="core\pages\stan.php" />
+    <Compile Include="core\connect.php" />
+    <Compile Include="core\functions.php" />
     <Compile Include="css\bootstrap-theme.css" />
     <Compile Include="css\bootstrap-theme.css.map" />
     <Compile Include="css\bootstrap-theme.min.css" />
@@ -38,7 +57,11 @@
     <Compile Include="css\bootstrap.css.map" />
     <Compile Include="css\bootstrap.min.css" />
     <Compile Include="css\bootstrap.min.css.map" />
+    <Compile Include="css\header.css" />
     <Compile Include="css\style.css" />
+    <Compile Include="database\createaccount.sql" />
+    <Compile Include="database\createdatabase.sql" />
+    <Compile Include="database\erd screenshot.png" />
     <Compile Include="fonts\glyphicons-halflings-regular.eot" />
     <Compile Include="fonts\glyphicons-halflings-regular.svg" />
     <Compile Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -52,15 +75,22 @@
     <Compile Include="nbproject\private\private.xml" />
     <Compile Include="nbproject\project.properties" />
     <Compile Include="nbproject\project.xml" />
-    <Compile Include="core\functions.php" />
+    <Compile Include="backend.php" />
+    <Compile Include="Digitale Portfolio.phpproj" />
+    <Compile Include="Digitale Portfolio.sln" />
     <Compile Include="index.php" />
     <Compile Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include=".vs\Digitale portfolio\v14" />
+    <Folder Include=".vs\Digitale portfolio" />
+    <Folder Include=".vs" />
+    <Folder Include="core\images" />
     <Folder Include="core\layout" />
     <Folder Include="core\pages" />
     <Folder Include="core" />
     <Folder Include="css" />
+    <Folder Include="database" />
     <Folder Include="fonts" />
     <Folder Include="js" />
     <Folder Include="nbproject\private" />

@@ -1,5 +1,5 @@
 <?php
-$db_name = "Digitaal_Portfolio";
+$db_name = "digitaal_portfolio";
 $DBconnect = mysqli_connect("localhost", "INF1H", "stenden1");
 //connect to the database
 if ($DBconnect === FALSE) {
