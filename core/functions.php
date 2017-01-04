@@ -2,44 +2,41 @@
 
 class functions {
     function executeQuery($SQLstring) {
-        $QueryResult = mysqli_query($DBconnect, $SQLString);
+		global $DBconnect;
+
+        $QueryResult = mysqli_query($DBconnect, $SQLstring);
         if ($QueryResult === false) {
             echo "Error excecuting query.<br>" . mysqli_errno($DBconnect) . ": " . mysqli_error($DBconnect);
-            mysqli_close($DBconnect);
             return;
         }
-        mysqli_close($DBconnect);
         return $QueryResult;
     }
 
 	function login() {
 		//email en password komen vanuit het ingevulde formulier
-		$Email = htmlspecialchars($_POST["E-mail"]);
-		$Password = htmlspecialchars($_POST["Password"]);
+		$email = htmlspecialchars($_POST["e-mail"]);
+		$password = htmlspecialchars($_POST["password"]);
 
-        //aantal rijen checken
-        $SQLString = "SELECT * FROM user WHERE e-mail='" . $Email . "' AND password = '" . $Password . "'";
-		$QueryResult = $this->executeQuery($SQLString);
-        $count = mysqli_num_rows($QueryResult);
+		if (!empty($email) && !empty($password)) {
+			//check of de velden zijn ingevoerd
+			echo $SQLString = "SELECT * FROM user WHERE `e-mail` = '$email' AND password = '$password'";
+			$QueryResult = $this->executeQuery($SQLString);
+			$row = mysqli_fetch_assoc($QueryResult);
 
-        //als er 1 rij is kloppen de email en wachtwoord
-        if ($count === 1){
-            $_SESSION['loggedIn'] = true;
-        } else {
-            return false;
-        }
-
+			//controleer of het wachtwoord end e-mail hetzelfde zijn
+			if ($email === $row["e-mail"] && $password === $row["password"]){
+				$_SESSION['loggedIn'] = true;
+				$_SESSION["e-mail"] = $email;
+				$_SESSION["password"] = $password;
+				$_SESSION['role'] = $row["role"];
+			} else {
+				echo "<br>One or more login details were incorrect, please try again.";
+			}
+		} else {
+			echo "<br>One or more fields are empty, please try again.";
+		}
 	}
 
-    function checkLogin() {
-		//met deze functie check je of de gebruiker is ingelogd (zet hem bovenaan de code)
-        if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == TRUE) {
-            return true;
-        } else {
-            echo "je bent niet ingelogd";
-			return false;
-        }
-    }
 }
 
 ?>
