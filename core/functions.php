@@ -19,7 +19,7 @@ class functions {
 
 		if (!empty($email) && !empty($password)) {
 			//check of de velden zijn ingevoerd
-			echo $SQLString = "SELECT * FROM user WHERE `e-mail` = '$email' AND password = '$password'";
+			$SQLString = "SELECT * FROM user WHERE `e-mail` = '$email' AND password = '$password'";
 			$QueryResult = $this->executeQuery($SQLString);
 			$row = mysqli_fetch_assoc($QueryResult);
 
@@ -27,7 +27,6 @@ class functions {
 			if ($email === $row["e-mail"] && $password === $row["password"]){
 				$_SESSION['loggedIn'] = true;
 				$_SESSION["e-mail"] = $email;
-				$_SESSION["password"] = $password;
 				$_SESSION['role'] = $row["role"];
 			} else {
 				echo "<br>One or more login details were incorrect, please try again.";
