@@ -13,7 +13,7 @@
     height: 100%;
     padding: 14.5px;
     float: left;
-    background-image: url('../images/background.png');
+    background-image: url('../core/images/background.png');
     background-size: cover;
 }
 #userblock{
