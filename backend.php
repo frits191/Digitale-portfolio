@@ -8,8 +8,8 @@ $functions = new functions;
 if (isset($_SESSION["loggedIn"])) {
 	if ($_SESSION["loggedIn"] == false) {
 		//Should be changed to underlying login screen and not an external page
-		//header('Location: core/login.php');
-		//exit();
+		header('Location: core/login.php');
+		exit();
 	}
 }
 
