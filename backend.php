@@ -5,12 +5,23 @@ require('core/functions.php');
 
 $functions = new functions;
 
-if (isset($_SESSION["loggedIn"])) {
-	if ($_SESSION["loggedIn"] == false) {
-		//Should be changed to underlying login screen and not an external page
-		header('Location: core/login.php');
+if ($_GET["p"] !== "login" && $_GET["p"] !== "logout") {
+	if (isset($_SESSION["loggedIn"])) {
+		if ($_SESSION["loggedIn"] == false) {		
+			header('Location: backend.php?p=login');
+			exit();
+		} 	
+	} else {
+		$_SESSION["loggedIn"] = false;
+		header('Location: backend.php?p=login');
 		exit();
 	}
+}
+
+if (empty($_GET["p"])) {
+	//set default page when already logged in
+	header('Location: backend.php?p=home');
+	exit();
 }
 
 echo "<!DOCTYPE html>";
@@ -29,45 +40,75 @@ echo "<!DOCTYPE html>";
 			//temp page for now, will become require to specific get page
 			?>
 			<div id='body' class='container-fluid'>
-            <div class='row'>
-                <div class='col-lg-2'>
-                    <div id='searchbar'>
-                        <form id='search' method='POST' action='#'>
-                            <input type='text' class='searchinput' name='search' size='10' maxlength='120' placeholder='Search'><input type='submit' value='>' class='searchbutton' title='Search'>
-                        </form>
-                    </div>
-                    <div id='content'>
-                        <table class='table table-hover'>
-                            <tr><th>Menu</th></tr>
-                            <tr><td><a href='cijfers.php'>Cijfers</a></td></tr>
-                            <tr><td><a href='projecten.php'>Projecten</a></td></tr>
-                            <tr><td><a href='stages.php'>Stages</a></td></tr>
-                            <tr><td><a href='portfolio.php'>Openbaar portfolio</a></td></tr>
-                            <tr><td><a href='opmerkingen.php'>Opmerkingen</a></td></tr>
-                        </table>
-                    </div>
-                </div>
-                <div class='col-lg-10'>
-                    <nav aria-label='Page navigation'>
-                        <ul class='pagination'>
-                            <li>
-                                <a href='#' title='Previous' aria-label='Previous'>
-                                    <span aria-hidden='true'>&laquo;</span>
-                                </a>
-                            </li>
-                            <li><a href='#'>1</a></li>
-                            <li><a href='#'>2</a></li>
-                            <li><a href='#'>3</a></li>
-                            <li>
-                                <a href='#' title='Next' aria-label='Next'>
-                                    <span aria-hidden='true'>&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+				<div class='row'>
+					<div class='col-lg-2'>
+						<div id='searchbar'>
+							<form id='search' method='POST' action='#'>
+								<input type='text' class='searchinput' name='search' size='10' maxlength='120' placeholder='Search'><input type='submit' value='>' class='searchbutton' title='Search'>
+							</form>
+						</div>
+						<div id='content'>
+							<table class='table table-hover'>
+								<tr><th>Menu</th></tr>
+								<tr><td><a href='cijfers.php'>Cijfers</a></td></tr>
+								<tr><td><a href='projecten.php'>Projecten</a></td></tr>
+								<tr><td><a href='stages.php'>Stages</a></td></tr>
+								<tr><td><a href='portfolio.php'>Openbaar portfolio</a></td></tr>
+								<tr><td><a href='opmerkingen.php'>Opmerkingen</a></td></tr>
+							</table>
+						</div>
+					</div>
 			<?php
+			if ($_GET["p"] == "home") {
+				//HOME
+				?>
+				<div class='col-lg-10'>
+					<nav aria-label='Page navigation'>
+						<ul class='pagination'>
+							<li>
+								<a href='#' title='Previous' aria-label='Previous'>
+									<span aria-hidden='true'>&laquo;</span>
+								</a>
+							</li>
+							<li><a href='#'>1</a></li>
+							<li><a href='#'>2</a></li>
+							<li><a href='#'>3</a></li>
+							<li>
+								<a href='#' title='Next' aria-label='Next'>
+									<span aria-hidden='true'>&raquo;</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+				<?php
+			} 
+			elseif ($_GET["p"] == "login") {
+				//LOGIN											
+				echo "<div class='col-lg-10'>";
+					echo "<form method='post' action='#'>";
+						echo "Login<br><br>";
+						echo "E-mail: <input type='e-mail' name='e-mail' required><br><br>";
+						echo "Password: <input type='password' name='password' required><br><br>";
+						echo "<input type='submit' name='submitLogin'><br><br>";
+					echo "</form>";
+					if (isset($_POST["submitLogin"])) {
+						$functions->login();
+					}
+				echo "</div>";			
+			}
+			elseif ($_GET["p"] == "logout") {
+				//LOGOUT
+				$_SESSION['loggedIn'] = false;
+				$_SESSION["e-mail"] = "";
+				$_SESSION['role'] = "";
+				?>				
+				<div class='col-lg-10'>
+					U bent uitgelogd.
+				</div>
+				<?php
+			}
+			echo "</div>";
 			require ('core/layout/footerbackend.php');
 		echo "</div>";
 	echo "</html>";
