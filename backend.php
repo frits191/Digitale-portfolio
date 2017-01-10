@@ -28,7 +28,7 @@ echo "<!DOCTYPE html>";
 			require ('core/layout/headerbackend.php');
 			//temp page for now, will become require to specific get page
 			?>
-			<div class='container-fluid'>
+			<div id='body' class='container-fluid'>
             <div class='row'>
                 <div class='col-lg-2'>
                     <div id='searchbar'>

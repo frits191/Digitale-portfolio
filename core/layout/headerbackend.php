@@ -1,11 +1,10 @@
-
 <div class='container-fluid'>
 	<div id='header'>
 		<div class='row'>
 			<div class='col-lg-9'>
 				<div id='mainblock'>
 					<a href='http://www.stenden.com' target='_blank' title='Logo stenden'>
-						<img id='logo' src='../Digitale-portfolio/core/images/header-logo.png' alt='logo' />
+						<img id='logo' src='../images/header-logo.png' alt='logo' />
 					</a>
 				</div>
 			</div>
