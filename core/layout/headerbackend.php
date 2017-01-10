@@ -1,10 +1,9 @@
-
 <div class='container-fluid'>
 	<div id='header'>
 		<div class='row'>
 			<div class='col-lg-9'>
 				<div id='mainblock'>
-					<a href='http://www.stenden.com' target='_blank' title='Logo stenden'>
+					<a href='backend.php?p=home' title='Logo stenden'>
 						<img id='logo' src='../Digitale-portfolio/core/images/header-logo.png' alt='logo' />
 					</a>
 				</div>
@@ -17,7 +16,7 @@
 						(Sample text)
 						<br />
 						<br />
-						<a id='userlink' href='#'>Uitloggen</a>
+						<a id='userlink' href='backend.php?p=logout'>Uitloggen</a>
 					</p>
 				</div>
 			</div>

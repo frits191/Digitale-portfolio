@@ -28,6 +28,8 @@ class functions {
 				$_SESSION['loggedIn'] = true;
 				$_SESSION["e-mail"] = $email;
 				$_SESSION['role'] = $row["role"];
+				header ('Location: backend.php?p=home');
+				exit();
 			} else {
 				echo "<br>One or more login details were incorrect, please try again.";
 			}
