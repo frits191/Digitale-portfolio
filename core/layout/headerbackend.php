@@ -1,21 +1,40 @@
-<?php
-	echo "<div id='header'>";
-        echo "<div id='menu'>";
-            echo "<div id='searchbar'>";
-                echo "<form id='search' method='POST' action='#'>";
-                    echo "<input type='text' class='searchinput' name='search' size='10' maxlength='120' placeholder='Search'><input type='submit' value='>' class='searchbutton'>";
-                echo "</form>";
-            echo "</div>";
-            echo "<div id='content'>";
-                echo "<table class='table table-hover'>";
-                    echo "<tr><th>Menu</th></tr>";
-                    echo "<tr><td><a href='cijfers.php'>Cijfers</a></td></tr>";
-                    echo "<tr><td><a href='projecten.php'>Projecten</a></td></tr>";
-                    echo "<tr><td><a href='stages.php'>Stages</a></td></tr>";
-                    echo "<tr><td><a href='portfolio.php'>Openbaar portfolio</a></td></tr>";
-                    echo "<tr><td><a href='opmerkingen.php'>Opmerkingen</a></td></tr>";
-                echo "</table>";
-            echo "</div>";
-        echo "</div>";
-    echo "</div>";
-?>
+
+<div class='container-fluid'>
+	<div id='header'>
+		<div class='row'>
+			<div class='col-lg-9'>
+				<div id='mainblock'>
+					<a href='http://www.stenden.com' target='_blank' title='Logo stenden'>
+						<img id='logo' src='../Digitale-portfolio/core/images/header-logo.png' alt='logo' />
+					</a>
+				</div>
+			</div>
+			<div class='col-lg-3'>
+				<div id='userblock'>
+					<p>
+						U bent ingelogd als:
+						<br />
+						(Sample text)
+						<br />
+						<br />
+						<a id='userlink' href='#'>Uitloggen</a>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class='row'>
+			<div id='downblock' class='col-lg-12'>
+				<div class='item-add'>
+					<div class='btn-group'>
+						<button type="button" class="btn btn-default" aria-label="Left Align">
+							<span class="glyphicon glyphicon-file" aria-hidden="true" title='Add a new file'></span>
+						</button>
+						<button type="button" class="btn btn-default" aria-label="Left Align">
+							<span class="glyphicon glyphicon-folder-open" aria-hidden="true" title='Add a new folder'></span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
