@@ -104,18 +104,18 @@ table a {
     color: #000000 !important;
 }
 .container-fluid {
-    padding: 0;
-    margin: 0;
+    padding: 0 !important;
+    margin: 0 !important; 
 }
 .col-lg-2 {
     padding-bottom: 0;
     background-color: #c8d8ff;
 }
 .col-lg-3 {
-    padding: 0;
+    padding: 0 !important;
 }
 .col-lg-9 {
-    padding: 0;
+    padding: 0 !important;
 }
 .col-lg-10 {
     padding: 0;

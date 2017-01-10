@@ -35,6 +35,7 @@ echo "<!DOCTYPE html>";
 			echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>';
 			echo '<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>';
 		echo "</head>";
+		echo "<body>";
 		echo "<div id='wrapper'>";
 			require ('core/layout/headerbackend.php');
 			//temp page for now, will become require to specific get page
@@ -111,6 +112,7 @@ echo "<!DOCTYPE html>";
 			echo "</div>";
 			require ('core/layout/footerbackend.php');
 		echo "</div>";
+		echo "</body>";
 	echo "</html>";
 
 ?>
