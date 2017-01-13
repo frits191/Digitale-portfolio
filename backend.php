@@ -1,16 +1,33 @@
 <?php
+
 session_start();
 require('core/connect.php');
 require('core/functions.php');
+require('core/backendPages.php');
 
 $functions = new functions;
+$pages = new Pages;
 
-if ($_GET["p"] !== "login" && $_GET["p"] !== "logout") {
+$p = $_GET["p"];
+
+//Checks if the page is not empty and if the method exists
+if (empty($p)) {
+	header('Location: backend.php?p=home');
+	exit();
+}
+
+if (method_exists($pages, $p) == false) {
+	header('Location: backend.php?p=home');
+	exit();
+}
+
+//Checks if the user is logged in
+if ($p !== "login" && $p !== "logout") {
 	if (isset($_SESSION["loggedIn"])) {
-		if ($_SESSION["loggedIn"] == false) {		
+		if ($_SESSION["loggedIn"] == false) {
 			header('Location: backend.php?p=login');
 			exit();
-		} 	
+		}
 	} else {
 		$_SESSION["loggedIn"] = false;
 		header('Location: backend.php?p=login');
@@ -18,10 +35,16 @@ if ($_GET["p"] !== "login" && $_GET["p"] !== "logout") {
 	}
 }
 
-if (empty($_GET["p"])) {
-	//set default page when already logged in
-	header('Location: backend.php?p=home');
-	exit();
+//When a user is already logged in they are not allowed to go to the login page
+if ($p == "login") {
+	if ($_SESSION["loggedIn"] == true) {
+		header('Location: backend.php?p=home');
+		exit();
+	}
+}
+
+if (isset($_SESSION["role"])) {
+	$role = $_SESSION["role"];
 }
 
 echo "<!DOCTYPE html>";
@@ -35,82 +58,78 @@ echo "<!DOCTYPE html>";
 			echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>';
 			echo '<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>';
 		echo "</head>";
+		echo "<body>";
 		echo "<div id='wrapper'>";
+
 			require ('core/layout/headerbackend.php');
-			//temp page for now, will become require to specific get page
-			?>
-			<div id='body' class='container-fluid'>
-				<div class='row'>
-					<div class='col-lg-2'>
-						<div id='searchbar'>
-							<form id='search' method='POST' action='#'>
-								<input type='text' class='searchinput' name='search' size='10' maxlength='120' placeholder='Search'><input type='submit' value='>' class='searchbutton' title='Search'>
-							</form>
-						</div>
-						<div id='content'>
-							<table class='table table-hover'>
-								<tr><th>Menu</th></tr>
-								<tr><td><a href='cijfers.php'>Cijfers</a></td></tr>
-								<tr><td><a href='projecten.php'>Projecten</a></td></tr>
-								<tr><td><a href='stages.php'>Stages</a></td></tr>
-								<tr><td><a href='portfolio.php'>Openbaar portfolio</a></td></tr>
-								<tr><td><a href='opmerkingen.php'>Opmerkingen</a></td></tr>
-							</table>
-						</div>
-					</div>
-			<?php
-			if ($_GET["p"] == "home") {
-				//HOME
-				?>
-				<div class='col-lg-10'>
-					<nav aria-label='Page navigation'>
-						<ul class='pagination'>
-							<li>
-								<a href='#' title='Previous' aria-label='Previous'>
-									<span aria-hidden='true'>&laquo;</span>
-								</a>
-							</li>
-							<li><a href='#'>1</a></li>
-							<li><a href='#'>2</a></li>
-							<li><a href='#'>3</a></li>
-							<li>
-								<a href='#' title='Next' aria-label='Next'>
-									<span aria-hidden='true'>&raquo;</span>
-								</a>
-							</li>
-						</ul>
-					</nav>
-				</div>
-				<?php
-			} 
-			elseif ($_GET["p"] == "login") {
-				//LOGIN											
+
+			//Menu
+			echo "<div id='body' class='container-fluid'>";
+				echo "<div class='row'>";
+					echo "<div class='col-lg-2'>";
+						echo "<div id='searchbar'>";
+							echo "<form id='search' method='POST' action='#'>";
+								echo "<input type='text' class='searchinput' name='search' size='10' maxlength='120' placeholder='Search'><input type='submit' value='>' class='searchbutton' title='Search'>";
+							echo "</form>";
+						echo "</div>";
+						echo "<div id='content'>";
+							echo "<table class='table table-hover'>";
+								echo "<tr><th>Menu</th></tr>";
+								echo "<tr><td><a href='backend.php?p=cijfers'>Cijfers</a></td></tr>";
+								echo "<tr><td><a href='backend.php?p=projecten'>Projecten</a></td></tr>";
+								echo "<tr><td><a href='backend.php?p=stages'>Stages</a></td></tr>";
+								echo "<tr><td><a href='backend.php?p=portfolio'>Openbaar portfolio</a></td></tr>";
+								echo "<tr><td><a href='backend.php?p=opmerkingen'>Opmerkingen</a></td></tr>";
+								if (isset($_SESSION["role"])) {
+									if ($role == "admin") {
+										echo "<tr><td><a href='backend.php?p=gebruikers'>Gebruikers beheren</a></td></tr>";
+									}
+								}
+							echo "</table>";
+						echo "</div>";
+					echo "</div>";
 				echo "<div class='col-lg-10'>";
-					echo "<form method='post' action='#'>";
-						echo "Login<br><br>";
-						echo "E-mail: <input type='e-mail' name='e-mail' required><br><br>";
-						echo "Password: <input type='password' name='password' required><br><br>";
-						echo "<input type='submit' name='submitLogin'><br><br>";
-					echo "</form>";
-					if (isset($_POST["submitLogin"])) {
-						$functions->login();
+
+					//Checks which page is called and directs traffic to the appropriate page
+					if ($p == "home") {
+						$pages->home();
 					}
-				echo "</div>";			
-			}
-			elseif ($_GET["p"] == "logout") {
-				//LOGOUT
-				$_SESSION['loggedIn'] = false;
-				$_SESSION["e-mail"] = "";
-				$_SESSION['role'] = "";
-				?>				
-				<div class='col-lg-10'>
-					U bent uitgelogd.
-				</div>
-				<?php
-			}
+					elseif ($p == "login") {
+						$pages->login();
+					}
+					elseif ($p == "logout") {
+						$pages->logout();
+					}
+					elseif ($p == "cijfers") {
+						$pages->cijfers();
+					}
+					elseif ($p == "projecten") {
+						$pages->projecten();
+					}
+					elseif ($p == "stages") {
+						$pages->stages();
+					}
+					elseif ($p == "portfolio") {
+						$pages->portfolio();
+					}
+					elseif ($p == "opmerkingen") {
+						$pages->opmerkingen();
+					}
+					elseif ($p == "gebruikers") {
+						if ($role == "admin") {
+							$pages->gebruikers();
+						} else {
+							header ('Location: backend.php?p=home');
+							exit();
+						}
+					}
+				echo "</div>";
 			echo "</div>";
+
 			require ('core/layout/footerbackend.php');
+
 		echo "</div>";
+		echo "</body>";
 	echo "</html>";
 
 ?>
