@@ -75,7 +75,7 @@ echo "<!DOCTYPE html>";
 			echo '<link rel="stylesheet" type="text/css" href="../Digitale-portfolio/css/backend.css">';
 			echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/simplex/bootstrap.min.css">';
 			echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>';
-			echo '<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>';
+			echo '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>';
 		echo "</head>";
 		echo "<body>";
 		echo "<div id='wrapper'>";
@@ -118,9 +118,9 @@ echo "<!DOCTYPE html>";
 												$SQLString = "SELECT title, id FROM portfolio WHERE " . $sqlFollow;
 												$QueryResult = $functions->executeQuery($SQLString);
 												$row = mysqli_fetch_all($QueryResult);
-
+												
 												if (empty($_SESSION["portfolio_id"])) {
-													$_SESSION["portfolio_id"] = $row[0][0];
+													$_SESSION["portfolio_id"] = $row[0][1];
 												}
 
 												for ($i = count($row); $i > 0; $i--) {
@@ -130,6 +130,10 @@ echo "<!DOCTYPE html>";
 												$SQLString = "SELECT title, id FROM portfolio";
 												$QueryResult = $functions->executeQuery($SQLString);
 												$row = mysqli_fetch_all($QueryResult);
+											
+												if (empty($_SESSION["portfolio_id"])) {
+													$_SESSION["portfolio_id"] = $row[0][1];
+												}
 
 												for ($i = count($row); $i > 0; $i--) {
 													echo "<option value='" . $row[$i - 1][1] . "' name='PortfolioID' " . ($_SESSION["portfolio_id"] == $row[$i - 1][1] ? 'selected=\"selected\"' : '') . ">" . $row[$i - 1][0] . "</option>";

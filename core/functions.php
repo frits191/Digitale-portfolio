@@ -19,27 +19,31 @@ class functions {
 
 		if (!empty($email) && !empty($password)) {
 			//check of de velden zijn ingevoerd
-			$SQLString = "SELECT * FROM user WHERE `e-mail` = '$email' AND password = '$password'";
+			$SQLString = "SELECT * FROM user WHERE `e-mail` = '". $email . "'";
 			$QueryResult = $this->executeQuery($SQLString);
 			$row = mysqli_fetch_assoc($QueryResult);
 
 			//controleer of het wachtwoord end e-mail hetzelfde zijn
-			if ($email === $row["e-mail"] && $password === $row["password"]){
-				$_SESSION['loggedIn'] = true;
-				$_SESSION["e-mail"] = $email;
-				$_SESSION['role'] = $row["role"];
-				$_SESSION['name'] = $row["firstName"] . " " . $row["lastName"];
-				$_SESSION['id'] = $row["id"];
+			if ($email === $row["e-mail"]){
+				if (password_verify($password, $row["password"])) {
+					$_SESSION['loggedIn'] = true;
+					$_SESSION["e-mail"] = $email;
+					$_SESSION['role'] = $row["role"];
+					$_SESSION['name'] = $row["firstName"] . " " . $row["lastName"];
+					$_SESSION['id'] = $row["id"];
 
-				if ($_SESSION['role'] == "student") {
-					$SQLString = "SELECT id FROM portfolio WHERE owner_id = '" . $_SESSION["id"] . "'";
-					$QueryResult = $this->executeQuery($SQLString);
-					$row = mysqli_fetch_assoc($QueryResult);		
-					$_SESSION['portfolio_id'] = $row["id"];
+					if ($_SESSION['role'] == "student") {
+						$SQLString = "SELECT id FROM portfolio WHERE owner_id = '" . $_SESSION["id"] . "'";
+						$QueryResult = $this->executeQuery($SQLString);
+						$row = mysqli_fetch_assoc($QueryResult);		
+						$_SESSION['portfolio_id'] = $row["id"];
+					}
+
+					header ('Location: backend.php?p=home');
+					exit();
+				} else {
+					echo "<br>Fout wachtwoord/email combinatie";
 				}
-
-				header ('Location: backend.php?p=home');
-				exit();
 			} else {
 				echo "<br>Fout wachtwoord/email combinatie";
 			}
@@ -50,7 +54,7 @@ class functions {
 
 	function register() {
 		$email = htmlspecialchars($_POST["email"]);
-		$password = htmlspecialchars($_POST["password"]);
+		$password = htmlspecialchars($_POST["password"]);				
 		$fname = htmlspecialchars($_POST["fname"]);
 		$lname = htmlspecialchars($_POST["lname"]);
 		$phone = htmlspecialchars($_POST["phone"]);
@@ -72,8 +76,9 @@ class functions {
 		}
 
 		if (!empty($email) && !empty($password) && !empty($fname) && !empty($lname) && !empty($role)) {
+			$hash = password_hash($password, PASSWORD_DEFAULT);
 			$SQLString = "INSERT INTO user (`e-mail`, `password`, `role`, `firstName`, `lastName`, `phone`) VALUES
-				('" . $email . "', '" . $password . "', '" . $role . "', '" . $fname . "', '" . $lname . "', '" . $phone . "')";
+				('" . $email . "', '" . $hash . "', '" . $role . "', '" . $fname . "', '" . $lname . "', '" . $phone . "')";
 			$this->executeQuery($SQLString);
 
 			$SQLString = "SELECT id FROM user WHERE `e-mail` = '" . $email . "'";
@@ -97,9 +102,9 @@ class functions {
 			if (empty($_POST["folderDesc"])) {
 				$description = "";
 			} else {
-				$description = htmlspecialchars($_POST["folderName"]);
+				$description = htmlspecialchars($_POST["folderDesc"]);
 			}
-			$SQLString = "INSERT INTO project (`title`, `description`, `portfolio_id`) VALUES ('" . $title . "', '" . $description . "', '" . $_SESSION['portfolio_id'] . "')";
+			echo $SQLString = "INSERT INTO project (`title`, `description`, `portfolio_id`) VALUES ('" . $title . "', '" . $description . "', '" . $_SESSION['portfolio_id'] . "')";
 			$QueryResult = $this->executeQuery($SQLString);
 		}
 	}

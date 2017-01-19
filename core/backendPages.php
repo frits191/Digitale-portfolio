@@ -71,8 +71,6 @@ class Pages
 
 		if (isset($_POST["submitFolder"])) {	
 			$functions->createFolder();
-			header('Location backend.php?p=projecten');
-			exit();
 		}
 
 		
@@ -142,7 +140,7 @@ class Pages
                         </div>
                         <div class="modal-body">
                             <p>
-                                <form action='backend.php?p=projecten#' method='POST'>
+                                <form action='backend.php?p=projecten' method='POST'>
                                 <input type='text' name='folderName' placeholder='Title' required><br><br>
 								<input type='text' name='folderDesc' placeholder='Description'>
                             </p>
