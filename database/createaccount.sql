@@ -1,0 +1,4 @@
+CREATE USER 'INF1H'@'localhost' IDENTIFIED BY 'stenden';
+GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP
+ON digitaalportfolio.*
+TO 'INF1H'@'localhost'
