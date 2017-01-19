@@ -1,4 +1,10 @@
-﻿*{
+﻿﻿@media (min-width: 768px) {
+    body {
+        overflow-y: hidden;
+        overflow-x: hidden;
+    }
+}
+body {
     margin: 0;
     padding: 0;
 }
@@ -37,11 +43,6 @@
 a{
     text-decoration: none;
     color: black;
-}
-#menu {
-    width: 170px;
-    height: 600px;
-    background-color: #c8d8ff;
 }
 #searchbar {
     padding-top: 30px;
@@ -104,23 +105,34 @@ table a {
     color: #000000 !important;
 }
 .container-fluid {
-    padding: 0 !important;
-    margin: 0 !important; 
+    padding: 0;
+    margin: 0;
+}
+.row {
+    min-height: 100%;
+}
+#body .row {
+    height: 100%;
 }
 .col-lg-2 {
-    padding-bottom: 0;
+    min-height: 359.2px;
+    height: 100%;
+    padding-right: 0;
     background-color: #c8d8ff;
 }
 .col-lg-3 {
-    padding: 0 !important;
+    padding: 0;
 }
 .col-lg-9 {
-    padding: 0 !important;
+    padding: 0;
 }
 .col-lg-10 {
     padding: 0;
-    height: 359.2px;
+    height: 100%;
     background-color: #f2f2f2;
+}
+#downblock .btn-group {
+    margin-right: 45px;
 }
 .btn-group {
     margin-right: 15px;
@@ -132,7 +144,7 @@ button {
     color: white;
 }
 nav {
-    position: absolute;
+    position: relative;
     width: 100%;
     bottom: 0;
     text-align: center;
@@ -151,8 +163,80 @@ nav {
 #downblock .col-lg-12 {
     background-color: darkblue;
 }
+.files {
+    width: 100%;
+    min-height: 262.4px;
+    height: 100%;
+    float: left;
+}
+.navigation {
+    width: 100%;
+    height: auto;
+    padding-top: 20px;
+    float: left;
+}
+.fileblock {
+    width: 150px;
+    height: 200px;
+    background-color: #c8d8ff;
+    border-radius: 15px;
+    margin-left: 55px;
+    margin-top: 20px;
+    float: left;
+}
+.filemenu {
+    width: 150px;
+    height: 50px;
+    border-radius: 0px 0px 15px 15px;
+    background-color: #85a8ff;
+    margin-top: 29.4px;
+    position: absolute;
+}
+.fileblock .btn-link .glyphicon-file {
+    font-size: 75px;
+    color: white;
+    padding-top: 30.2px;
+    padding-left: 37.5px;
+}
+.fileblock .btn-link .glyphicon-folder-open {
+    font-size: 75px;
+    color: white;
+    padding-top: 30.2px;
+    padding-left: 27.5px;
+}
+.filemenu .btn-group span {
+    font-size: 16px;
+}
+.filemenu .btn-link {
+    color: white;
+}
+.filemenu .btn-link:hover,
+.filemenu .btn-link:active,
+.filemenu .btn-link:focus {
+    color: darkblue;
+}
 .footer {
     background-color: #4f5258;
     color: white;
     text-align: center;
+}
+#banner {
+	padding: 0px;
+}
+#userLogged {
+	padding: 0px;
+}
+#footerContainer {
+	padding: 0px;
+}
+.portfolioSelect {
+	width: 50%;
+	margin-left: 25%;
+	margin-right: 25%;
+	margin-top : 25%;
+}
+.FolderTitle {
+	width: 100%;
+	text-align: center;
+	font-size: 16px;
 }

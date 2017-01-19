@@ -51,14 +51,15 @@ class Pages
 	}
 
 	function logout() {
-		//LOGOUT
-		//$_SESSION['loggedIn'] = false;
-		//$_SESSION["e-mail"] = "";
-		//$_SESSION['role'] = "";
+		//Logout
 		session_unset();
 		session_destroy();
-		
+
 		echo "U bent uitgelogd.";
+	}
+
+	function info() {
+
 	}
 
 	function cijfers() {
@@ -66,7 +67,93 @@ class Pages
 	}
 
 	function projecten() {
+		global $functions;
 
+		if (isset($_POST["submitFolder"])) {	
+			$functions->createFolder();
+			header('Location backend.php?p=projecten');
+			exit();
+		}
+
+		
+		echo "<div class='files'>";
+
+		$functions->getFolders();
+		
+		?>
+		 <!-- Folder template
+		        
+			<div class='clearfix'></div>
+            <div class='fileblock'>
+                <div class='file'>
+                    <button type='button' class='btn-link'>
+                        <span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>
+                    </button>
+                </div>
+                <div class='filemenu'>
+                    <div class='btn-group'>
+                        <button type='button' class='btn btn-link'>
+                            <span class='glyphicon glyphicon-open' aria-hidden='true' title='Upload'></span>
+                        </button>
+                        <button type='button' class='btn btn-link'>
+                            <span class='glyphicon glyphicon-pencil' aria-hidden='true' title='Edit'></span>
+                        </button>
+                        <button type='button' class='btn btn-link'>
+                            <span class='glyphicon glyphicon-trash' aria-hidden='true' title='Delete'></span>
+                        </button>
+                    </div>
+                </div>
+		-->
+
+		<!-- File template
+       
+			<div class='clearfix'></div>
+            <div class='fileblock'>
+                <div class='file'>
+                    <button type='button' class='btn-link'>
+                        <span class='glyphicon glyphicon-file' aria-hidden='true'></span>
+                    </button>
+                </div>
+                <div class='filemenu'>
+                    <div class='btn-group'>
+                        <button type='button' class='btn btn-link'>
+                            <span class='glyphicon glyphicon-open' aria-hidden='true' title='Upload'></span>
+                        </button>
+                        <button type='button' class='btn btn-link'>
+                            <span class='glyphicon glyphicon-pencil' aria-hidden='true' title='Edit'></span>
+                        </button>
+                        <button type='button' class='btn btn-link'>
+                            <span class='glyphicon glyphicon-trash' aria-hidden='true' title='Delete'></span>
+                        </button>
+                    </div>
+                </div>
+		-->
+
+			</div>
+
+			<!-- File uploading -->
+			
+			<div class="modal fade" id="AddFolder" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Maak een nieuw map aan.</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>
+                                <input type='text' name='folderName' placeholder='Title' required><br><br>
+								<input type='text' name='folderDesc' placeholder='Description'>
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <input type='submit' value='Verzend' name='submitFolder'></form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			<?php
+			echo "</div>";
 	}
 
 	function stages() {

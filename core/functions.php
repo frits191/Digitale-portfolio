@@ -29,6 +29,15 @@ class functions {
 				$_SESSION["e-mail"] = $email;
 				$_SESSION['role'] = $row["role"];
 				$_SESSION['name'] = $row["firstName"] . " " . $row["lastName"];
+				$_SESSION['id'] = $row["id"];
+
+				if ($_SESSION['role'] == "student") {
+					$SQLString = "SELECT id FROM portfolio WHERE owner_id = '" . $_SESSION["id"] . "'";
+					$QueryResult = $this->executeQuery($SQLString);
+					$row = mysqli_fetch_assoc($QueryResult);		
+					$_SESSION['portfolio_id'] = $row["id"];
+				}
+
 				header ('Location: backend.php?p=home');
 				exit();
 			} else {
@@ -64,11 +73,62 @@ class functions {
 
 		if (!empty($email) && !empty($password) && !empty($fname) && !empty($lname) && !empty($role)) {
 			$SQLString = "INSERT INTO user (`e-mail`, `password`, `role`, `firstName`, `lastName`, `phone`) VALUES
-				('$email', '$password', '$role', '$fname', '$lname', '$phone')";
+				('" . $email . "', '" . $password . "', '" . $role . "', '" . $fname . "', '" . $lname . "', '" . $phone . "')";
 			$this->executeQuery($SQLString);
+
+			$SQLString = "SELECT id FROM user WHERE `e-mail` = '" . $email . "'";
+			$QueryResult = $this->executeQuery($SQLString);
+			$row = mysqli_fetch_assoc($QueryResult);
+			$id = $row["id"];
+
+			if ($role = "student") {
+				$SQLString = "INSERT INTO portfolio (`title`, `owner_id`) VALUES ('Portfolio " . $fname . "', '" . $id . "')";
+				$this->executeQuery($SQLString);
+			}
 			echo "The account was succesfully created";
 		} else {
 			echo "Please fill out all forms.";
+		}
+	}
+
+	function createFolder() {
+		if (!empty($_POST["folderName"])) {
+			$title = htmlspecialchars($_POST["folderName"]);
+			if (empty($_POST["folderDesc"])) {
+				$description = "";
+			} else {
+				$description = htmlspecialchars($_POST["folderName"]);
+			}
+			$SQLString = "INSERT INTO project (`title`, `description`, `portfolio_id`) VALUES ('" . $title . "', '" . $description . "', '" . $_SESSION['portfolio_id'] . "')";
+			$QueryResult = $this->executeQuery($SQLString);
+		}
+	}
+
+	function getFolders() {
+		$SQLString = "SELECT * FROM project WHERE portfolio_id = '" . $_SESSION["portfolio_id"] . "' ORDER BY id DESC";
+		$QueryResult = $this->executeQuery($SQLString);
+		$row = mysqli_fetch_all($QueryResult);
+
+		for ($i = count($row) - 1;$i >= 0;$i--) {
+			//echo "<div class='clearfix'></div>";
+            echo "<div class='fileblock'>";
+                echo "<div class='file' onclick='location.href = \"backend.php?p=portfolio&project=" . $row[$i][0] . "\";'>";
+                    echo "<button type='button' class='btn-link'>";
+                        echo "<span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>";
+                    echo "</button>";
+                echo "</div>";
+                echo "<div class='filemenu'>";
+					echo "<div class='FolderTitle'>" . $row[$i][1] . "</div>";
+                    echo "<div class='btn-group'>";
+                        echo "<button type='button' class='btn btn-link'>";
+                            echo "<span class='glyphicon glyphicon-pencil' aria-hidden='true' title='Edit'></span>";
+                        echo "</button>";
+                        echo "<button type='button' class='btn btn-link'>";
+                            echo "<span class='glyphicon glyphicon-trash' aria-hidden='true' title='Delete'></span>";
+                        echo "</button>";
+                    echo "</div>";
+                echo "</div>";	
+			echo "</div>";
 		}
 	}
 }
