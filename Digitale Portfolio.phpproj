@@ -16,6 +16,7 @@
     <IncludeDebugInformation>false</IncludeDebugInformation>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="core\backendPages.php" />
     <Compile Include="core\images\background.png" />
     <Compile Include="core\images\header-achtergrond.png" />
     <Compile Include="core\images\header-balk.png" />
