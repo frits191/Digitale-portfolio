@@ -170,21 +170,55 @@ class Pages
 	function gebruikers() {
 		global $functions;
 
-		echo "Voeg een gebruiker toe: <br><br>";
-		echo "<form action='#' method='post'>";
-			echo "<input type='email' name='email' placeholder='E-mail' required><br><br>";
-			echo "<input type='password' name='password' placeholder='Password' required><br><br>";
-			echo "<input type='text' name='fname' placeholder='First name' required><br><br>";
-			echo "<input type='text' name='lname' placeholder='Last name' required><br><br>";
-			echo "<input type='number' name='phone' maxlength='16' placeholder='Phone Number'><br><br>";
-			echo "Role<br><select name='role'><br><br>";
-				echo "<option value='student'>Student</option>";
-				echo "<option value='docent'>Docent</option>";
-				echo "<option value='SLB'>SLB'er</option>";
-				echo "<option value='admin'>Administrator</option>";
-			echo "</select><br><br>";
-			echo "<input type='submit' name='submitRegister'>";
-		echo "</form>";
+		echo "<table class='table table-hover'>";
+			echo "<thead>";
+				echo "<tr>";
+					echo "<th>ID</th>";
+					echo "<th>E-mail</th>";
+					echo "<th>Role</th>";
+					echo "<th>First Name</th>";
+					echo "<th>Last Name</th>";
+					echo "<th>Phone number</th>";
+					echo "<th>Following</th>";
+				echo "</tr>";
+			echo "</thead>";
+			echo "<tbody>";
+				$SQLString = "SELECT * FROM user ORDER BY id ASC";
+				$QueryResult = $functions->executeQuery($SQLString);
+				$row = mysqli_fetch_all($QueryResult);
+
+				foreach ($row as $index) {
+					echo "<tr>";
+						echo "<td>" . $index[0] . "</td>";
+						echo "<td>" . $index[1] . "</td>";
+						echo "<td>" . $index[3] . "</td>";
+						echo "<td>" . $index[4] . "</td>";
+						echo "<td>" . $index[5] . "</td>";
+						echo "<td>" . $index[6] . "</td>";
+						echo "<td>" . $index[7] . "</td>";
+					echo "</tr>";
+				}
+			echo "</tbody>";
+		echo "</table>";
+
+		echo "<button type='button' class='btn btn-default' id='addUserButton'>Voeg gebruiker toe.</button>";
+			echo "<div id='addUser'>";
+				echo "Voeg een gebruiker toe: <br><br>";
+				echo "<form action='#' method='post'>";
+					echo "<input type='email' name='email' placeholder='E-mail' required><br><br>";
+					echo "<input type='password' name='password' placeholder='Password' required><br><br>";
+					echo "<input type='text' name='fname' placeholder='First name' required><br><br>";
+					echo "<input type='text' name='lname' placeholder='Last name' required><br><br>";
+					echo "<input type='number' name='phone' maxlength='16' placeholder='Phone Number'><br><br>";
+					echo "Role<br><select name='role'><br><br>";
+						echo "<option value='student'>Student</option>";
+						echo "<option value='docent'>Docent</option>";
+						echo "<option value='SLB'>SLB'er</option>";
+						echo "<option value='admin'>Administrator</option>";
+					echo "</select><br><br>";
+					echo "<input type='submit' name='submitRegister'>";
+				echo "</form>";
+			echo "</div>";
 
 		if (isset($_POST["submitRegister"])) {
 			echo "<br>";

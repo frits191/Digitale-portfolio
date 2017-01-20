@@ -76,6 +76,7 @@ echo "<!DOCTYPE html>";
 			echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/simplex/bootstrap.min.css">';
 			echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>';
 			echo '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>';
+			echo '<script src="js/scripts.js"></script>';
 		echo "</head>";
 		echo "<body>";
 		echo "<div id='wrapper'>";

@@ -61,7 +61,7 @@ class functions {
 		$role = htmlspecialchars($_POST["role"]);
 
 		if (empty($phone)) {
-			$phone = "NULL";
+			$phone = "";
 		}
 
 		$SQLString = "SELECT `e-mail` FROM user";
@@ -86,9 +86,11 @@ class functions {
 			$row = mysqli_fetch_assoc($QueryResult);
 			$id = $row["id"];
 
-			if ($role = "student") {
+			if ($role == "student") {
 				$SQLString = "INSERT INTO portfolio (`title`, `owner_id`) VALUES ('Portfolio " . $fname . "', '" . $id . "')";
 				$this->executeQuery($SQLString);
+				$folderPath = "portfolio/" . $id . "/";
+				mkdir($folderPath);
 			}
 			echo "The account was succesfully created";
 		} else {
@@ -104,7 +106,7 @@ class functions {
 			} else {
 				$description = htmlspecialchars($_POST["folderDesc"]);
 			}
-			echo $SQLString = "INSERT INTO project (`title`, `description`, `portfolio_id`) VALUES ('" . $title . "', '" . $description . "', '" . $_SESSION['portfolio_id'] . "')";
+			$SQLString = "INSERT INTO project (`title`, `description`, `portfolio_id`) VALUES ('" . $title . "', '" . $description . "', '" . $_SESSION['portfolio_id'] . "')";
 			$QueryResult = $this->executeQuery($SQLString);
 		}
 	}
