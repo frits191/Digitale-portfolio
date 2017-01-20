@@ -99,6 +99,7 @@ class functions {
 	}
 
 	function createFolder() {
+		global $DBconnect;
 		if (!empty($_POST["folderName"])) {
 			$title = htmlspecialchars($_POST["folderName"]);
 			if (empty($_POST["folderDesc"])) {
@@ -108,6 +109,9 @@ class functions {
 			}
 			$SQLString = "INSERT INTO project (`title`, `description`, `portfolio_id`) VALUES ('" . $title . "', '" . $description . "', '" . $_SESSION['portfolio_id'] . "')";
 			$QueryResult = $this->executeQuery($SQLString);
+			$last_id = mysqli_insert_id($DBconnect);
+			$folderPath = "front-end/res/portfolios/" . $_SESSION["portfolio_id"] . "/" . $last_id;
+			mkdir($folderPath);
 		}
 	}
 
