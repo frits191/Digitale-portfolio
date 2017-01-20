@@ -56,6 +56,7 @@ class Pages
 		session_destroy();
 
 		echo "U bent uitgelogd.";
+		header('refresh:2;url=backend.php?p=home');
 	}
 
 	function info() {
@@ -79,30 +80,6 @@ class Pages
 		$functions->getFolders();
 		
 		?>
-		 <!-- Folder template
-		        
-			<div class='clearfix'></div>
-            <div class='fileblock'>
-                <div class='file'>
-                    <button type='button' class='btn-link'>
-                        <span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>
-                    </button>
-                </div>
-                <div class='filemenu'>
-                    <div class='btn-group'>
-                        <button type='button' class='btn btn-link'>
-                            <span class='glyphicon glyphicon-open' aria-hidden='true' title='Upload'></span>
-                        </button>
-                        <button type='button' class='btn btn-link'>
-                            <span class='glyphicon glyphicon-pencil' aria-hidden='true' title='Edit'></span>
-                        </button>
-                        <button type='button' class='btn btn-link'>
-                            <span class='glyphicon glyphicon-trash' aria-hidden='true' title='Delete'></span>
-                        </button>
-                    </div>
-                </div>
-		-->
-
 		<!-- File template
        
 			<div class='clearfix'></div>
@@ -195,7 +172,7 @@ class Pages
 						echo "<td>" . $index[4] . "</td>";
 						echo "<td>" . $index[5] . "</td>";
 						echo "<td>" . $index[6] . "</td>";
-						echo "<td>" . $index[7] . "</td>";
+						echo "<td>" . $index[7] . "</td>";	
 					echo "</tr>";
 				}
 			echo "</tbody>";
