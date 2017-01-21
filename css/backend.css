@@ -243,3 +243,6 @@ nav {
 #addUser {
 	display: none;
 }
+.Pnav {
+	float: left;
+}

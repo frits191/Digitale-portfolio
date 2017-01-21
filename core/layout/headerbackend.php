@@ -32,15 +32,25 @@
 		<div class='row'>
 			<div id='downblock' class='col-lg-12'> 
 			<?php
-			if ($p == "projecten") {
+			if (isset($_GET["project"])) {
+				$project = htmlspecialchars($_GET["project"]);
+				if (is_int($project !== true)) {
+					header('Location: backend.php?p=home');
+					exit();
+				}
+				echo "<div class='item-add'>";
+					echo "<div class='btn-group'>";
+						echo "<button type='button' class='btn btn-default' aria-label='Left Align'>";
+							echo "<span class='glyphicon glyphicon-file' aria-hidden='true' title='Add a new file' data-toggle='modal' data-target='#AddFile'></span>";
+						echo "</button>";					
+					echo "</div>";
+				echo "</div>";
+			} elseif ($p == "projecten") {
 				echo "<div class='item-add'>";
 					echo "<div class='btn-group'>";
 						echo "<button type='button' class='btn btn-default' aria-label='Left Align'>";
 							echo "<span class='glyphicon glyphicon-folder-open' aria-hidden='true' title='Add a new folder' data-toggle='modal' data-target='#AddFolder'></span>";
-						echo "</button>";
-						echo "<button type='button' class='btn btn-default' aria-label='Left Align'>";
-							echo "<span class='glyphicon glyphicon-file' aria-hidden='true' title='Add a new file' data-toggle='modal' data-target='#AddFile'></span>";
-						echo "</button>";						
+						echo "</button>";					
 					echo "</div>";
 				echo "</div>";
 			}
