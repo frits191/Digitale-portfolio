@@ -115,15 +115,62 @@ class functions {
 		}
 	}
 
+	function uploadFile() {
+		global $project;
+
+		$title = htmlspecialchars($_POST["fileTitle"]);
+
+		if (isset($_POST["fileDesc"])) {
+			$description = htmlspecialchars($_POST["fileDesc"]);
+		} else {
+			$description = "";
+		}
+
+		if (empty($title)) {
+			header('Location: backend.php?p=projecten&project=' . $project);
+			exit();
+		}
+
+        $target_dir = "front-end/res/portfolios/" . $_SESSION["portfolio_id"] . "/" . $project . "/";
+
+        if(getimagesize($_FILES["file"]["tmp_name"]) !== false) {
+            if (isset($_FILES["file"])) {
+                $target_file = $target_dir . basename($_FILES["file"]["name"]);
+                $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+                if ($this->imagecheck($imageFileType , $target_file, "file") === true) {
+                    move_uploaded_file($_FILES["file"]["tmp_name"], $target_file);
+                    rename($target_file, $target_dir . $title . "." . $imageFileType);
+
+					$SQLString = "INSERT INTO file (`title`, `type`, `description`, `project_id`) VALUES ('" . $title . "', '." . $imageFileType . "', '" . $description . "', '" . $project . "')";
+					$this->executeQuery($SQLString);
+                } 
+            }
+        }
+	}
+
+	function imagecheck($imageFileType, $target_file, $ImageName) {
+        //check if the file does not exceed the max size
+		if ($_FILES[$ImageName]["size"] > 5000000) {
+			echo "Sorry, your file is too large.<br>";
+            return false;
+        }
+        //Check if the image is a jpg, png, jpeg or gif
+        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
+            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.<br>";
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 	function getFolders() {
 		$SQLString = "SELECT * FROM project WHERE portfolio_id = '" . $_SESSION["portfolio_id"] . "' ORDER BY id DESC";
 		$QueryResult = $this->executeQuery($SQLString);
 		$row = mysqli_fetch_all($QueryResult);
 
 		for ($i = count($row) - 1;$i >= 0;$i--) {
-			//echo "<div class='clearfix'></div>";
             echo "<div class='fileblock'>";
-                echo "<div class='file' onclick='location.href = \"backend.php?p=portfolio&project=" . $row[$i][0] . "\";'>";
+                echo "<div class='file' onclick='location.href = \"backend.php?p=projecten&project=" . $row[$i][0] . "\";'>";
                     echo "<button type='button' class='btn-link'>";
                         echo "<span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>";
                     echo "</button>";
@@ -131,6 +178,55 @@ class functions {
                 echo "<div class='filemenu'>";
 					echo "<div class='FolderTitle'>" . $row[$i][1] . "</div>";
                     echo "<div class='btn-group'>";
+                        echo "<button type='button' class='btn btn-link'>";
+                            echo "<span class='glyphicon glyphicon-pencil' aria-hidden='true' title='Edit' data-toggle='modal' data-target='#EditFolder'></span>";
+                        echo "</button>";
+                        echo "<button type='button' class='btn btn-link'>";
+                            echo "<span class='glyphicon glyphicon-trash' aria-hidden='true' title='Delete' data-toggle='modal' data-target='#DeleteFolder'></span>";
+                        echo "</button>";
+                    echo "</div>";
+                echo "</div>";	
+			echo "</div>";
+		}
+		echo "<nav class='Pnav' aria-label='Page navigation'>";
+			echo "<ul class='pagination'>";
+				echo "<li>";
+					echo "<a href='#' title='Previous' aria-label='Previous'>";
+						echo "<span aria-hidden='true'>&laquo;</span>";
+					echo "</a>";
+				echo "</li>";
+				echo "<li>";
+					echo "<a href='#'>1</a>";
+				echo "</li>";
+				echo "<li>";
+					echo "<a href='#' title='Next' aria-label='Next'>";
+						echo "<span aria-hidden='true'>&raquo;</span>";
+					echo "</a>";
+				echo "</li>";
+			echo "</ul>";
+		echo "</nav>"; 
+	}
+
+	function getFiles() {
+		global $project;
+
+		$SQLString = "SELECT * FROM file WHERE project_id = " . $project;
+		$QueryResult = $this->executeQuery($SQLString);
+		$row = mysqli_fetch_all($QueryResult);
+
+		for ($i = count($row) - 1;$i >= 0;$i--) {
+            echo "<div class='fileblock'>";
+                echo "<div class='file' onclick='location.href = \"front-end\res\portfolio" . $_SESSION["portfolio_id"] . "\\" . $project . "\";'>";
+                    echo "<button type='button' class='btn-link'>";
+                        echo "<span class='glyphicon glyphicon-file' aria-hidden='true'></span>";
+                    echo "</button>";
+                echo "</div>";
+                echo "<div class='filemenu'>";
+					echo "<div class='FolderTitle'>" . $row[$i][1] . $row[$i][2] . "</div>";
+                    echo "<div class='btn-group'>";
+						echo "<button type='button' class='btn btn-link'>";
+							echo "<span class='glyphicon glyphicon-open' aria-hidden='true' title='Upload'></span>";
+						echo "</button>";
                         echo "<button type='button' class='btn btn-link'>";
                             echo "<span class='glyphicon glyphicon-pencil' aria-hidden='true' title='Edit'></span>";
                         echo "</button>";
@@ -141,7 +237,23 @@ class functions {
                 echo "</div>";	
 			echo "</div>";
 		}
+		echo "<nav class='Pnav' aria-label='Page navigation'>";
+			echo "<ul class='pagination'>";
+				echo "<li>";
+					echo "<a href='#' title='Previous' aria-label='Previous'>";
+						echo "<span aria-hidden='true'>&laquo;</span>";
+					echo "</a>";
+				echo "</li>";
+				echo "<li>";
+					echo "<a href='#'>1</a>";
+				echo "</li>";
+				echo "<li>";
+					echo "<a href='#' title='Next' aria-label='Next'>";
+						echo "<span aria-hidden='true'>&raquo;</span>";
+					echo "</a>";
+				echo "</li>";
+			echo "</ul>";
+		echo "</nav>";
 	}
 }
-
 ?>

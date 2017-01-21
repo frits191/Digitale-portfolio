@@ -8,7 +8,7 @@ require('core/backendPages.php');
 $functions = new functions;
 $pages = new Pages;
 
-$p = $_GET["p"];
+$p = htmlspecialchars($_GET["p"]);
 
 //Checks if the page is not empty and if the method exists
 if (empty($p)) {
@@ -53,19 +53,6 @@ if (isset($_POST["PortfolioID"])) {
 	$_SESSION["portfolio_id"] = $selected;
 }
 
-
-//Authentication
-
-//Makes sure the user is authorised to view the current portfolio
-if (isset($_SESSION["portfolio"])) {
-
-}
-
-//Makes sure the user is authorized to view the current folder
-if (isset($_GET["projecten"])) {
-	
-}
-
 echo "<!DOCTYPE html>";
 	echo "<html>";
 		echo "<head>";
@@ -96,7 +83,7 @@ echo "<!DOCTYPE html>";
 						if (isset($role)) {
 							if ($role !== "student") {
 								echo "<div class='portfolioSelect'>";
-									echo "Viewing project:<br>";
+									echo "Bekijk portfolio van:<br>";
 									echo "<form action='backend.php?p=home' method='post'>";
 										echo "<select name='PortfolioID' onchange='this.form.submit()'>";
 											//Select portfolio based on user role

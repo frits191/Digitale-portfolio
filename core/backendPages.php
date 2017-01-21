@@ -5,32 +5,7 @@ class Pages
 	function home() {
 		//HOME
 		echo "<div class='col-lg-10'>";
-			//Navigation at the bottom, kept here for future reference
-
-			/* echo "<nav aria-label='Page navigation'>";
-				echo "<ul class='pagination'>";
-					echo "<li>";
-						echo "<a href='#' title='Previous' aria-label='Previous'>";
-							echo "<span aria-hidden='true'>&laquo;</span>";
-						echo "</a>";
-					echo "</li>";
-					echo "<li>";
-						echo "<a href='#'>1</a>";
-					echo "</li>";
-					echo "<li>";
-						echo "<a href='#'>2</a>";
-					echo "</li>";
-					echo "<li>";
-						echo "<a href='#'>3</a>";
-					echo "</li>";
-					echo "<li>";
-						echo "<a href='#' title='Next' aria-label='Next'>";
-							echo "<span aria-hidden='true'>&raquo;</span>";
-						echo "</a>";
-					echo "</li>";
-				echo "</ul>";
-			echo "</nav>"; */
-			echo "Welcome " . $_SESSION["name"] . ".<br>";
+			echo "Welkom " . $_SESSION["name"] . ".<br>";
 			echo "Kies links in het menu een optie om verder te gaan.";
 		echo "</div>";
 	}
@@ -70,66 +45,137 @@ class Pages
 	function projecten() {
 		global $functions;
 
+		if (isset($_GET["project"])) {
+			$project = htmlspecialchars($_GET["project"]);
+			if (is_int($project !== true)) {
+				header('Location: backend.php?p=home');
+				exit();
+			} 
+			$SQLString = "SELECT portfolio_id FROM project WHERE id = " . $project;
+			$QueryResult = $functions->executeQuery($SQLString);
+			$row = mysqli_fetch_all($QueryResult);
+			if (mysqli_num_rows($QueryResult) > 0) {
+				if ($row[0][0] != $_SESSION["portfolio_id"]) {
+					header('Location: backend.php?p=home');
+					exit();
+				}
+			} else {
+				header('Location: backend.php?p=home');
+				exit();
+			}
+		}
+
 		if (isset($_POST["submitFolder"])) {	
 			$functions->createFolder();
 		}
 
-		
+		if (isset($_POST["submitFile"])) {
+			$functions->uploadFile();
+		}	
+
+		//TODO: breadcrumbs
+		echo "Maurice portfolio->projecten->SLB Folder<br>";
+
+		if (isset($_GET["project"])) {
+			echo "<a href='backend.php?p=projecten'><-- back</a>";
+		}
+
 		echo "<div class='files'>";
+			if (isset($_GET["project"])) {
+				$functions->getfiles();
+			} else {
+				$functions->getFolders();
+			}			
+		echo "</div>";
 
-		$functions->getFolders();
-		
-		?>
-		<!-- File template
-       
-			<div class='clearfix'></div>
-            <div class='fileblock'>
-                <div class='file'>
-                    <button type='button' class='btn-link'>
-                        <span class='glyphicon glyphicon-file' aria-hidden='true'></span>
-                    </button>
-                </div>
-                <div class='filemenu'>
-                    <div class='btn-group'>
-                        <button type='button' class='btn btn-link'>
-                            <span class='glyphicon glyphicon-open' aria-hidden='true' title='Upload'></span>
-                        </button>
-                        <button type='button' class='btn btn-link'>
-                            <span class='glyphicon glyphicon-pencil' aria-hidden='true' title='Edit'></span>
-                        </button>
-                        <button type='button' class='btn btn-link'>
-                            <span class='glyphicon glyphicon-trash' aria-hidden='true' title='Delete'></span>
-                        </button>
-                    </div>
-                </div>
-		-->
+		//Folder creation modal
+		echo '<div class="modal fade" id="AddFolder" role="dialog">';
+            echo '<div class="modal-dialog">';
+                echo '<div class="modal-content">';
+                    echo '<div class="modal-header">';
+                        echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+                        echo '<h4 class="modal-title">Maak een nieuw map aan.</h4>';
+                    echo'</div>';
+                    echo '<div class="modal-body">';
+                        echo '<p>';
+                            echo "<form action='backend.php?p=projecten' method='POST'>";
+								echo "<input type='text' name='folderName' placeholder='Title' required><br><br>";
+								echo "<input type='text' name='folderDesc' placeholder='Description'>";
+                        echo "</p>";
+                    echo "</div>";
+                    echo '<div class="modal-footer">';
+                        echo "<input type='submit' value='Verzend' name='submitFolder'></form>";
+                    echo "</div>";
+                echo "</div>";
+            echo "</div>";
+        echo "</div>";
 
-			</div>
+		//File uploading modal
+		echo '<div class="modal fade" id="AddFile" role="dialog">';
+            echo '<div class="modal-dialog">';
+                echo '<div class="modal-content">';
+                    echo '<div class="modal-header">';
+                        echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+                        echo '<h4 class="modal-title">Voeg een bestand toe.</h4>';
+                    echo'</div>';
+                    echo '<div class="modal-body">';
+                        echo '<p>';
+                            echo "<form action='backend.php?p=projecten&project=" . $project . "' method='POST' enctype='multipart/form-data'>";
+								echo "<input type='file' name='file' required><br>";
+								echo "<input type='text' name='fileTitle' placeholder='Name' required><br><br>";
+								echo "<input type='text' name='fileDesc' placeholder='Description'>";
+                        echo "</p>";
+                    echo "</div>";
+                    echo '<div class="modal-footer">';
+                        echo "<input type='submit' value='Verzend' name='submitFile'></form>";
+                    echo "</div>";
+                echo "</div>";
+            echo "</div>";
+        echo "</div>";
 
-			<!-- File uploading -->
-			
-			<div class="modal fade" id="AddFolder" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Maak een nieuw map aan.</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>
-                                <form action='backend.php?p=projecten' method='POST'>
-                                <input type='text' name='folderName' placeholder='Title' required><br><br>
-								<input type='text' name='folderDesc' placeholder='Description'>
-                            </p>
-                        </div>
-                        <div class="modal-footer">
-                            <input type='submit' value='Verzend' name='submitFolder'></form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-			<?php
-			echo "</div>";
+		//Edit Folder modal
+		echo '<div class="modal fade" id="EditFolder" role="dialog">';
+            echo '<div class="modal-dialog">';
+                echo '<div class="modal-content">';
+                    echo '<div class="modal-header">';
+                        echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+                        echo '<h4 class="modal-title">Edit</h4>';
+                    echo'</div>';
+                    echo '<div class="modal-body">';
+                        echo '<p>';
+                            echo "<form action='backend.php?p=projecten' method='POST'>";
+								echo "<input type='text' name='fileTitle' placeholder='Name' required><br><br>";
+								echo "<input type='text' name='fileDesc' placeholder='Description'>";
+                        echo "</p>";
+                    echo "</div>";
+                    echo '<div class="modal-footer">';
+                        echo "<input type='submit' value='Verzend' name='submitFile'></form>";
+                    echo "</div>";
+                echo "</div>";
+            echo "</div>";
+        echo "</div>";
+
+		//Delete Folder modal
+		echo '<div class="modal fade" id="DeleteFolder" role="dialog">';
+            echo '<div class="modal-dialog">';
+                echo '<div class="modal-content">';
+                    echo '<div class="modal-header">';
+                        echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+                        echo '<h4 class="modal-title">Voeg een bestand toe.</h4>';
+                    echo'</div>';
+                    echo '<div class="modal-body">';
+                        echo '<p>';
+                            echo "<form action='backend.php?p=projecten' method='POST'>";
+								echo "<input type='text' name='fileTitle' placeholder='Name' required><br><br>";
+								echo "<input type='text' name='fileDesc' placeholder='Description'>";
+                        echo "</p>";
+                    echo "</div>";
+                    echo '<div class="modal-footer">';
+                        echo "<input type='submit' value='Verzend' name='submitFile'></form>";
+                    echo "</div>";
+                echo "</div>";
+            echo "</div>";
+        echo "</div>";
 	}
 
 	function stages() {
