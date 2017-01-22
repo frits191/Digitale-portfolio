@@ -89,5 +89,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\backend.css" />
+    <Content Include="js\scripts.js" />
   </ItemGroup>
 </Project>

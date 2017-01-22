@@ -39,7 +39,46 @@ class Pages
 	}
 
 	function cijfers() {
+		global $functions;
 
+		echo "<table class='table table-hover'>";
+			echo "<thead>";
+				echo "<tr>";
+					echo "<th>Project</th>";
+					echo "<th>Grade</th>";
+					echo "<th>Given by</th>";
+					echo "<th>Remark</th>";
+				echo "</tr>";
+			echo "</thead>";
+			echo "<tbody>";
+				$SQLString = "SELECT id FROM project WHERE portfolio_id = " . $_SESSION["portfolio_id"];
+				$QueryResult = $functions->executeQuery($SQLString);
+				$row = mysqli_fetch_all($QueryResult);
+	
+				$sqlID = '';
+				for ($i = 0; $i < count($row); $i++) {
+					if ($i == 1) {
+						$sqlID .= "project_id = " . $row[$i][0];
+					} else {
+						$sqlID .= "project_id = " . $row[$i][0] . " OR ";
+					}
+				}
+
+				$SQLString = "SELECT project.title, grade, remark, USER.firstName, USER.lastName FROM `rating`, `project`, `user`
+							  WHERE rating.project_id = project.id AND rating.giver_id = USER.id ORDER BY rating.project_id DESC";
+				$QueryResult = $functions->executeQuery($SQLString);
+				$row = mysqli_fetch_all($QueryResult);
+
+				foreach ($row as $index) {
+					echo "<tr>";
+						echo "<td>" . $index[0] . "</td>";
+						echo "<td>" . $index[1] . "</td>";
+						echo "<td>" . $index[3] . " " . $index[4] . "</td>";
+						echo "<td>" . $index[2] . "</td>";
+					echo "</tr>";
+				}
+			echo "</tbody>";
+		echo "</table>";
 	}
 
 	function projecten() {
@@ -68,13 +107,23 @@ class Pages
 		if (isset($_POST["submitFolder"])) {	
 			$functions->createFolder();
 		}
-
 		if (isset($_POST["submitFile"])) {
 			$functions->uploadFile();
+		}
+		if (isset($_POST["folderEdit"])) {
+			$functions->editFolder();
+		}		
+		if (isset($_POST["folderDelete"])) {
+			$functions->deleteFolder();
+		}		
+		if (isset($_POST["fileEdit"])) {
+			$functions->editFile();
+		}		
+		if (isset($_POST["fileDelete"])) {
+			$functions->deleteFile();
 		}	
 
-		//TODO: breadcrumbs
-		echo "Maurice portfolio->projecten->SLB Folder<br>";
+		$functions->breadcrumbs();		
 
 		if (isset($_GET["project"])) {
 			echo "<a href='backend.php?p=projecten'><-- back</a>";
@@ -131,51 +180,7 @@ class Pages
                     echo "</div>";
                 echo "</div>";
             echo "</div>";
-        echo "</div>";
-
-		//Edit Folder modal
-		echo '<div class="modal fade" id="EditFolder" role="dialog">';
-            echo '<div class="modal-dialog">';
-                echo '<div class="modal-content">';
-                    echo '<div class="modal-header">';
-                        echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
-                        echo '<h4 class="modal-title">Edit</h4>';
-                    echo'</div>';
-                    echo '<div class="modal-body">';
-                        echo '<p>';
-                            echo "<form action='backend.php?p=projecten' method='POST'>";
-								echo "<input type='text' name='fileTitle' placeholder='Name' required><br><br>";
-								echo "<input type='text' name='fileDesc' placeholder='Description'>";
-                        echo "</p>";
-                    echo "</div>";
-                    echo '<div class="modal-footer">';
-                        echo "<input type='submit' value='Verzend' name='submitFile'></form>";
-                    echo "</div>";
-                echo "</div>";
-            echo "</div>";
-        echo "</div>";
-
-		//Delete Folder modal
-		echo '<div class="modal fade" id="DeleteFolder" role="dialog">';
-            echo '<div class="modal-dialog">';
-                echo '<div class="modal-content">';
-                    echo '<div class="modal-header">';
-                        echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
-                        echo '<h4 class="modal-title">Voeg een bestand toe.</h4>';
-                    echo'</div>';
-                    echo '<div class="modal-body">';
-                        echo '<p>';
-                            echo "<form action='backend.php?p=projecten' method='POST'>";
-								echo "<input type='text' name='fileTitle' placeholder='Name' required><br><br>";
-								echo "<input type='text' name='fileDesc' placeholder='Description'>";
-                        echo "</p>";
-                    echo "</div>";
-                    echo '<div class="modal-footer">';
-                        echo "<input type='submit' value='Verzend' name='submitFile'></form>";
-                    echo "</div>";
-                echo "</div>";
-            echo "</div>";
-        echo "</div>";
+        echo "</div>";	
 	}
 
 	function stages() {
@@ -192,6 +197,10 @@ class Pages
 
 	function gebruikers() {
 		global $functions;
+
+		if (isset($_POST["submitRegister"])) {
+			$functions->register();
+		}
 
 		echo "<table class='table table-hover'>";
 			echo "<thead>";
@@ -241,11 +250,6 @@ class Pages
 					echo "</select><br><br>";
 					echo "<input type='submit' name='submitRegister'>";
 				echo "</form>";
-			echo "</div>";
-
-		if (isset($_POST["submitRegister"])) {
-			echo "<br>";
-			$functions->register();
-		}
+			echo "</div>";		
 	}
 }
