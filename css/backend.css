@@ -17,7 +17,12 @@
        float: none;
        display: block;
     }
-
+	#loginEmail {
+		width: 20%;
+	}
+	#loginPassword {
+		width: 20%;
+	}
     .bootstrap-vertical-nav .navbar-nav .nav-item+.nav-item {
        margin-left: 0;
     }
@@ -338,6 +343,12 @@ nav {
 	.mainContent{
 		min-height:55vh;
 	}
+	#loginEmail {
+		width: 50%;
+	}
+	#loginPassword {
+		width: 50%;
+	}
 }
 .Pnav {
 	float: left;
@@ -345,12 +356,6 @@ nav {
 #folderCreateDesc {
 	resize: none;
 	height: 145px;
-}
-#loginEmail {
-	width: 20%;
-}
-#loginPassword {
-	width: 20%;
 }
 #selPort {
 	width: 110%;
