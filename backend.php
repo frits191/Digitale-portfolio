@@ -78,14 +78,18 @@ echo "<html>";
 		require ('core/layout/headerbackend.php');
 
 		//Menu
-		echo "<div id='body' class='container-fluid'>";
-			echo "<div class='row'>";
-				echo "<div class='col-lg-2'>";
-					echo "<div id='searchbar'>";
-						echo "<form id='search' method='POST' action='#'>";
-							echo "<input type='text' class='searchinput' name='search' size='10' maxlength='120' placeholder='Search'><input type='submit' value='>' class='searchbutton' title='Search'>";
-						echo "</form>";
-					echo "</div>";
+		echo "<div id='body' class='container-fluid clearfix'>";
+			echo "<div class='row mainContent clearfix'>";
+
+				 echo "<div class='col-lg-2 bootstrap-vertical-nav'>";
+				 	echo "<div class='navbar navbar-light'>";
+					echo "<button class='navbar-toggler hidden-md-up' type='button' data-toggle='collapse' data-target='#exCollapsingNavbar2'>&#9776;</button>";
+						echo "<div class='collapse navbar-toggleable-sm' id='exCollapsingNavbar2'>";
+							echo "<div id='searchbar'>";
+								echo "<form class='form-inline' id='search' method='POST' action='#'>";
+									echo "<input type='text' class='searchinput' name='search' size='10' maxlength='120' placeholder='Search'><input type='submit' value='>' class='searchbutton' title='Search'>";
+								echo "</form>";
+							echo "</div>";
 
 					if (isset($role)) {
 						if ($role !== "student") {
@@ -142,23 +146,23 @@ echo "<html>";
 						}
 					}
 
-					echo "<div id='content'>";
-						echo "<table class='table table-hover'>";
-							echo "<tr><th>Menu</th></tr>";
-							echo "<tr><td><a href='backend.php?p=info'>Persoonlijke gegevens</a></td></tr>";
-							echo "<tr><td><a href='backend.php?p=cijfers'>Cijfers</a></td></tr>";
-							echo "<tr><td><a href='backend.php?p=projecten'>Projecten</a></td></tr>";
-							echo "<tr><td><a href='backend.php?p=stages'>Stages</a></td></tr>";
-							echo "<tr><td><a href='backend.php?p=portfolio'>Openbaar portfolio</a></td></tr>";
-							echo "<tr><td><a href='backend.php?p=opmerkingen'>Opmerkingen</a></td></tr>";
-							if (isset($_SESSION["role"])) {
-								if ($role == "admin") {
-									echo "<tr><td><a href='backend.php?p=gebruikers'>Gebruikers beheren</a></td></tr>";
-								}
-							}
-						echo "</table>";
-					echo "</div>";
+					echo "<p>Menu</p>";
+					echo "<ul class='navbar navbar-nav'>";
+						echo "<li class='nav-item'><a href='backend.php?p=info'>Persoonlijke gegevens</a></li>";
+						echo "<li class='nav-item'><a href='backend.php?p=cijfers'>Cijfers</a></li>";
+						echo "<li class='nav-item'><a href='backend.php?p=projecten'>Projecten</a></li>";
+						echo "<li class='nav-item'><a href='backend.php?p=stages'>Stages</a></li>";
+						echo "<li class='nav-item'><a href='backend.php?p=portfolio'>Openbaar portfolio</a></li>";
+						echo "<li class='nav-item'><a href='backend.php?p=opmerkingen'>Opmerkingen</a></li>";
+						if (isset($_SESSION["role"])) {
+					 		if ($role == "admin") {
+					 			echo "<li class='nav-item'><a href='backend.php?p=gebruikers'>Gebruikers beheren</a></li>";
+ 							}
+						}
+					echo "</ul>";
 				echo "</div>";
+			echo "</div>";
+			echo "</div>";
 			echo "<div class='col-lg-10'>";
 
 				//Checks which page is called and directs traffic to the appropriate page
@@ -200,7 +204,6 @@ echo "<html>";
 			echo "</div>";
 		echo "</div>";
 
-		echo "<div class='clearfix'></div>";
 			echo '<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">';
 				echo '<div class="slides"></div>';
 				echo '<h3 class="title"></h3>';
