@@ -54,38 +54,46 @@ if (isset($_POST["PortfolioID"])) {
 }
 
 echo "<!DOCTYPE html>";
-	echo "<html>";
-		echo "<head>";
-			echo "<title>Digitaal Portfolio</title>";
-			echo '<meta charset="utf-8" />';
-			echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
-			echo '<link rel="stylesheet" type="text/css" href="../Digitale-portfolio/css/backend.css">';
-			echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/simplex/bootstrap.min.css">';
-			echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>';
-			echo '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>';
-			echo '<script src="js/scripts.js"></script>';
-		echo "</head>";
-		echo "<body>";
-		echo "<div id='wrapper'>";
+echo "<html>";
+	echo "<head>";
+		echo "<title>Digitaal Portfolio</title>";
+		echo '<meta charset="utf-8" />';
+		echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
+		echo '<link rel="stylesheet" type="text/css" href="../Digitale-portfolio/css/backend.css">';
+		echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/simplex/bootstrap.min.css">';		
+		echo '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>';
+		echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>';
+		echo '<script src="js/scripts.js"></script>';
+		echo '<link rel="stylesheet" href="//blueimp.github.io/Gallery/css/blueimp-gallery.min.css">';
+		echo '<link rel="stylesheet" href="css/jquery.fileupload.css">';
+		echo '<link rel="stylesheet" href="css/jquery.fileupload-ui.css">';
+		echo '<style>';
+			//Hide Angular JS elements before initializing
+			echo '.ng-cloak { display: none; }';
+		echo '</style>';
+	echo "</head>";
+	echo "<body>";
+	echo "<div id='wrapper'>";
 
-			require ('core/layout/headerbackend.php');
+		require ('core/layout/headerbackend.php');
 
-			//Menu
-			echo "<div id='body' class='container-fluid'>";
-				echo "<div class='row'>";
-					echo "<div class='col-lg-2'>";
-						echo "<div id='searchbar'>";
-							echo "<form id='search' method='POST' action='#'>";
-								echo "<input type='text' class='searchinput' name='search' size='10' maxlength='120' placeholder='Search'><input type='submit' value='>' class='searchbutton' title='Search'>";
-							echo "</form>";
-						echo "</div>";
+		//Menu
+		echo "<div id='body' class='container-fluid'>";
+			echo "<div class='row'>";
+				echo "<div class='col-lg-2'>";
+					echo "<div id='searchbar'>";
+						echo "<form id='search' method='POST' action='#'>";
+							echo "<input type='text' class='searchinput' name='search' size='10' maxlength='120' placeholder='Search'><input type='submit' value='>' class='searchbutton' title='Search'>";
+						echo "</form>";
+					echo "</div>";
 
-						if (isset($role)) {
-							if ($role !== "student") {
-								echo "<div class='portfolioSelect'>";
-									echo "Bekijk portfolio van:<br>";
-									echo "<form action='backend.php?p=home' method='post'>";
-										echo "<select name='PortfolioID' onchange='this.form.submit()'>";
+					if (isset($role)) {
+						if ($role !== "student") {
+							echo "<div class='portfolioSelect'>";
+								echo "<label for='selPort'>Bekijk de portfolio van:</label>";
+								echo "<form action='backend.php?p=home' method='post' >";
+									echo '<div class="form-group">';
+										echo "<select name='PortfolioID' class='form-control' id='selPort' onchange='this.form.submit()'>";
 											//Select portfolio based on user role
 											$UserID = $_SESSION["id"];
 											if ($role == "docent" || $role == "SLB") {								
@@ -128,75 +136,103 @@ echo "<!DOCTYPE html>";
 												}
 											}
 										echo "</select>";
-									echo "</form>";
-								echo "</div>";
-							}
+									echo "</div>";
+								echo "</form>";
+							echo "</div>";
 						}
+					}
 
-						echo "<div id='content'>";
-							echo "<table class='table table-hover'>";
-								echo "<tr><th>Menu</th></tr>";
-								echo "<tr><td><a href='backend.php?p=info'>Persoonlijke gegevens</a></td></tr>";
-								echo "<tr><td><a href='backend.php?p=cijfers'>Cijfers</a></td></tr>";
-								echo "<tr><td><a href='backend.php?p=projecten'>Projecten</a></td></tr>";
-								echo "<tr><td><a href='backend.php?p=stages'>Stages</a></td></tr>";
-								echo "<tr><td><a href='backend.php?p=portfolio'>Openbaar portfolio</a></td></tr>";
-								echo "<tr><td><a href='backend.php?p=opmerkingen'>Opmerkingen</a></td></tr>";
-								if (isset($_SESSION["role"])) {
-									if ($role == "admin") {
-										echo "<tr><td><a href='backend.php?p=gebruikers'>Gebruikers beheren</a></td></tr>";
-									}
+					echo "<div id='content'>";
+						echo "<table class='table table-hover'>";
+							echo "<tr><th>Menu</th></tr>";
+							echo "<tr><td><a href='backend.php?p=info'>Persoonlijke gegevens</a></td></tr>";
+							echo "<tr><td><a href='backend.php?p=cijfers'>Cijfers</a></td></tr>";
+							echo "<tr><td><a href='backend.php?p=projecten'>Projecten</a></td></tr>";
+							echo "<tr><td><a href='backend.php?p=stages'>Stages</a></td></tr>";
+							echo "<tr><td><a href='backend.php?p=portfolio'>Openbaar portfolio</a></td></tr>";
+							echo "<tr><td><a href='backend.php?p=opmerkingen'>Opmerkingen</a></td></tr>";
+							if (isset($_SESSION["role"])) {
+								if ($role == "admin") {
+									echo "<tr><td><a href='backend.php?p=gebruikers'>Gebruikers beheren</a></td></tr>";
 								}
-							echo "</table>";
-						echo "</div>";
+							}
+						echo "</table>";
 					echo "</div>";
-				echo "<div class='col-lg-10'>";
-
-					//Checks which page is called and directs traffic to the appropriate page
-					if ($p == "home") {
-						$pages->home();
-					}
-					elseif ($p == "login") {
-						$pages->login();
-					}
-					elseif ($p == "logout") {
-						$pages->logout();
-					}
-					elseif ($p == "info") {
-						$pages->info();
-					}
-					elseif ($p == "cijfers") {
-						$pages->cijfers();
-					}
-					elseif ($p == "projecten") {
-						$pages->projecten();
-					}
-					elseif ($p == "stages") {
-						$pages->stages();
-					}
-					elseif ($p == "portfolio") {
-						$pages->portfolio();
-					}
-					elseif ($p == "opmerkingen") {
-						$pages->opmerkingen();
-					}
-					elseif ($p == "gebruikers") {
-						if ($role == "admin") {
-							$pages->gebruikers();
-						} else {
-							header ('Location: backend.php?p=home');
-							exit();
-						}
-					}
 				echo "</div>";
+			echo "<div class='col-lg-10'>";
+
+				//Checks which page is called and directs traffic to the appropriate page
+				if ($p == "home") {
+					$pages->home();
+				}
+				elseif ($p == "login") {
+					$pages->login();
+				}
+				elseif ($p == "logout") {
+					$pages->logout();
+				}
+				elseif ($p == "info") {
+					$pages->info();
+				}
+				elseif ($p == "cijfers") {
+					$pages->cijfers();
+				}
+				elseif ($p == "projecten") {
+					$pages->projecten();
+				}
+				elseif ($p == "stages") {
+					$pages->stages();
+				}
+				elseif ($p == "portfolio") {
+					$pages->portfolio();
+				}
+				elseif ($p == "opmerkingen") {
+					$pages->opmerkingen();
+				}
+				elseif ($p == "gebruikers") {
+					if ($role == "admin") {
+						$pages->gebruikers();
+					} else {
+						header ('Location: backend.php?p=home');
+						exit();
+					}
+				}
 			echo "</div>";
-
-			echo "<div class='clearfix'></div>";
-
-			require ('core/layout/footerbackend.php');
-
 		echo "</div>";
-		echo "</body>";
-	echo "</html>";
+
+		echo "<div class='clearfix'></div>";
+			echo '<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">';
+				echo '<div class="slides"></div>';
+				echo '<h3 class="title"></h3>';
+				echo '<a class="prev">‹</a>';
+				echo '<a class="next">›</a>';
+				echo '<a class="close">×</a>';
+				echo '<a class="play-pause"></a>';
+				echo '<ol class="indicator"></ol>';
+			echo '</div>';
+
+			//File uploading scripts
+			echo '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>';
+			echo '<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>';
+			echo '<script src="js/vendor/jquery.ui.widget.js"></script>';
+			echo '<script src="//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>';
+			echo '<script src="//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>';
+			echo '<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>';
+			echo '<script src="//blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>';
+			echo '<script src="js/jquery.iframe-transport.js"></script>';
+			echo '<script src="js/jquery.fileupload.js"></script>';
+			echo '<script src="js/jquery.fileupload-process.js"></script>';
+			echo '<script src="js/jquery.fileupload-image.js"></script>';
+			echo '<script src="js/jquery.fileupload-audio.js"></script>';
+			echo '<script src="js/jquery.fileupload-video.js"></script>';
+			echo '<script src="js/jquery.fileupload-validate.js"></script>';
+			echo '<script src="js/jquery.fileupload-angular.js"></script>';
+			echo '<script src="js/app.js"></script>';
+
+		require ('core/layout/footerbackend.php');
+
+	echo "</div>";
+	echo "</body>";
+echo "</html>";
 
 ?>

@@ -246,3 +246,16 @@ nav {
 .Pnav {
 	float: left;
 }
+#folderCreateDesc {
+	resize: none;
+	height: 145px;
+}
+#loginEmail {
+	width: 20%;
+}
+#loginPassword {
+	width: 20%;
+}
+#selPort {
+	width: 110%;
+}
