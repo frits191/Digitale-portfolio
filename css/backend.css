@@ -216,7 +216,7 @@ nav {
 }
 .files {
     width: 100%;
-    min-height: 262.4px;
+    min-height: 100%;
     height: 100%;
     float: left;
 }
@@ -228,7 +228,7 @@ nav {
 }
 .fileblock {
     width: 150px;
-    height: 200px;
+    height: 230px;
     background-color: #c8d8ff;
     border-radius: 15px;
     margin-left: 55px;
@@ -237,7 +237,7 @@ nav {
 }
 .filemenu {
     width: 150px;
-    height: 50px;
+    height: 90px;
     border-radius: 0px 0px 15px 15px;
     background-color: #85a8ff;
     margin-top: 29.4px;

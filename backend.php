@@ -124,7 +124,7 @@ echo "<html>";
 												}
 
 												for ($i = count($row); $i > 0; $i--) {
-													echo "<option value='" . $row[$i - 1][1] . "' name='PortfolioID' " . ($_SESSION["portfolio_id"] == $row[$i - 1][1] ? 'selected=\"selected\"' : '') . ">" . $row[$i - 1][0] . "</option>";
+													echo "<option value='" . $row[$i - 1][1] . "' " . ($_SESSION["portfolio_id"] == $row[$i - 1][1] ? 'selected=\'selected\'' : '') . ">" . $row[$i - 1][0] . "</option>";
 												}
 											} elseif ($role == "admin") {
 												$SQLString = "SELECT title, id FROM portfolio";
@@ -136,7 +136,7 @@ echo "<html>";
 												}
 
 												for ($i = count($row); $i > 0; $i--) {
-													echo "<option value='" . $row[$i - 1][1] . "' name='PortfolioID' " . ($_SESSION["portfolio_id"] == $row[$i - 1][1] ? 'selected=\"selected\"' : '') . ">" . $row[$i - 1][0] . "</option>";
+													echo "<option value='" . $row[$i - 1][1] . "' " . ($_SESSION["portfolio_id"] == $row[$i - 1][1] ? 'selected=\'selected\'' : '') . ">" . $row[$i - 1][0] . "</option>";
 												}
 											}
 										echo "</select>";

@@ -138,52 +138,30 @@ class functions {
 	function uploadFile() {
 		global $project;
 
-		$title = htmlspecialchars($_POST["fileTitle"]);
-		$title = str_replace("'", "&#39;", $title);
-
-		if (isset($_POST["fileDesc"])) {
-			$desc = htmlspecialchars($_POST["fileDesc"]);
-			$desc = str_replace("'", "&#39;", $desc);
-		} else {
-			$description = "";
-		}
-
-		if (empty($title)) {
-			header('Location: backend.php?p=projecten&project=' . $project);
-			exit();
-		}
-
         $target_dir = "front-end/res/portfolios/" . $_SESSION["portfolio_id"] . "/" . $project . "/";
+		$dir = "server/php/files/";
+		$scandir = scandir($dir);		
 
-        if(getimagesize($_FILES["file"]["tmp_name"]) !== false) {
-            if (isset($_FILES["file"])) {
-                $target_file = $target_dir . basename($_FILES["file"]["name"]);
-                $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
-                if ($this->imagecheck($imageFileType , $target_file, "file") === true) {
-                    move_uploaded_file($_FILES["file"]["tmp_name"], $target_file);
-                    rename($target_file, $target_dir . $title . "." . $imageFileType);
+		$key1 = array_search("thumbnail", $scandir);
+		$key2 = array_search(".gitignore", $scandir);
+		$key3 = array_search(".htaccess", $scandir);
+		unset($scandir[0], $scandir[1], $scandir[$key1], $scandir[$key2], $scandir[$key3]);
+		$scandir = array_values($scandir);
 
-					$SQLString = 'INSERT INTO file (`title`, `type`, `description`, `project_id`) VALUES ("' . $title . '", ".' . $imageFileType . '", "' . $desc . '", "' . $project . '")';
-					$this->executeQuery($SQLString);
-                } 
-            }
-        }
+		for ($i = 0; $i < count($scandir); $i++) {
+			$key = array_search($scandir[$i], $scandir);
+			$target_file = $dir . $scandir[$key];
+			$FileArray = explode(".", $scandir[$i]);
+			$title = $FileArray[0];
+			$imageFileType = "." . $FileArray[1];
+
+			rename($target_file, $target_dir . $title . $imageFileType);
+			array_map('unlink', glob("$dir/thumbnail/*.*"));
+
+			$SQLString = 'INSERT INTO file (`title`, `type`, `description`, `project_id`) VALUES ("' . $title . '", "' . $imageFileType . '", "", "' . $project . '")';
+			$this->executeQuery($SQLString);
+		}	
 	}
-
-	function imagecheck($imageFileType, $target_file, $ImageName) {
-        //check if the file does not exceed the max size
-		if ($_FILES[$ImageName]["size"] > 5000000) {
-			echo "Sorry, your file is too large.<br>";
-            return false;
-        }
-        //Check if the image is a jpg, png, jpeg or gif
-        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
-            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.<br>";
-            return false;
-        } else {
-            return true;
-        }
-    }
 
 	function editFolder() {
 		$title = htmlspecialchars($_POST["folderName"]);
@@ -319,11 +297,11 @@ class functions {
 						echo '<div class="modal-header">';
 							echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
 							echo '<h4 class="modal-title">Bewerk deze map.</h4>';
-						echo'</div>';
+						echo '</div>';
 						echo '<div class="modal-body">';
 							echo '<p>';
 								echo "<form action='backend.php?p=projecten' method='POST'>";
-									echo "<input type='hidden' name='folderID' value='" . $row[$i][0] . "' required>";
+									echo "<input type='hidden' name='folderID' value='" . $row[$i][0] . "'>";
 									echo "<input type='text' name='folderName' value='" . $row[$i][1] . "' placeholder='Name' required><br><br>";
 									echo "<input type='text' name='folderDesc' value='" . $row[$i][2] . "' placeholder='Description'>";
 							echo "</p>";
@@ -346,7 +324,7 @@ class functions {
 						echo '<div class="modal-body">';
 							echo '<p>';
 								echo "<form action='backend.php?p=projecten' method='POST'>";
-									echo "<input type='hidden' name='folderToDelete' value='" . $row[$i][0] . "'required><br><br>";
+									echo "<input type='hidden' name='folderToDelete' value='" . $row[$i][0] . "'><br><br>";
 									echo "<input type='submit' value='Verwijder' name='folderDelete'></form>";
 							echo "</p>";
 						echo "</div>";
@@ -416,8 +394,8 @@ class functions {
 						echo '<div class="modal-body">';
 							echo '<p>';
 								echo "<form action='backend.php?p=projecten&project=" . $project . "' method='POST'>";
-									echo "<input type='hidden' name='fileID' value='" . $row[$i][0] . "' required>";
-									echo "<input type='hidden' name='projectID' value='" . $project . "' required>";
+									echo "<input type='hidden' name='fileID' value='" . $row[$i][0] . "'>";
+									echo "<input type='hidden' name='projectID' value='" . $project . "'>";
 									echo "<input type='text' name='fileName' value='" . $row[$i][1] . "' placeholder='Name' required><br><br>";
 									echo "<input type='text' name='fileDesc' value='" . $row[$i][3] . "' placeholder='Description'>";
 							echo "</p>";
@@ -440,8 +418,8 @@ class functions {
 						echo '<div class="modal-body">';
 							echo '<p>';
 								echo "<form action='backend.php?p=projecten&project=" . $project . "' method='POST'>";
-									echo "<input type='hidden' name='fileToDelete' value='" . $row[$i][0] . "'required><br><br>";
-									echo "<input type='hidden' name='projectID' value='" . $project . "' required>";
+									echo "<input type='hidden' name='fileToDelete' value='" . $row[$i][0] . "'><br><br>";
+									echo "<input type='hidden' name='projectID' value='" . $project . "'>";
 									echo "<input type='submit' value='Verwijder' name='fileDelete'></form>";
 							echo "</p>";
 						echo "</div>";
