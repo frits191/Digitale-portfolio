@@ -58,19 +58,28 @@ echo "<html>";
 	echo "<head>";
 		echo "<title>Digitaal Portfolio</title>";
 		echo '<meta charset="utf-8" />';
-		echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
-		echo '<link rel="stylesheet" type="text/css" href="../Digitale-portfolio/css/backend.css">';
+		echo '<meta name="viewport" content="width=device-width, initial-scale=1">';	
+
+		//JS
 		echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>';
-		echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/simplex/bootstrap.min.css">';		
-		echo '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>';		
+		//echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>';
+		echo '<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript">></script>';
+		echo '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>';	
 		echo '<script src="js/scripts.js"></script>';
+
+		//CSS
+		echo '<link rel="stylesheet" type="text/css" href="../Digitale-portfolio/css/backend.css">';
+		echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">';	
+		echo '<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">';				
 		echo '<link rel="stylesheet" href="//blueimp.github.io/Gallery/css/blueimp-gallery.min.css">';
 		echo '<link rel="stylesheet" href="css/jquery.fileupload.css">';
 		echo '<link rel="stylesheet" href="css/jquery.fileupload-ui.css">';
-		echo '<style>';
-			//Hide Angular JS elements before initializing
+
+		//Hide Angular JS elements before initializing
+		echo '<style>';			
 			echo '.ng-cloak { display: none; }';
 		echo '</style>';
+
 	echo "</head>";
 	echo "<body>";
 	echo "<div id='wrapper'>";
@@ -124,7 +133,7 @@ echo "<html>";
 												}
 
 												for ($i = count($row); $i > 0; $i--) {
-													echo "<option value='" . $row[$i - 1][1] . "' name='PortfolioID' " . ($_SESSION["portfolio_id"] == $row[$i - 1][1] ? 'selected=\"selected\"' : '') . ">" . $row[$i - 1][0] . "</option>";
+													echo "<option value='" . $row[$i - 1][1] . "' " . ($_SESSION["portfolio_id"] == $row[$i - 1][1] ? 'selected=\'selected\'' : '') . ">" . $row[$i - 1][0] . "</option>";
 												}
 											} elseif ($role == "admin") {
 												$SQLString = "SELECT title, id FROM portfolio";
@@ -136,7 +145,7 @@ echo "<html>";
 												}
 
 												for ($i = count($row); $i > 0; $i--) {
-													echo "<option value='" . $row[$i - 1][1] . "' name='PortfolioID' " . ($_SESSION["portfolio_id"] == $row[$i - 1][1] ? 'selected=\"selected\"' : '') . ">" . $row[$i - 1][0] . "</option>";
+													echo "<option value='" . $row[$i - 1][1] . "' " . ($_SESSION["portfolio_id"] == $row[$i - 1][1] ? 'selected=\'selected\'' : '') . ">" . $row[$i - 1][0] . "</option>";
 												}
 											}
 										echo "</select>";
@@ -148,15 +157,15 @@ echo "<html>";
 
 					echo "<p>Menu</p>";
 					echo "<ul class='navbar navbar-nav'>";
-						echo "<li class='nav-item'><a href='backend.php?p=info'>Persoonlijke gegevens</a></li>";
-						echo "<li class='nav-item'><a href='backend.php?p=cijfers'>Cijfers</a></li>";
-						echo "<li class='nav-item'><a href='backend.php?p=projecten'>Projecten</a></li>";
-						echo "<li class='nav-item'><a href='backend.php?p=stages'>Stages</a></li>";
-						echo "<li class='nav-item'><a href='backend.php?p=portfolio'>Openbaar portfolio</a></li>";
-						echo "<li class='nav-item'><a href='backend.php?p=opmerkingen'>Opmerkingen</a></li>";
+						echo "<a href='backend.php?p=info'><li class='nav-item' id='NavItem'>Persoonlijke gegevens</li></a>";
+						echo "<a href='backend.php?p=cijfers'><li class='nav-item' id='NavItem'>Cijfers</li></a>";
+						echo "<a href='backend.php?p=projecten'><li class='nav-item' id='NavItem'>Projecten</li></a>";
+						echo "<a href='backend.php?p=stages'><li class='nav-item' id='NavItem'>Stages</li></a>";
+						echo "<a href='backend.php?p=portfolio'><li class='nav-item' id='NavItem'>Openbaar portfolio</li></a>";
+						echo "<a href='backend.php?p=opmerkingen'><li class='nav-item' id='NavItem'>Opmerkingen</li></a>";
 						if (isset($_SESSION["role"])) {
 					 		if ($role == "admin") {
-					 			echo "<li class='nav-item'><a href='backend.php?p=gebruikers'>Gebruikers beheren</a></li>";
+					 			echo "<a href='backend.php?p=gebruikers'><li class='nav-item' id='NavItem'>Gebruikers beheren</li></a>";
  							}
 						}
 					echo "</ul>";
@@ -220,7 +229,7 @@ echo "<html>";
 			echo '<script src="js/vendor/jquery.ui.widget.js"></script>';
 			echo '<script src="//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>';
 			echo '<script src="//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>';
-			echo '<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>';
+			//echo '<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>';
 			echo '<script src="//blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>';
 			echo '<script src="js/jquery.iframe-transport.js"></script>';
 			echo '<script src="js/jquery.fileupload.js"></script>';

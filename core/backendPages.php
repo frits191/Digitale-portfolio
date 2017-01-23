@@ -14,7 +14,7 @@ class Pages
 		//LOGIN
 		global $functions;
 
-		echo "<form method='post' action='#'><br>";
+		echo "<form method='post' action='backend.php?p=login'><br>";
 			echo "Login:<br><br>";
 			echo "<div class='input-group'>";
 				echo '<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>';
@@ -180,11 +180,7 @@ class Pages
                         echo '<h4 class="modal-title">Voeg een bestand toe.</h4>';
                     echo'</div>';
                     echo '<div class="modal-body">';
-                        echo '<p>';
-                            //echo "<form action='backend.php?p=projecten&project=" . $project . "' method='POST' enctype='multipart/form-data'>";
-								//echo "<input type='file' name='file' required><br>";
-								//echo "<input type='text' name='fileTitle' placeholder='Name' required><br><br>";
-								//echo "<input type='text' name='fileDesc' placeholder='Description'>";
+                        echo '<p>';                        
 
 							?>
 								<!-- The file upload form used as target for the file upload widget -->
@@ -201,10 +197,6 @@ class Pages
 											<button type="button" class="btn btn-primary start" data-ng-click="submit()">
 												<i class="glyphicon glyphicon-upload"></i>
 												<span>Start upload</span>
-											</button>
-											<button type="button" class="btn btn-warning cancel" data-ng-click="cancel()">
-												<i class="glyphicon glyphicon-ban-circle"></i>
-												<span>Cancel upload</span>
 											</button>
 											<!-- The global file processing state -->
 											<span class="fileupload-process"></span>
@@ -262,7 +254,9 @@ class Pages
                         echo "</p>";
                     echo "</div>";
                     echo '<div class="modal-footer">';
-                        //echo "<input type='submit' value='Verzend' name='submitFile'></form>";
+						echo "<form action='backend.php?p=projecten&project=" . $project . "' method='POST' enctype='multipart/form-data'>";
+							echo "<input class='btn btn-default' type='submit' value='Submit' name='submitFile'></button>";
+						echo "</form>";
                     echo "</div>";
                 echo "</div>";
             echo "</div>";
@@ -298,6 +292,7 @@ class Pages
 					echo "<th>Last Name</th>";
 					echo "<th>Phone number</th>";
 					echo "<th>Following</th>";
+					echo "<th></th>";
 				echo "</tr>";
 			echo "</thead>";
 			echo "<tbody>";
@@ -314,6 +309,74 @@ class Pages
 						echo "<td>" . $index[5] . "</td>";
 						echo "<td>" . $index[6] . "</td>";
 						echo "<td>" . $index[7] . "</td>";	
+						echo "<td><button type='button' class='btn btn-default' data-toggle='modal' data-target='#EditUser" . $index[0] . "' id='EditUser'>Bewerken</button>";
+
+						//Edit modal
+						echo '<div class="modal fade" id="EditUser' . $index[0] . '" role="dialog">';
+							echo '<div class="modal-dialog">';
+								echo '<div class="modal-content">';
+									echo '<div class="modal-header">';
+										echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+										echo '<h4 class="modal-title">Bewerk deze gebruiker.</h4>';
+									echo '</div>';
+									echo '<div class="modal-body">';
+										echo '<p>';
+											echo "<form action='backend.php?p=gebruikers' method='POST'>";
+												echo "<div class='input-group'>";
+													echo "<label for='AddEmail'>E-mail:</label><br>";
+													echo "<input type='email' class='form-control' name='email' id='AddEmail' value='" . $index[1] . "' placeholder='E-mail' required>";
+												echo "</div><br>";
+												echo "<div class='input-group'>";
+													echo "<label for='Addfname'>First name:</label><br>";
+													echo "<input type='text' name='fname' class='form-control' id='Addfname' value='" . $index[4] . "' placeholder='First name' required>";
+												echo "</div><br>";
+												echo "<div class='input-group'>";
+													echo "<label for='Addlname'>Last name:</label><br>";
+													echo "<input type='text' name='lname' class='form-control' id='Addlname' value='" . $index[5] . "' placeholder='Last name' required>";
+												echo "</div><br>";
+												echo "<div class='input-group'>";
+													echo "<label for='AddPhone'>Phone number:</label><br>";
+													echo "<input type='number' name='phone' class='form-control' id='AddPhone' value='" . $index[6] . "' maxlength='16' placeholder='Phone Number'>";
+												echo "</div><br>";
+												echo "<div class='input-group'>";
+													echo "<label for='AddRole'>Role:</label>";
+													echo "<select class='form-control' id='AddRole' name='role'><br><br>";
+														echo "<option value='student'" . ($index[3] == "student" ? 'selected=\'selected\'' : '') . ">Student</option>";
+														echo "<option value='docent'" . ($index[3] == "docent" ? 'selected=\'selected\'' : '') . ">Docent</option>";
+														echo "<option value='SLB'" . ($index[3] == "SLB" ? 'selected=\'selected\'' : '') . ">SLB'er</option>";
+														echo "<option value='admin'" . ($index[3] == "admin" ? 'selected=\'selected\'' : '') . ">Administrator</option>";
+													echo "</select>";
+												echo "</div><br>";
+												echo "<label for='EditFollow'>";
+												echo "<button type='button' id='EditFollow' class='btn btn-default' data-toggle='modal' data-target='#EditFollowing" . $index[0] . "'></button>";
+												
+												//Edit following modal
+												echo '<div class="modal fade" id="EditFollowing' . $index[0] . '" role="dialog">';										
+													echo '<div class="modal-dialog">';
+														echo '<div class="modal-content">';
+															echo '<div class="modal-header">';
+																echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+																echo '<h4 class="modal-title">Bewerk de volg permissies.</h4>';
+															echo '</div>';
+															echo '<div class="modal-body">';
+																echo '<p>';
+																	echo "<form action='backend.php?p=gebruikers' method='POST'>";
+																	
+																echo "</p>";
+															echo "</div>";					
+														echo "</div>";
+													echo "</div>";
+												echo "</div>";												
+		
+										echo "</p>";
+									echo "</div>";
+									echo '<div class="modal-footer">';
+										echo "<input type='submit' value='Bewerk' name='EditUser'></form>";
+									echo "</div>";
+								echo "</div>";
+							echo "</div>";
+						echo "</div>";
+
 					echo "</tr>";
 				}
 			echo "</tbody>";
@@ -322,19 +385,37 @@ class Pages
 		echo "<button type='button' class='btn btn-default' id='addUserButton'>Voeg gebruiker toe.</button>";
 			echo "<div id='addUser'>";
 				echo "Voeg een gebruiker toe: <br><br>";
-				echo "<form action='#' method='post'>";
-					echo "<input type='email' name='email' placeholder='E-mail' required><br><br>";
-					echo "<input type='password' name='password' placeholder='Password' required><br><br>";
-					echo "<input type='text' name='fname' placeholder='First name' required><br><br>";
-					echo "<input type='text' name='lname' placeholder='Last name' required><br><br>";
-					echo "<input type='number' name='phone' maxlength='16' placeholder='Phone Number'><br><br>";
-					echo "Role<br><select name='role'><br><br>";
-						echo "<option value='student'>Student</option>";
-						echo "<option value='docent'>Docent</option>";
-						echo "<option value='SLB'>SLB'er</option>";
-						echo "<option value='admin'>Administrator</option>";
-					echo "</select><br><br>";
-					echo "<input type='submit' name='submitRegister'>";
+				echo "<form action='backend.php?p=gebruikers' method='post'>";
+					echo "<div class='input-group'>";
+						echo "<label for='AddEmail'>E-mail:</label><br>";
+						echo "<input type='email' class='form-control' name='email' id='AddEmail' placeholder='E-mail' required>";
+					echo "</div><br>";
+					echo "<div class='input-group'>";
+						echo "<label for='AddPassword'>Password:</label><br>";
+						echo "<input type='password' name='password' class='form-control' id='AddPassword' placeholder='Password' required>";
+					echo "</div><br>";
+					echo "<div class='input-group'>";
+						echo "<label for='Addfname'>First name:</label><br>";
+						echo "<input type='text' name='fname' class='form-control' id='Addfname' placeholder='First name' required>";
+					echo "</div><br>";
+					echo "<div class='input-group'>";
+						echo "<label for='Addlname'>Last name:</label><br>";
+						echo "<input type='text' name='lname' class='form-control' id=Addlname placeholder='Last name' required>";
+					echo "</div><br>";
+					echo "<div class='input-group'>";
+						echo "<label for='AddPhone'>Phone number:</label><br>";
+						echo "<input type='number' name='phone' class='form-control' id='AddPhone' maxlength='16' placeholder='Phone Number'>";
+					echo "</div><br>";
+					echo "<div class='input-group'>";
+						echo "<label for='AddRole'>Role:</label><br>";
+						echo "<select class='form-control' id='AddRole' name='role'><br><br>";
+							echo "<option value='student'>Student</option>";
+							echo "<option value='docent'>Docent</option>";
+							echo "<option value='SLB'>SLB'er</option>";
+							echo "<option value='admin'>Administrator</option>";
+						echo "</select>";
+					echo "</div><br>";
+					echo "<button class='btn btn-default' type='submit' name='submitRegister'>Verzenden</button>";
 				echo "</form>";
 			echo "</div>";		
 	}

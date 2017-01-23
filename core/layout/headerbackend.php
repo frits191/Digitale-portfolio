@@ -39,7 +39,6 @@ echo "<div class='container-fluid'>";
 						header('Location: backend.php?p=home');
 						exit();
 					}
-
 					echo "<div class='item-add'>";
 						echo "<div class='btn-group'>";
 							echo "<button type='button' class='btn btn-default' aria-label='Left Align'>";
