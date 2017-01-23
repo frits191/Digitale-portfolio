@@ -291,7 +291,10 @@ nav {
 }
 #footerContainer {
 	padding: 0px;
+  padding-top:1.5%;
 }
+
+
 .portfolioSelect {
 	width: 50%;
 	margin-left: 25%;
