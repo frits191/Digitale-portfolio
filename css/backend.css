@@ -45,6 +45,10 @@ body {
     position: relative;
 }
 
+.bootstrap-vertical-nav{
+  margin-bottom: -99999px;
+  padding-bottom: 99999px;
+}
 
 #mainblock{
     width: 100%;
@@ -75,7 +79,7 @@ body {
 }
 
 #body{
-	height: auto;
+	min-height:70vh;
 }
 
 .row{
@@ -287,7 +291,10 @@ nav {
 }
 #footerContainer {
 	padding: 0px;
+  padding-top:1.5%;
 }
+
+
 .portfolioSelect {
 	width: 50%;
 	margin-left: 25%;
@@ -311,6 +318,11 @@ nav {
 	display:none;
 }
 
+.mainContent{
+  min-height:65.3vh;
+  overflow: hidden;
+}
+
 @media only screen and (max-width: 1200px){
 	.nav-item{
 		float:left;
@@ -323,9 +335,7 @@ nav {
 	#downblock{
 		height:5vh;
 	}
-	.navbar{
-		height:auto;
-	}
+
 	.collapse{
 		display:none !important;
 	}
@@ -340,7 +350,9 @@ nav {
 		display:block;
 	}
 	.bootstrap-vertical-nav{
-		background-color:transparent;
+    padding-bottom:0;
+    margin-bottom:0;
+		min-height:0 !important;
 	}
 	#body{
 		height:auto;
@@ -353,7 +365,7 @@ nav {
 	}
 	#loginPassword {
 		width: 50%;
-	}	
+	}
 }
 .Pnav {
 	float: left;
