@@ -58,25 +58,25 @@ echo "<html>";
 	echo "<head>";
 		echo "<title>Digitaal Portfolio</title>";
 		echo '<meta charset="utf-8" />';
-		echo '<meta name="viewport" content="width=device-width, initial-scale=1">';	
+		echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
 
 		//JS
 		echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>';
 		//echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>';
 		echo '<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript">></script>';
-		echo '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>';	
+		echo '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>';
 		echo '<script src="js/scripts.js"></script>';
 
 		//CSS
 		echo '<link rel="stylesheet" type="text/css" href="../Digitale-portfolio/css/backend.css">';
-		echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">';	
-		echo '<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">';				
+		echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">';
+		echo '<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">';
 		echo '<link rel="stylesheet" href="//blueimp.github.io/Gallery/css/blueimp-gallery.min.css">';
 		echo '<link rel="stylesheet" href="css/jquery.fileupload.css">';
 		echo '<link rel="stylesheet" href="css/jquery.fileupload-ui.css">';
 
 		//Hide Angular JS elements before initializing
-		echo '<style>';			
+		echo '<style>';
 			echo '.ng-cloak { display: none; }';
 		echo '</style>';
 
@@ -88,7 +88,7 @@ echo "<html>";
 
 		//Menu
 		echo "<div id='body' class='container-fluid clearfix'>";
-			echo "<div class='row mainContent clearfix'>";
+			echo "<div class='row mainContent clearfix '>";
 
 				 echo "<div class='col-lg-2 bootstrap-vertical-nav'>";
 				 	echo "<div class='navbar navbar-light'>";
@@ -109,14 +109,14 @@ echo "<html>";
 										echo "<select name='PortfolioID' class='form-control' id='selPort' onchange='this.form.submit()'>";
 											//Select portfolio based on user role
 											$UserID = $_SESSION["id"];
-											if ($role == "docent" || $role == "SLB") {								
+											if ($role == "docent" || $role == "SLB") {
 												$SQLString = "SELECT following FROM user WHERE id = " . $UserID;
 												$QueryResult = $functions->executeQuery($SQLString);
 												$row = mysqli_fetch_assoc($QueryResult);
 
 												$following = explode(',', $row["following"]);
 												$sqlFollow = '';
-												for ($x = count($following); $x > 0; $x--) {	
+												for ($x = count($following); $x > 0; $x--) {
 													if ($x == 1) {
 														$sqlFollow .= "id = " . $following[$x - 1];
 													} else {
@@ -127,7 +127,7 @@ echo "<html>";
 												$SQLString = "SELECT title, id FROM portfolio WHERE " . $sqlFollow;
 												$QueryResult = $functions->executeQuery($SQLString);
 												$row = mysqli_fetch_all($QueryResult);
-												
+
 												if (empty($_SESSION["portfolio_id"])) {
 													$_SESSION["portfolio_id"] = $row[0][1];
 												}
@@ -139,7 +139,7 @@ echo "<html>";
 												$SQLString = "SELECT title, id FROM portfolio";
 												$QueryResult = $functions->executeQuery($SQLString);
 												$row = mysqli_fetch_all($QueryResult);
-											
+
 												if (empty($_SESSION["portfolio_id"])) {
 													$_SESSION["portfolio_id"] = $row[0][1];
 												}
@@ -173,7 +173,7 @@ echo "<html>";
 			echo "</div>";
 			echo "</div>";
 			echo "<div class='col-lg-10'>";
-
+			
 				//Checks which page is called and directs traffic to the appropriate page
 				if ($p == "home") {
 					$pages->home();
@@ -216,9 +216,9 @@ echo "<html>";
 			echo '<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">';
 				echo '<div class="slides"></div>';
 				echo '<h3 class="title"></h3>';
-				echo '<a class="prev">‹</a>';
-				echo '<a class="next">›</a>';
-				echo '<a class="close">×</a>';
+				echo '<a class="prev">ï¿½</a>';
+				echo '<a class="next">ï¿½</a>';
+				echo '<a class="close">ï¿½</a>';
 				echo '<a class="play-pause"></a>';
 				echo '<ol class="indicator"></ol>';
 			echo '</div>';
