@@ -32,7 +32,6 @@ echo "<div class='container-fluid'>";
 		echo "</div>";
 		echo "<div class='row'>";
 			echo "<div id='downblock' class='col-lg-12'>";
- 
 				if (isset($_GET["project"])) {
 					$project = htmlspecialchars($_GET["project"]);
 					if (is_int($project !== true)) {

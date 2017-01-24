@@ -1,58 +1,57 @@
-﻿﻿@media (min-width: 768px) {
-    ' {
-        overflow-y: hidden;
+﻿@media (min-width: 768px) {
+    body {
         overflow-x: hidden;
     }
-	.bootstrap-vertical-nav .navbar .navbar-collapse {
-       padding: 0;
-       max-height: none;
+    .fileupload-buttonbar .toggle, .files .toggle, .files .btn span{
+        display:block !important;
+    }
+    .bootstrap-vertical-nav .navbar .navbar-collapse {
+        padding: 0;
+        max-height: none;
     }
     .bootstrap-vertical-nav .navbar ul {
-       float: none;
+        float: none;
     }
     .bootstrap-vertical-nav .navbar ul:not {
-       display: block;
+        display: block;
     }
-   .bootstrap-vertical-nav .navbar li {
-       float: none;
-       display: block;
+    .bootstrap-vertical-nav .navbar li {
+        float: none;
+        display: block;
     }
-	#loginEmail {
-		width: 20%;
-	}
-	#loginPassword {
-		width: 20%;
-	}
+    #loginEmail {
+        width: 20%;
+    }
+    #loginPassword {
+        width: 20%;
+    }
     .bootstrap-vertical-nav .navbar-nav .nav-item+.nav-item {
-       margin-left: 0;
-    }	
-  }
+        margin-left: 0;
+    }
+    #exCollapsingNavbar2.collapse{
+        display:block !important;
+    }
 }
-
 body {
     margin: 0;
     padding: 0;
 }
-
 #wrapper{
-	background-color:#f2f2f2;
+    background-color:#f2f2f2;
 }
-
 #header{
     width: 100%;
     height: 15%;
     margin: 0;
     position: relative;
 }
-
 .bootstrap-vertical-nav{
-  margin-bottom: -99999px;
-  padding-bottom: 99999px;
+    margin-bottom: -99999px;
+    padding-bottom: 99999px;
 }
-
 #mainblock{
     width: 100%;
-    height: 25vh;
+    height: 20vh;
     padding: 14.5px;
     float: left;
     background-image: url('../core/images/background.png');
@@ -60,12 +59,11 @@ body {
 }
 #userblock{
     width: 100%;
-    height: 25vh;
+    height: 20vh;
     float: left;
     background-color: #4F5258;
     padding: 5px;
 }
-
 #userblock a{
     color: white;
 }
@@ -75,25 +73,23 @@ body {
 }
 #downblock{
     height: auto;
-	min-height: 30px;
+    min-height: 30px;
     background-color: darkblue;
 }
-
 #body{
-	min-height:70vh;
+    min-height: 75vh;
 }
-
 .row{
-	height:inherit;
+    height:inherit;
 }
-#NavItem {
-	padding-top: 5px;
-	padding-bottom: 5px;
+.nav-item {
+    padding-top: 5px;   
+    padding-bottom: 5px;
+}       }
+.nav-item:hover {
+    background-color: white;
 }
-#NavItem:hover {
-	background-color: white;
-}
-a{
+a {
     text-decoration: none;
     color: black;
 }
@@ -101,14 +97,14 @@ a{
     padding-top: 30px;
     padding-left: 15px;
 }
-#search{
+#search {
     padding: 0 !important;
     padding-left: 15px !important;
     margin: 0;
     float: left;
-	width: 100%;
+    width: 100%;
 }
-.searchinput{
+.searchinput {
     margin: 0;
     padding: 5px 15px;
     font-family: Arial, Helvetica, sans-serif;
@@ -116,7 +112,7 @@ a{
     border:1px solid #0076a3; border-right:0px;
     border-top-left-radius: 5px 5px;
     border-bottom-left-radius: 5px 5px;
-	width: 70%;
+    width: 70%;
 }
 .searchbutton {
     margin: 0;
@@ -132,7 +128,7 @@ a{
     background: #FFFFFF;
     border-top-right-radius: 5px 5px;
     border-bottom-right-radius: 5px 5px;
-	width: 10%;
+    width: 10%;
 }
 .searchbutton:hover {
     text-decoration: none;
@@ -143,22 +139,20 @@ a{
 .searchbutton::-moz-focus-inner {
     border: 0;
 }
-
 .navbar-toggler{
     font-size:30px;
-	background-color:transparent;
-	border:none;
+    background-color:transparent;
+    border:none;
 }
-
 .navbar-toggler:hover{
-	color:#85a8ff;
+    color:#85a8ff;
 }
 .navbar ul {
-	list-style: none;
+    list-style: none;
 }
 .navbar p {
     border-top: 0px !important;
-	margin-left:40px;
+    margin-left:40px;
     font-size:20px;
 }
 .navbar p:hover {
@@ -171,13 +165,10 @@ a{
     text-decoration: none !important;
     color: #000000 !important;
 }
-
-
 .container-fluid {
     padding: 0;
     margin: 0;
 }
-
 .col-lg-2 {
     min-height: 359.2px;
     height: 100%;
@@ -199,23 +190,15 @@ a{
     margin-right: 45px;
 }
 .btn-group {
+    height:34px;
     margin-right: 15px;
     float: right;
 }
-
 nav {
     position: relative;
     width: 100%;
     bottom: 0;
     text-align: center;
-}
-.pagination>li>a:focus,
-.pagination>li>a:hover,
-.pagination>li>span:focus,
-.pagination>li>span:hover {
-    color: #23527c;
-    background-color: #c8d8ff;
-    border-color: #c8d8ff;
 }
 .col-lg-12 {
     padding: 0;
@@ -228,6 +211,7 @@ nav {
     min-height: 100%;
     height: 100%;
     float: left;
+    margin-bottom:20px;
 }
 .navigation {
     width: 100%;
@@ -235,14 +219,29 @@ nav {
     padding-top: 20px;
     float: left;
 }
-.fileblock {
-    width: 150px;
-    height: 230px;
-    background-color: #c8d8ff;
-    border-radius: 15px;
-    margin-left: 55px;
-    margin-top: 20px;
-    float: left;
+@media (max-width: 415px) {
+    .fileblock {
+        width: 150px;
+        height: 230px;
+        background-color: #c8d8ff;
+        border-radius: 15px;
+        margin-left: 30%;
+        margin-right: 31%;
+        margin-bottom: 10%;
+        float: left;
+    }
+}
+@media (min-width: 416px) {
+    .fileblock {
+        margin-bottom: 2%;
+        width: 150px;
+        height: 230px;
+        background-color: #c8d8ff;
+        border-radius: 15px;
+        margin-left: 55px;
+        margin-top: 20px;
+        float: left;
+    }
 }
 .filemenu {
     width: 150px;
@@ -269,6 +268,8 @@ nav {
 }
 .filemenu .btn-link {
     color: white;
+    height:34px;
+    width:42px;
 }
 .filemenu .btn-link:hover,
 .filemenu .btn-link:active,
@@ -279,121 +280,118 @@ nav {
     background-color: #4f5258;
     color: white;
     text-align: center;
-	height: 6vh;
+    height: 6vh;
     padding: 0;
     margin: 0;
 }
 #banner {
-	padding: 0px;
+    padding: 0px;
 }
 #userLogged {
-	padding: 0px;
+    padding: 0px;
 }
 #footerContainer {
-	padding: 0px;
-  padding-top:1.5%;
+    padding: 0px;
 }
-
-
+#footerContainer p {
+    padding-top: 0.77%; 
+}
 .portfolioSelect {
-	width: 50%;
-	margin-left: 25%;
-	margin-right: 25%;
-	margin-top : 25%;
+    width: 70%;
+    margin-left:30px;
+    margin-right: 25%;
+    margin-top : 25%;
 }
 .FolderTitle {
-	width: 100%;
-	text-align: center;
-	font-size: 16px;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
 }
 #addUser {
-	display: none;
+    display: none;
 }
-
-.navbar-toggler{
-	display:none;
+.navbar-toggler {
+    display:none;
 }
-
-.mainContent{
-  min-height:65.3vh;
-  overflow: hidden;
+.mainContent {
+    min-height:65.3vh;
+    overflow: hidden;
+}
+.modal-footer {
+    text-align: center !important;
+}
+@media only screen and (max-width: 1024px){
+    .nav-item {
+        clear: both;
+        margin-right:5px;
+        margin-bottom:5px;
+    }
+    .portfolioSelect {
+        margin-top:0;
+    }
+    #userblock {
+        min-height:10px;
+    }
+    #downblock {
+        height:5vh;
+    }
+    #exCollapsingNavbar2.collapse {
+        display:none !important;
+    }
+    #exCollapsingNavbar2.collapsing {
+        background-color:#c8d8ff;
+    }
+    #exCollapsingNavbar2.collapse.in {
+        display:block !important;
+        background-color:#c8d8ff;
+    }
+    .navbar-toggler {
+        display:block;
+    }
+    .bootstrap-vertical-nav {
+        padding-bottom:0;
+        margin-bottom:0;
+        min-height:0 !important;
+    }
+    #body {
+        height:auto;
+    }
+    .mainContent {
+        min-height:55vh;
+    }
+    #loginEmail {
+        width: 50%;
+    }
+    #loginPassword {
+        width: 50%;
+    }
 }
 .Pnav {
-	float: left;
+    float: left;
 }
 #folderCreateDesc {
-	resize: none;
-	height: 145px;
+    resize: none;
+    height: 145px;
 }
 #EditFolderDesc {
-	resize: none;
-	height: 145px;
+    resize: none;
+    height: 145px;
 }
 #selPort {
-	width: 110%;
+    width: 110%;
 }
 #AddEmail {
-	width: 120%;
+    width: 120%;
 }
 #AddPassword {
-	width: 120%;
+    width: 120%;
 }
 #Addfname {
-	width: 120%;
+    width: 120%;
 }
 #Addlname {
-	width: 120%;
+    width: 120%;
 }
 #AddPhone {
-	width: 120%;
-}
-.collapse {
-	display: block !important;
-}
-
-@media only screen and (max-width: 1200px){
-	.nav-item{
-		float:left;
-		margin-right:5px;
-		margin-bottom:5px;
-	}
-	#userblock{
-		height:10vh;
-	}
-	#downblock{
-		height:5vh;
-	}
-	.collapse{
-		display:none !important;
-	}
-	.collapsing{
-		background-color:#c8d8ff;
-	}
-	.collapse.in{
-		display:block !important;
-		background-color:#c8d8ff;
-	}
-	.navbar-toggler{
-		display:block;
-	}
-	.bootstrap-vertical-nav{
-		padding-bottom:0;
-		margin-bottom:0;
-		min-height:0 !important;
-	}
-	#body{
-		height:auto;
-	}
-	.mainContent{
-		min-height:55vh;
-	}
-	#loginEmail {
-		width: 50%;
-	}
-	#loginPassword {
-		width: 50%;
-	}
-	.collapse{
-		display:block !important;
-	}
+    width: 120%;
 }

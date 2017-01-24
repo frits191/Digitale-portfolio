@@ -127,12 +127,10 @@ class Pages
 		}		
 		if (isset($_POST["fileDelete"])) {
 			$functions->deleteFile();
-		}	
-
-		$functions->breadcrumbs();		
+		}		
 
 		if (isset($_GET["project"])) {
-			echo "<a href='backend.php?p=projecten'><-- back</a>";
+			echo "<a href='backend.php?p=projecten'><button type='button' class='btn btn-default'>Back</button></a>";
 		}
 
 		echo "<div class='files'>";
@@ -405,7 +403,7 @@ class Pages
 						echo "<option value='admin'>Administrator</option>";
 					echo "</select>";
 				echo "</div><br>";
-				echo "<button class='btn btn-default' type='submit' name='submitRegister'>Verzenden</button>";
+				echo "<button class='btn btn-default' type='submit' name='submitRegister'>Verzenden</button><br><br>";
 			echo "</form>";
 		echo "</div>";		
 	}
