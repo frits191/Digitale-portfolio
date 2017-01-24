@@ -25,55 +25,8 @@
 	}
     .bootstrap-vertical-nav .navbar-nav .nav-item+.nav-item {
        margin-left: 0;
-    }
-	.collapse{
-		display:block !important;
-	}
+    }	
   }
-}
-
-@media only screen and (max-width: 1200px){
-	.nav-item{
-		float:left;
-		margin-right:5px;
-		margin-bottom:5px;
-	}
-	#userblock{
-		height:10vh;
-	}
-	#downblock{
-		height:5vh;
-	}
-	.collapse{
-		display:none !important;
-	}
-	.collapsing{
-		background-color:#c8d8ff;
-	}
-	.collapse.in{
-		display:block !important;
-		background-color:#c8d8ff;
-	}
-	.navbar-toggler{
-		display:block;
-	}
-	.bootstrap-vertical-nav{
-		padding-bottom:0;
-		margin-bottom:0;
-		min-height:0 !important;
-	}
-	#body{
-		height:auto;
-	}
-	.mainContent{
-		min-height:55vh;
-	}
-	#loginEmail {
-		width: 50%;
-	}
-	#loginPassword {
-		width: 50%;
-	}
 }
 
 body {
@@ -393,4 +346,54 @@ nav {
 }
 #AddPhone {
 	width: 120%;
+}
+.collapse {
+	display: block !important;
+}
+
+@media only screen and (max-width: 1200px){
+	.nav-item{
+		float:left;
+		margin-right:5px;
+		margin-bottom:5px;
+	}
+	#userblock{
+		height:10vh;
+	}
+	#downblock{
+		height:5vh;
+	}
+	.collapse{
+		display:none !important;
+	}
+	.collapsing{
+		background-color:#c8d8ff;
+	}
+	.collapse.in{
+		display:block !important;
+		background-color:#c8d8ff;
+	}
+	.navbar-toggler{
+		display:block;
+	}
+	.bootstrap-vertical-nav{
+		padding-bottom:0;
+		margin-bottom:0;
+		min-height:0 !important;
+	}
+	#body{
+		height:auto;
+	}
+	.mainContent{
+		min-height:55vh;
+	}
+	#loginEmail {
+		width: 50%;
+	}
+	#loginPassword {
+		width: 50%;
+	}
+	.collapse{
+		display:block !important;
+	}
 }
