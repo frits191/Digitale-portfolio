@@ -302,12 +302,18 @@ class functions {
 							echo '<p>';
 								echo "<form action='backend.php?p=projecten' method='POST'>";
 									echo "<input type='hidden' name='folderID' value='" . $row[$i][0] . "'>";
-									echo "<input type='text' name='folderName' value='" . $row[$i][1] . "' placeholder='Name' required><br><br>";
-									echo "<input type='text' name='folderDesc' value='" . $row[$i][2] . "' placeholder='Description'>";
+									echo "<div class='form-group'>";
+										echo "<label for='EditFolderName'>Bestands Naam:</label><br>";
+										echo "<input type='text' class='form-control' id='EditFolderName' name='folderName' value='" . $row[$i][1] . "' placeholder='Name' required>";
+									echo "</div>";
+									echo "<div class='form-group'>";
+										echo "<label for='EditFolderDesc'>Beschrijving:</label><br>";
+										echo "<textarea name='folderDesc' class='form-control' id='EditFolderDesc' maxlength='500' placeholder='Description'>" . $row[$i][2] . "</textarea>";
+									echo "</div>";
 							echo "</p>";
 						echo "</div>";
 						echo '<div class="modal-footer">';
-							echo "<input type='submit' value='Bewerk' name='folderEdit'></form>";
+							echo "<button type='submit' class='btn btn-default' name='folderEdit'>Bewerk</button></form>";
 						echo "</div>";
 					echo "</div>";
 				echo "</div>";
@@ -319,13 +325,13 @@ class functions {
 					echo '<div class="modal-content">';
 						echo '<div class="modal-header">';
 							echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
-							echo '<h4 class="modal-title">Weet u zeker dat je de map: \'' . $row[$i][1] . '\' wilt verwijderen?<br>Hou er rekening mee dat alle onderliggende bestanden ook worden verwijdert.</h4>';
+							echo '<h4 class="modal-title">Weet u zeker dat u de map: \'' . $row[$i][1] . '\' wilt verwijderen?<br>Waarschuwing: alle onderliggende bestanden worden ook verwijderd.</h4>';
 						echo'</div>';
 						echo '<div class="modal-body">';
 							echo '<p>';
 								echo "<form action='backend.php?p=projecten' method='POST'>";
 									echo "<input type='hidden' name='folderToDelete' value='" . $row[$i][0] . "'><br><br>";
-									echo "<input type='submit' value='Verwijder' name='folderDelete'></form>";
+									echo "<button type='submit' class='btn btn-default' name='folderDelete'>Verwijder</button></form>";
 							echo "</p>";
 						echo "</div>";
 						echo '<div class="modal-footer">';						
@@ -334,7 +340,7 @@ class functions {
 				echo "</div>";
 			echo "</div>";
 		}
-		echo "<nav class='Pnav' aria-label='Page navigation'>";
+		/* echo "<nav class='Pnav' aria-label='Page navigation'>";
 			echo "<ul class='pagination'>";
 				echo "<li>";
 					echo "<a href='#' title='Previous' aria-label='Previous'>";
@@ -350,7 +356,7 @@ class functions {
 					echo "</a>";
 				echo "</li>";
 			echo "</ul>";
-		echo "</nav>"; 
+		echo "</nav>"; */
 	}
 
 	function getFiles() {
@@ -396,12 +402,18 @@ class functions {
 								echo "<form action='backend.php?p=projecten&project=" . $project . "' method='POST'>";
 									echo "<input type='hidden' name='fileID' value='" . $row[$i][0] . "'>";
 									echo "<input type='hidden' name='projectID' value='" . $project . "'>";
-									echo "<input type='text' name='fileName' value='" . $row[$i][1] . "' placeholder='Name' required><br><br>";
-									echo "<input type='text' name='fileDesc' value='" . $row[$i][3] . "' placeholder='Description'>";
+									echo "<div class='input-group'>";
+										echo "<label for='EditFileName'>Bestands Naam:</label><br>";
+										echo "<input type='text' class='form-control' id='EditFileName' name='fileName' value='" . $row[$i][1] . "' placeholder='Name' required><br><br>";
+									echo "</div>";
+									echo "<div class='input-group'>";
+										echo "<label for='EditFileDesc'>Beschrijving:</label><br>";
+										echo "<input type='text' class='form-control' id='EditFileDesc' name='fileDesc' value='" . $row[$i][3] . "' placeholder='Description'>";
+									echo "</div>";
 							echo "</p>";
 						echo "</div>";
 						echo '<div class="modal-footer">';
-							echo "<input type='submit' value='Bewerk' name='fileEdit'></form>";
+							echo "<button type='submit' class='btn btn-default' name='fileEdit'>Bewerken</button></form>";
 						echo "</div>";
 					echo "</div>";
 				echo "</div>";
@@ -413,14 +425,14 @@ class functions {
 					echo '<div class="modal-content">';
 						echo '<div class="modal-header">';
 							echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
-							echo '<h4 class="modal-title">Weet u zeker dat je het bestand: \'' . $row[$i][1] . '\' wilt verwijderen?</h4>';
+							echo '<h4 class="modal-title">Weet u zeker dat u het bestand: \'' . $row[$i][1] . $row[$i][2] . '\' wilt verwijderen?</h4>';
 						echo'</div>';
 						echo '<div class="modal-body">';
 							echo '<p>';
 								echo "<form action='backend.php?p=projecten&project=" . $project . "' method='POST'>";
 									echo "<input type='hidden' name='fileToDelete' value='" . $row[$i][0] . "'><br><br>";
 									echo "<input type='hidden' name='projectID' value='" . $project . "'>";
-									echo "<input type='submit' value='Verwijder' name='fileDelete'></form>";
+									echo "<button type='submit' class='btn btn-default' name='fileDelete'>Verwijder</button></form>";
 							echo "</p>";
 						echo "</div>";
 						echo '<div class="modal-footer">';						
@@ -429,7 +441,7 @@ class functions {
 				echo "</div>";
 			echo "</div>";
 		}
-		echo "<nav class='Pnav' aria-label='Page navigation'>";
+		/* echo "<nav class='Pnav' aria-label='Page navigation'>";
 			echo "<ul class='pagination'>";
 				echo "<li>";
 					echo "<a href='#' title='Previous' aria-label='Previous'>";
@@ -445,7 +457,7 @@ class functions {
 					echo "</a>";
 				echo "</li>";
 			echo "</ul>";
-		echo "</nav>";
+		echo "</nav>"; */
 	}
 
 	function breadcrumbs() {

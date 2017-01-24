@@ -156,7 +156,7 @@ echo "<html>";
 					}
 
 					echo "<p>Menu</p>";
-					echo "<ul class='navbar navbar-nav'>";
+					echo "<ul class='navbar navbar-nav' id='navbarDisplay'>";
 						echo "<a href='backend.php?p=info'><li class='nav-item' id='NavItem'>Persoonlijke gegevens</li></a>";
 						echo "<a href='backend.php?p=cijfers'><li class='nav-item' id='NavItem'>Cijfers</li></a>";
 						echo "<a href='backend.php?p=projecten'><li class='nav-item' id='NavItem'>Projecten</li></a>";
@@ -229,7 +229,6 @@ echo "<html>";
 			echo '<script src="js/vendor/jquery.ui.widget.js"></script>';
 			echo '<script src="//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>';
 			echo '<script src="//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>';
-			//echo '<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>';
 			echo '<script src="//blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>';
 			echo '<script src="js/jquery.iframe-transport.js"></script>';
 			echo '<script src="js/jquery.fileupload.js"></script>';
