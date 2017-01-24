@@ -129,10 +129,8 @@ class Pages
 			$functions->deleteFile();
 		}	
 
-		$functions->breadcrumbs();		
-
 		if (isset($_GET["project"])) {
-			echo "<a href='backend.php?p=projecten'><-- back</a>";
+			echo "<a href='backend.php?p=projecten'><button type='button' class='btn btn-default'>Terug</button></a>";
 		}
 
 		echo "<div class='files'>";
@@ -293,6 +291,7 @@ class Pages
 					echo "<th>Telefoon nummer</th>";
 					echo "<th>Toegang tot:</th>";
 					echo "<th></th>";
+					echo "<th></th>";
 				echo "</tr>";
 			echo "</thead>";
 			echo "<tbody>";
@@ -310,6 +309,32 @@ class Pages
 						echo "<td>" . $index[6] . "</td>";
 						echo "<td>" . $index[7] . "</td>";	
 						echo "<td><button type='button' class='btn btn-default' data-toggle='modal' data-target='#EditUser" . $index[0] . "' id='EditUser'>Bewerken</button></td>";
+						if ($_SESSION["e-mail"] == $index[1]) {
+							echo "<td><button type='button' class='btn btn-danger' disabled>Verwijderen</button></td>";
+						} else {
+							echo "<td><button type='button' class='btn btn-danger' data-toggle='modal' data-target='#DeleteUser" . $index[0] . "' id='Deleteuser'>Verwijderen</button></td>";
+							//Delete modal
+							echo '<div class="modal fade" id="DeleteUser' . $index[0] . '" role="dialog">';
+							echo '<div class="modal-dialog">';
+								echo '<div class="modal-content">';
+									echo '<div class="modal-header">';
+										echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+										echo '<h4 class="modal-title">Weet u zeker dat u de gebruiker: \'' . $index[4] . ' ' . $index[5] . '\' wilt verwijderen?`</h4>';
+									echo'</div>';
+									echo '<div class="modal-body">';
+										echo '<p>';
+										echo '<h5><strong>Waarschuwing:</strong> de onderliggende portfolio/bestanden worden ook verwijderd.</h5>';
+											echo "<form action='backend.php?p=projecten' method='POST'>";
+												echo "<input type='hidden' name='folderToDelete' value='" . $index[0] . "'><br><br>";
+									echo "</div>";
+									echo '<div class="modal-footer">';
+										echo "<button type='submit' class='btn btn-default' name='folderDelete'>Verwijder</button></form>";
+										echo "</p>";
+									echo "</div>";
+								echo "</div>";
+							echo "</div>";
+						echo "</div>";
+						}
 					echo "</tr>";
 
 				//Edit modal
@@ -351,15 +376,26 @@ class Pages
 													echo "<option value='SLB'" . ($index[3] == "SLB" ? 'selected=\'selected\'' : '') . ">SLB'er</option>";
 													echo "<option value='admin'" . ($index[3] == "admin" ? 'selected=\'selected\'' : '') . ">Administrator</option>";
 												echo "</select>";
-										echo "</div><br>";
-										echo "<label for='EditFollowButton'>Docent toegang lijst:</label><br>";
-										echo "<button type='button' data-toggle='collapse' data-target='#EditFollow' id='EditFollowButton' class='btn btn-default'>Verander</button>";
-										echo "<div id='EditFollow' class='collapse'>";
-											echo "Pas de leerlingen die bij deze docent horen aan:<br><br>";									
-											if ($index[3] == "admin") {
-												echo "De administrator heeft al toegang tot alle portfolio's!";
-											}	
-										echo "</div>";								
+												
+										echo "</div><br><b>Waarschuwing: </b>Als de rol van een student verandert wordt de gehele portfolio en alle onderliggende bestanden ook verwijderd.<br><br>";
+										if ($index[3] == "docent" || $index[3] == "SLB") {
+											echo "<label for='EditFollowButton'>Docent toegang lijst:</label><br>";
+											echo "<button type='button' data-toggle='collapse' data-target='#EditFollow' id='EditFollowButton' class='btn btn-default'>Pas aan</button>";
+											echo "<div id='EditFollow' class='collapse'><br>";
+												echo "Pas de leerlingen die bij deze docent horen aan:<br><br>";
+
+												$SQLString = "SELECT firstName, lastName, id FROM user WHERE role = 'student'";
+												$QueryResult = $functions->executeQuery($SQLString);
+												$UserList = mysqli_fetch_all($QueryResult);
+
+												$followingArray = explode(',', $index[7]);
+
+												foreach ($UserList as $index => $value) {
+													echo "<label class='checkbox-inline'><input type='checkbox' value='" . $value[2] . "' " . (in_array($value[2], $followingArray) ? 'checked' : '') . ">" . $value[0] . " " . $value[1] . "</label>";	
+												}
+											
+											echo "</div>";	
+										}							
 								echo "</p>";
 							echo "</div>";
 							echo '<div class="modal-footer">';
@@ -405,7 +441,7 @@ class Pages
 						echo "<option value='admin'>Administrator</option>";
 					echo "</select>";
 				echo "</div><br>";
-				echo "<button class='btn btn-default' type='submit' name='submitRegister'>Verzenden</button>";
+				echo "<button class='btn btn-default' type='submit' name='submitRegister'>Verzenden</button><br><br>";
 			echo "</form>";
 		echo "</div>";		
 	}

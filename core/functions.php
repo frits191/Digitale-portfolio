@@ -310,11 +310,11 @@ class functions {
 										echo "<label for='EditFolderDesc'>Beschrijving:</label><br>";
 										echo "<textarea name='folderDesc' class='form-control' id='EditFolderDesc' maxlength='500' placeholder='Description'>" . $row[$i][2] . "</textarea>";
 									echo "</div>";
+									echo "</div>";
+									echo '<div class="modal-footer">';
+									echo "<button type='submit' class='btn btn-default' name='folderEdit'>Bewerk</button></form>";
 							echo "</p>";
-						echo "</div>";
-						echo '<div class="modal-footer">';
-							echo "<button type='submit' class='btn btn-default' name='folderEdit'>Bewerk</button></form>";
-						echo "</div>";
+						echo "</div>";				
 					echo "</div>";
 				echo "</div>";
 			echo "</div>";
@@ -325,16 +325,18 @@ class functions {
 					echo '<div class="modal-content">';
 						echo '<div class="modal-header">';
 							echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
-							echo '<h4 class="modal-title">Weet u zeker dat u de map: \'' . $row[$i][1] . '\' wilt verwijderen?<br>Waarschuwing: alle onderliggende bestanden worden ook verwijderd.</h4>';
+							echo '<h4 class="modal-title">Weet u zeker dat u de map: \'' . $row[$i][1] . '\' wilt verwijderen?`</h4>';
 						echo'</div>';
 						echo '<div class="modal-body">';
 							echo '<p>';
+								echo '<h5><strong>Waarschuwing:</strong> alle onderliggende bestanden worden ook verwijderd.</h5>';
 								echo "<form action='backend.php?p=projecten' method='POST'>";
 									echo "<input type='hidden' name='folderToDelete' value='" . $row[$i][0] . "'><br><br>";
-									echo "<button type='submit' class='btn btn-default' name='folderDelete'>Verwijder</button></form>";
 							echo "</p>";
 						echo "</div>";
-						echo '<div class="modal-footer">';						
+						echo '<div class="modal-footer">';
+							echo "<button type='submit' class='btn btn-default' name='folderDelete'>Verwijder</button></form>";
+							echo "</p>";						
 						echo "</div>";
 					echo "</div>";
 				echo "</div>";
@@ -432,10 +434,10 @@ class functions {
 								echo "<form action='backend.php?p=projecten&project=" . $project . "' method='POST'>";
 									echo "<input type='hidden' name='fileToDelete' value='" . $row[$i][0] . "'><br><br>";
 									echo "<input type='hidden' name='projectID' value='" . $project . "'>";
-									echo "<button type='submit' class='btn btn-default' name='fileDelete'>Verwijder</button></form>";
-							echo "</p>";
 						echo "</div>";
-						echo '<div class="modal-footer">';						
+						echo '<div class="modal-footer">';	
+								echo "<button type='submit' class='btn btn-default' name='fileDelete'>Verwijder</button></form>";
+							echo "</p>";								
 						echo "</div>";
 					echo "</div>";
 				echo "</div>";
@@ -458,34 +460,6 @@ class functions {
 				echo "</li>";
 			echo "</ul>";
 		echo "</nav>"; */
-	}
-
-	function breadcrumbs() {
-		//"Portfolio Maurice->projecten->SLB Folder<br>";
-		$SQLString = "SELECT title FROM portfolio WHERE id = " . $_SESSION["portfolio_id"];
-		$QueryResult = $this->executeQuery($SQLString);
-		$row = mysqli_fetch_assoc($QueryResult);
-		$portfolio = $row["title"];
-
-		if (isset($_GET["project"])) {
-			$projectID = htmlspecialchars($_GET["project"]);
-			$projectID = str_replace("'", "&#39;", $projectID);
-
-			if (is_int($projectID !== true)) {
-				header('Location: backend.php?p=home');
-				exit();
-			}
-			$SQLString = "SELECT title FROM project WHERE id = " . $projectID . " AND portfolio_id = " . $_SESSION["portfolio_id"];
-			$QueryResult = $this->executeQuery($SQLString);
-			if (mysqli_num_rows($QueryResult) == 0) {
-				header('Location: backend.php?p=home');
-				exit();
-			}
-			$row = mysqli_fetch_assoc($QueryResult);
-			echo $portfolio . "-><a href='backend.php?p=projecten'>projecten</a>->" . $row["title"] . "<br>";
-		} else {
-			echo $portfolio . "->projecten<br>";
-		}
 	}
 }
 ?>
