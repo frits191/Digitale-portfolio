@@ -1,8 +1,8 @@
- <div class='row'>
-        <div class='col-lg-12' id='footerContainer'>
-            <div class='footer'>
-                <p>&copy; INF1H | Stenden hogeschool Emmen 2017</p>
-            </div>
-        </div>
-    </div>
-</div>  
+<?php 
+echo "<div class='row footer'>";
+	echo "<div class='col-lg-12' id='footerContainer'>";
+			echo "<p>&copy; INF1H | Stenden hogeschool Emmen " . date('Y') . "</p>";
+	echo "</div>";
+echo "</div>";
+echo "</div>";
+?>

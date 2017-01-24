@@ -33,26 +33,10 @@
     <Compile Include="core\images\new-layout-portfolio-backend_0033_new-folder.png" />
     <Compile Include="core\images\new-layout-portfolio-backend_0034_item-teovoegen.png" />
     <Compile Include="core\images\new-layout-portfolio-backend_0049_Menu-rechts.png" />
-    <Compile Include="core\layout\footer.php" />
     <Compile Include="core\layout\footerbackend.php" />
-    <Compile Include="core\layout\header.php" />
     <Compile Include="core\layout\headerbackend.php" />
-    <Compile Include="core\pages\bram.php" />
-    <Compile Include="core\pages\dennis.php" />
-    <Compile Include="core\pages\home.php" />
-    <Compile Include="core\pages\jasper.php" />
-    <Compile Include="core\pages\julian.php" />
-    <Compile Include="core\pages\maarten.php" />
-    <Compile Include="core\pages\maurice.php" />
-    <Compile Include="core\pages\rick.php" />
-    <Compile Include="core\pages\stan.php" />
     <Compile Include="core\connect.php" />
     <Compile Include="core\functions.php" />
-    <Compile Include="css\header.css" />
-    <Compile Include="css\style.css" />
-    <Compile Include="database\createaccount.sql" />
-    <Compile Include="database\createdatabase.sql" />
-    <Compile Include="database\erd screenshot.png" />
     <Compile Include="fonts\glyphicons-halflings-regular.eot" />
     <Compile Include="fonts\glyphicons-halflings-regular.svg" />
     <Compile Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -78,10 +62,8 @@
     <Folder Include=".vs" />
     <Folder Include="core\images" />
     <Folder Include="core\layout" />
-    <Folder Include="core\pages" />
     <Folder Include="core" />
     <Folder Include="css" />
-    <Folder Include="database" />
     <Folder Include="fonts" />
     <Folder Include="js" />
     <Folder Include="nbproject\private" />
@@ -89,5 +71,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\backend.css" />
+    <Content Include="js\scripts.js" />
   </ItemGroup>
 </Project>
