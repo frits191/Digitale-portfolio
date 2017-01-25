@@ -47,6 +47,10 @@ class Pages
 	function cijfers() {
 		global $functions;
 
+		if (isset($_POST["submitCijfer"])) {
+			$functions->EditCijfer();
+		}
+
 		echo "<table class='table table-hover'>";
 			echo "<thead>";
 				echo "<tr>";
@@ -54,6 +58,7 @@ class Pages
 					echo "<th>Cijfer</th>";
 					echo "<th>Gegeven door</th>";
 					echo "<th>Opmerking</th>";
+					echo "<th></th>";
 				echo "</tr>";
 			echo "</thead>";
 			echo "<tbody>";		
@@ -92,7 +97,35 @@ class Pages
 							echo "<td>" . $grade . "</td>";
 							echo "<td>" . $fname . " " . $lname . "</td>";
 							echo "<td>" . $comment . "</td>";
-						echo "</tr>";
+							echo "<td><button type='button' class='btn btn-default' data-toggle='modal' data-target='#EditGrade" . $index[0] . "'>Verander cijfer</button>"; 
+							echo '<div class="modal fade" id="EditGrade' . $index[0] . '" role="dialog">';
+							echo '<div class="modal-dialog">';
+								echo '<div class="modal-content">';
+									echo '<div class="modal-header">';
+										echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+										echo '<h4 class="modal-title">Pas het cijfer aan.</h4>';
+									echo'</div>';
+									echo '<div class="modal-body">';
+										echo '<p>';
+											echo "<form action='backend.php?p=cijfers' method='POST'>";
+												echo "<div class='form-group'>";
+													echo "<label for='cijfer'>Cijfer</label>";
+													echo "<input type='number' name='cijfer' class='form-control' id='cijfer' min='1' max='10' step='0.1' value='" . $grade . "' required>";
+												echo "</div>";
+												echo "<div class='form-group'>";
+													echo "<label for='cijferOpmerking'>Opmerking:</label>";
+													echo "<textarea name='cijferOpmerking' placeholder='Opmerking' class='form-control' maxlength='500' id='cijferOpmerking'>" . $index[4] . "</textarea>";
+												echo "</div>";
+										echo "</p>";
+									echo "</div>";
+									echo '<div class="modal-footer">';
+										echo "<button type='submit' class='btn btn-default' value='Verzend' name='submitCijfer'>Verzend</button></form>";
+									echo "</div>";
+								echo "</div>";
+							echo "</div>";
+						echo "</div>";
+						echo "</td></tr>";
+						
 					}
 				}
 			echo "</tbody>";
@@ -271,10 +304,6 @@ class Pages
                 echo "</div>";
             echo "</div>";
         echo "</div>";	
-	}
-
-	function stages() {
-
 	}
 
 	function portfolio() {

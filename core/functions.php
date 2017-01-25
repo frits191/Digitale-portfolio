@@ -542,5 +542,9 @@ class functions {
 		$SQLString = "DELETE FROM user WHERE id = " . $userID;
 		$QueryResult = $this->executeQuery($SQLString);
 	}
+
+	function EditCijfer() {
+		
+	}
 }
 ?>

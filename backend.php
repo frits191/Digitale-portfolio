@@ -62,7 +62,6 @@ echo "<html>";
 
 		//JS
 		echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>';
-		//echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>';
 		echo '<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript">></script>';
 		echo '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>';
 		echo '<script src="js/scripts.js"></script>';
@@ -157,12 +156,11 @@ echo "<html>";
 
 					echo "<p>Menu</p>";
 					echo "<ul class='navbar navbar-nav' id='navbarDisplay'>";
-						echo "<a href='backend.php?p=info'><li class='nav-item' id='NavItem'>Persoonlijke gegevens</li></a>";
-						echo "<a href='backend.php?p=cijfers'><li class='nav-item' id='NavItem'>Cijfers</li></a>";
-						echo "<a href='backend.php?p=projecten'><li class='nav-item' id='NavItem'>Projecten</li></a>";
-						echo "<a href='backend.php?p=stages'><li class='nav-item' id='NavItem'>Stages</li></a>";
-						echo "<a href='backend.php?p=portfolio'><li class='nav-item' id='NavItem'>Openbaar portfolio</li></a>";
-						echo "<a href='backend.php?p=opmerkingen'><li class='nav-item' id='NavItem'>Opmerkingen</li></a>";
+						echo "<a href='backend.php?p=info'><li class='nav-item'>Persoonlijke gegevens</li></a>";
+						echo "<a href='backend.php?p=cijfers'><li class='nav-item'>Cijfers</li></a>";
+						echo "<a href='backend.php?p=projecten'><li class='nav-item'>Projecten</li></a>";
+						echo "<a href='backend.php?p=portfolio'><li class='nav-item'>Openbaar portfolio</li></a>";
+						echo "<a href='backend.php?p=opmerkingen'><li class='nav-item'>Opmerkingen</li></a>";
 						if (isset($_SESSION["role"])) {
 					 		if ($role == "admin") {
 					 			echo "<a href='backend.php?p=gebruikers'><li class='nav-item' id='NavItem'>Gebruikers beheren</li></a>";
@@ -192,9 +190,6 @@ echo "<html>";
 				}
 				elseif ($p == "projecten") {
 					$pages->projecten();
-				}
-				elseif ($p == "stages") {
-					$pages->stages();
 				}
 				elseif ($p == "portfolio") {
 					$pages->portfolio();

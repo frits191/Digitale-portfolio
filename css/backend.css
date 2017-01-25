@@ -85,9 +85,9 @@ body {
 .nav-item {
     padding-top: 5px;   
     padding-bottom: 5px;
-}       }
+}       
 .nav-item:hover {
-    background-color: white;
+    background-color: #f2f2f2;
 }
 a {
     text-decoration: none;
@@ -314,8 +314,11 @@ nav {
     display:none;
 }
 .mainContent {
-    min-height:65.3vh;
+    min-height:69.9vh;
     overflow: hidden;
+}
+.fileupload-buttonbar .toggle, .files .toggle, .files .ptn span {
+	display: block !important;
 }
 .modal-footer {
     text-align: center !important;
