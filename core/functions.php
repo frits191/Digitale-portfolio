@@ -342,23 +342,6 @@ class functions {
 				echo "</div>";
 			echo "</div>";
 		}
-		/* echo "<nav class='Pnav' aria-label='Page navigation'>";
-			echo "<ul class='pagination'>";
-				echo "<li>";
-					echo "<a href='#' title='Previous' aria-label='Previous'>";
-						echo "<span aria-hidden='true'>&laquo;</span>";
-					echo "</a>";
-				echo "</li>";
-				echo "<li>";
-					echo "<a href='#'>1</a>";
-				echo "</li>";
-				echo "<li>";
-					echo "<a href='#' title='Next' aria-label='Next'>";
-						echo "<span aria-hidden='true'>&raquo;</span>";
-					echo "</a>";
-				echo "</li>";
-			echo "</ul>";
-		echo "</nav>"; */
 	}
 
 	function getFiles() {
@@ -443,23 +426,121 @@ class functions {
 				echo "</div>";
 			echo "</div>";
 		}
-		/* echo "<nav class='Pnav' aria-label='Page navigation'>";
-			echo "<ul class='pagination'>";
-				echo "<li>";
-					echo "<a href='#' title='Previous' aria-label='Previous'>";
-						echo "<span aria-hidden='true'>&laquo;</span>";
-					echo "</a>";
-				echo "</li>";
-				echo "<li>";
-					echo "<a href='#'>1</a>";
-				echo "</li>";
-				echo "<li>";
-					echo "<a href='#' title='Next' aria-label='Next'>";
-						echo "<span aria-hidden='true'>&raquo;</span>";
-					echo "</a>";
-				echo "</li>";
-			echo "</ul>";
-		echo "</nav>"; */
+	}
+
+	function edituser() {
+		$email = htmlspecialchars($_POST["email"]);
+		$fname = htmlspecialchars($_POST["fname"]);
+		$lname = htmlspecialchars($_POST["lname"]);
+		$phone = htmlspecialchars($_POST["phone"]);
+		$role = htmlspecialchars($_POST["role"]);
+		if (isset($_POST["following"])) {
+			$followingArray = $_POST["following"];
+		} else {
+			$following = "";
+		}
+		$userID = htmlspecialchars($_POST["userID"]);
+
+		if (!empty($email) && !empty($fname) && !empty($lname) && !empty($role) && !empty($userID)) {
+			$SQLString = "SELECT role FROM user WHERE id = " . $userID;
+			$QueryResult = $this->executeQuery($SQLString);
+			$row = mysqli_fetch_all($QueryResult);
+
+			if (isset($followingArray)) {
+				$following = implode(",", $followingArray);
+			}
+
+			if ($row[0][0] == "student" && $role != "student") {
+				//When a student becomes another role
+				$SQLString = "SELECT id FROM portfolio WHERE owner_id = " . $userID;
+				$QueryResult = $this->executeQuery($SQLString);
+				$row = mysqli_fetch_all($QueryResult);
+				$portfolioID = $row[0][0];				
+
+				$SQLString = "SELECT id FROM project WHERE portfolio_id = " . $portfolioID;
+				$QueryResult = $this->executeQuery($SQLString);
+				$row = mysqli_fetch_all($QueryResult);
+
+				if (mysqli_num_rows($QueryResult) > 0) {
+					foreach ($row as $index => $value) {
+						$SQLString = "DELETE FROM file WHERE project_id = " . $value[0];
+						$QueryResult = $this->executeQuery($SQLString);
+						$SQLString = "DELETE FROM rating WHERE project_id = " . $value[0];
+						$QueryResult = $this->executeQuery($SQLString);
+						$SQLString = "DELETE FROM project WHERE id = " . $value[0];
+						$QueryResult = $this->executeQuery($SQLString);			
+
+						$dirname = "front-end/res/portfolios/" . $portfolioID . "/" . $value[0];;
+						array_map('unlink', glob("$dirname/*.*"));
+						rmdir($dirname);						
+					}				
+				}
+				$portDir = "front-end/res/portfolios/" . $portfolioID;
+				rmdir($portDir);
+
+				$SQLString = "DELETE FROM portfolio WHERE id = " . $portfolioID;
+				$QueryResult = $this->executeQuery($SQLString); 
+
+			} elseif ($row[0][0] != "student" && $role == "student") {
+				//When another role becomes a student
+				$following = "";
+				$SQLString = 'INSERT INTO portfolio (`title`, `owner_id`) VALUES ("Portfolio ' . $fname . '", "' . $userID . '")';
+				$this->executeQuery($SQLString);
+
+				$SQLString = "SELECT id FROM portfolio WHERE owner_id = " . $userID;
+				$QueryResult = $this->executeQuery($SQLString);
+				$row = mysqli_fetch_assoc($QueryResult);
+
+				$folderPath = "front-end/res/portfolios/" . $row["id"] . "/";
+				mkdir($folderPath);
+			}			
+
+			$SQLString = "UPDATE user SET `e-mail` = '" . $email . "', `role` = '" . $role . "', `firstName` = '" . $fname . "', `lastName` = '" . $lname . "', `phone` = '" . $phone . "', `following` = '" . $following . "' WHERE id = " . $userID; 
+			$QueryResult = $this->executeQuery($SQLString);
+		}
+	}
+
+	function deleteUser() {
+		$userID = htmlspecialchars($_POST["userID"]);
+
+		$SQLString = "SELECT role FROM user WHERE id = " . $userID;
+		$QueryResult = $this->executeQuery($SQLString);
+		$row = mysqli_fetch_all($QueryResult);
+		$role = $row[0][0];
+
+		if ($role == "student") {
+			$SQLString = "SELECT id FROM portfolio WHERE owner_id = " . $userID;
+			$QueryResult = $this->executeQuery($SQLString);
+			$row = mysqli_fetch_all($QueryResult);
+			$portfolioID = $row[0][0];				
+
+			$SQLString = "SELECT id FROM project WHERE portfolio_id = " . $portfolioID;
+			$QueryResult = $this->executeQuery($SQLString);
+			$row = mysqli_fetch_all($QueryResult);
+
+			if (mysqli_num_rows($QueryResult) > 0) {
+				foreach ($row as $index => $value) {
+					$SQLString = "DELETE FROM file WHERE project_id = " . $value[0];
+					$QueryResult = $this->executeQuery($SQLString);
+					$SQLString = "DELETE FROM rating WHERE project_id = " . $value[0];
+					$QueryResult = $this->executeQuery($SQLString);
+					$SQLString = "DELETE FROM project WHERE id = " . $value[0];
+					$QueryResult = $this->executeQuery($SQLString);			
+
+					$dirname = "front-end/res/portfolios/" . $portfolioID . "/" . $value[0];;
+					array_map('unlink', glob("$dirname/*.*"));
+					rmdir($dirname);						
+				}				
+			}
+			$portDir = "front-end/res/portfolios/" . $portfolioID;
+			rmdir($portDir);
+
+			$SQLString = "DELETE FROM portfolio WHERE id = " . $portfolioID;
+			$QueryResult = $this->executeQuery($SQLString); 
+		}
+
+		$SQLString = "DELETE FROM user WHERE id = " . $userID;
+		$QueryResult = $this->executeQuery($SQLString);
 	}
 }
 ?>
