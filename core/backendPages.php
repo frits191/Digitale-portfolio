@@ -277,7 +277,7 @@ class Pages
 				echo "</div><br>";
 				echo "<div class='input-group'>";
 					echo "<label for='info_description'>Beschrijving:</label><br>";
-					echo "<textarea name='info_description' class='form-control' id='info_description'>" . $rowInfo["Info"] . "</textarea>";
+					echo "<textarea name='info_description' class='form-control' id='info_description'>" . $rowInfo["Info"] . " </textarea>";
 				echo "</div><br>";
 				echo "<div class='input-group'>";
 					echo "<button type='submit' name='info_submit' class='btn btn-default'>Bewerken</button>";
@@ -423,7 +423,7 @@ class Pages
 		}	
 
 		if (isset($_GET["project"])) {
-			echo "<a href='backend.php?p=projecten'><button type='button' class='btn btn-default'>Terug</button></a>";
+			echo "<a href='backend.php?p=projecten'><button type='button' id='backButton' class='btn btn-default'>Terug</button></a>";
 		}
 
 		echo "<div class='files'>";
@@ -728,10 +728,14 @@ class Pages
 													$QueryResult = $functions->executeQuery($SQLString);
 													$UserList = mysqli_fetch_all($QueryResult);
 
-													$followingArray = explode(',', $index[7]);
+													$followingArray = explode(',', $index[7]);					
 
 													foreach ($UserList as $index => $value) {
-														echo "<label class='checkbox-inline'><input type='checkbox' name='following[]' value='" . $value[2] . "' " . (in_array($value[2], $followingArray) ? 'checked' : '') . ">" . $value[0] . " " . $value[1] . "</label>";	
+														$SQLString = "SELECT id FROM portfolio WHERE owner_id = " . $value[2];
+														$QueryResult = $functions->executeQuery($SQLString);
+														$row = mysqli_fetch_assoc($QueryResult);
+
+														echo "<label class='checkbox-inline'><input type='checkbox' name='following[]' value='" . $row['id'] . "' " . (in_array($row['id'], $followingArray) ? 'checked' : '') . ">" . $value[0] . " " . $value[1] . "</label>";	
 													}
 											
 												echo "</div>";	

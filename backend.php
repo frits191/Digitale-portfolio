@@ -37,9 +37,11 @@ if ($p !== "login" && $p !== "logout") {
 
 //When a user is already logged in they are not allowed to go to the login page
 if ($p == "login") {
-	if ($_SESSION["loggedIn"] == true) {
-		header('Location: backend.php?p=home');
-		exit();
+	if (isset($_SESSION["loggedIn"])) {
+		if ($_SESSION["loggedIn"] == true) {
+			header('Location: backend.php?p=home');
+			exit();
+		}
 	}
 }
 

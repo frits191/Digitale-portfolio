@@ -270,29 +270,40 @@ class functions {
 	}
 
 	function getFolders() {
-		$SQLString = "SELECT id, title, description FROM project WHERE portfolio_id = '" . $_SESSION["portfolio_id"] . "' ORDER BY id DESC";
+		$SQLString = "SELECT id, title, description, visible FROM project WHERE portfolio_id = '" . $_SESSION["portfolio_id"] . "' ORDER BY id DESC";
 		$QueryResult = $this->executeQuery($SQLString);
 		$row = mysqli_fetch_all($QueryResult);
 
 		for ($i = count($row) - 1;$i >= 0;$i--) {
-            echo "<div class='fileblock'>";
-                echo "<div class='file' title='". $row[$i][2] . "' onclick='location.href = \"backend.php?p=projecten&project=" . $row[$i][0] . "\";'>";
-                    echo "<button type='button' class='btn-link'>";
-                        echo "<span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>";
-                    echo "</button>";
-                echo "</div>";
-                echo "<div class='filemenu'>";
-					echo "<div class='FolderTitle'>" . $row[$i][1] . "</div>";
-                    echo "<div class='btn-group'>";
-                        echo "<button type='button' class='btn btn-link'>";
-                            echo "<span class='glyphicon glyphicon-pencil' aria-hidden='true' title='Edit' data-toggle='modal' data-target='#EditFolder" . $row[$i][0] . "'></span>";
-                        echo "</button>";
-                        echo "<button type='button' class='btn btn-link'>";
-                            echo "<span class='glyphicon glyphicon-trash' aria-hidden='true' title='Delete' data-toggle='modal' data-target='#DeleteFolder" . $row[$i][0] . "'></span>";
-                        echo "</button>";
-                    echo "</div>";
-                echo "</div>";	
-			echo "</div>";
+			echo "<form action='backend.php?p=projecten' method='post'>";
+				echo "<div class='fileblock'>";
+					echo "<div class='file' title='". $row[$i][2] . "' onclick='location.href = \"backend.php?p=projecten&project=" . $row[$i][0] . "\";'>";
+						echo "<button type='button' class='btn-link'>";
+							echo "<span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>";
+						echo "</button>";
+					echo "</div>";
+					echo "<div class='filemenu'>";
+						echo "<div class='FolderTitle'>" . $row[$i][1] . "</div>";
+						echo "<div class='btn-group'>";	
+							echo "<button type='submit' name='submitVisible' class='btn btn-link'>";									
+								if ($row[$i][3] == true) {
+									echo "<input type='hidden' name='visible' value='false'>";									
+									echo "<span class='glyphicon glyphicon-eye-open' title='Openbaar' aria-hidden='true'></span>";
+								} else {
+									echo "<input type='hidden' name='visible' value='true'>";									
+									echo "<span class='glyphicon glyphicon-eye-close' title='Niet openbaar' aria-hidden='true'></span>";									
+								} 		
+							echo "</button>";				             
+							echo "<button type='button' class='btn btn-link'>";
+								echo "<span class='glyphicon glyphicon-pencil' aria-hidden='true' title='Edit' data-toggle='modal' data-target='#EditFolder" . $row[$i][0] . "'></span>";
+							echo "</button>";
+							echo "<button type='button' class='btn btn-link'>";
+								echo "<span class='glyphicon glyphicon-trash' aria-hidden='true' title='Delete' data-toggle='modal' data-target='#DeleteFolder" . $row[$i][0] . "'></span>";
+							echo "</button>";
+						echo "</div>";
+					echo "</div>";	
+				echo "</div>";
+			echo "</form>"; 
 
 			//Edit Folder modal
 			echo '<div class="modal fade" id="EditFolder' . $row[$i][0] . '" role="dialog">';
