@@ -94,8 +94,8 @@ echo "<html>";
 					echo "<button class='navbar-toggler hidden-md-up' type='button' data-toggle='collapse' data-target='#exCollapsingNavbar2'>&#9776;</button>";
 						echo "<div class='collapse navbar-toggleable-sm' id='exCollapsingNavbar2'>";
 							echo "<div id='searchbar'>";
-								echo "<form class='form-inline' id='search' method='POST' action='#'>";
-									echo "<input type='text' class='searchinput' name='search' size='10' maxlength='120' placeholder='Search'><input type='submit' value='>' class='searchbutton' title='Search'>";
+								echo "<form class='form-inline' id='search' method='POST' action='backend.php?p=search'>";
+                                    echo "<input type='text' class='searchinput' name='search' size='10' maxlength='120' placeholder='Search' ><input type='submit' value='>' name='submit' class='searchbutton' title='Search'>";
 								echo "</form>";
 							echo "</div>";
 
@@ -160,6 +160,7 @@ echo "<html>";
 						echo "<a href='backend.php?p=cijfers'><li class='nav-item'>Cijfers</li></a>";
 						echo "<a href='backend.php?p=projecten'><li class='nav-item'>Projecten</li></a>";
 						if (isset($_SESSION["portfolio_id"])) {
+							$SQLString = "SELECT owner_id FROM portfolio WHERE id = " . $_SESSION["portfolio_id"];
 							echo "<a href='index.php?id=" . $_SESSION["portfolio_id"] . "'><li class='nav-item'>Openbaar portfolio</li></a>";
 						} else {
 							echo "<li class='nav-item'>Openbaar portfolio</li>";
@@ -198,6 +199,9 @@ echo "<html>";
 				elseif ($p == "opmerkingen") {
 					$pages->opmerkingen();
 				}
+				elseif ($p == "search") {
+                    $pages->search();
+                }
 				elseif ($p == "gebruikers") {
 					if ($role == "admin") {
 						$pages->gebruikers();
@@ -237,6 +241,8 @@ echo "<html>";
 			echo '<script src="js/app.js"></script>';
 
 		require ('core/layout/footerbackend.php');
+
+		mysqli_close($DBconnect);
 
 	echo "</div>";
 	echo "</body>";

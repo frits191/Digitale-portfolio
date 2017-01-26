@@ -101,9 +101,13 @@ class functions {
 				$SQLString = 'INSERT INTO portfolio (`title`, `owner_id`) VALUES ("Portfolio ' . $fname . '", "' . $id . '")';
 				$this->executeQuery($SQLString);
 
+				$SQLString = 'INSERT INTO persoonlijkeinfo (`user_id`) VALUES ("' . $id . '")';
+				$this->executeQuery($SQLString);
+
 				$SQLString = "SELECT id FROM portfolio WHERE owner_id = " . $id;
 				$QueryResult = $this->executeQuery($SQLString);
 				$row = mysqli_fetch_assoc($QueryResult);
+
 
 				$folderPath = "front-end/res/portfolios/" . $row["id"] . "/";
 				mkdir($folderPath);
@@ -272,7 +276,7 @@ class functions {
 
 		for ($i = count($row) - 1;$i >= 0;$i--) {
             echo "<div class='fileblock'>";
-                echo "<div class='file' onclick='location.href = \"backend.php?p=projecten&project=" . $row[$i][0] . "\";'>";
+                echo "<div class='file' title='". $row[$i][2] . "' onclick='location.href = \"backend.php?p=projecten&project=" . $row[$i][0] . "\";'>";
                     echo "<button type='button' class='btn-link'>";
                         echo "<span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>";
                     echo "</button>";
@@ -353,7 +357,7 @@ class functions {
 
 		for ($i = count($row) - 1;$i >= 0;$i--) {
             echo "<div class='fileblock'>";
-                echo "<div class='file' onclick='window.open(\"front-end/res/portfolios/" . $_SESSION["portfolio_id"] . "/" . $project . "/" . $row[$i][1] . $row[$i][2] . "\")'>";
+                echo "<div class='file' title='". $row[$i][3] . "' onclick='window.open(\"front-end/res/portfolios/" . $_SESSION["portfolio_id"] . "/" . $project . "/" . $row[$i][1] . $row[$i][2] . "\")'>";
                     echo "<button type='button' class='btn-link'>";
                         echo "<span class='glyphicon glyphicon-file' aria-hidden='true'></span>";
                     echo "</button>";
@@ -468,15 +472,18 @@ class functions {
 						$SQLString = "DELETE FROM rating WHERE project_id = " . $value[0];
 						$QueryResult = $this->executeQuery($SQLString);
 						$SQLString = "DELETE FROM project WHERE id = " . $value[0];
-						$QueryResult = $this->executeQuery($SQLString);			
+						$QueryResult = $this->executeQuery($SQLString);						
 
-						$dirname = "front-end/res/portfolios/" . $portfolioID . "/" . $value[0];;
+						$dirname = "front-end/res/portfolios/" . $portfolioID . "/" . $value[0];
 						array_map('unlink', glob("$dirname/*.*"));
 						rmdir($dirname);						
 					}				
 				}
 				$portDir = "front-end/res/portfolios/" . $portfolioID;
 				rmdir($portDir);
+
+				$SQLString = "DELETE FROM persoonlijkeinfo WHERE user_id = " . $userID;
+				$QueryResult = $this->executeQuery($SQLString);	
 
 				$SQLString = "DELETE FROM portfolio WHERE id = " . $portfolioID;
 				$QueryResult = $this->executeQuery($SQLString); 
@@ -490,6 +497,9 @@ class functions {
 				$SQLString = "SELECT id FROM portfolio WHERE owner_id = " . $userID;
 				$QueryResult = $this->executeQuery($SQLString);
 				$row = mysqli_fetch_assoc($QueryResult);
+
+				$SQLString = 'INSERT INTO persoonlijkeinfo (`user_id`) VALUES ("' . $userID . '")';
+				$this->executeQuery($SQLString);
 
 				$folderPath = "front-end/res/portfolios/" . $row["id"] . "/";
 				mkdir($folderPath);
@@ -535,6 +545,9 @@ class functions {
 			$portDir = "front-end/res/portfolios/" . $portfolioID;
 			rmdir($portDir);
 
+			$SQLString = "DELETE FROM persoonlijkeinfo WHERE user_id = " . $userID;
+			$QueryResult = $this->executeQuery($SQLString);	
+
 			$SQLString = "DELETE FROM portfolio WHERE id = " . $portfolioID;
 			$QueryResult = $this->executeQuery($SQLString); 
 		}
@@ -551,6 +564,30 @@ class functions {
 
 		if (!empty($grade) && !empty($project_id) && !empty($giver_id)) {
 			$SQLString = "UPDATE rating SET grade = '" . $grade . "', remark = '" . $remark . "', giver_id = '" . $giver_id . "' WHERE project_id = '" . $project_id . "'";
+			$this->executeQuery($SQLString);
+		}
+	}
+
+	function submitInfo() {
+		$title = htmlspecialchars($_POST["info_title"]);
+		$color_bg = htmlspecialchars($_POST["info_color_bg"]);
+		$color_font = htmlspecialchars($_POST["info_color_font"]);
+		$layout = htmlspecialchars($_POST["info_layout"]);
+		$study = htmlspecialchars($_POST["info_study"]);
+		$interests = htmlspecialchars($_POST["info_interests"]);
+		$experience = htmlspecialchars($_POST["info_experience"]);
+		$hobby = htmlspecialchars($_POST["info_hobby"]);
+		$description = htmlspecialchars($_POST["info_description"]);
+
+		if (!empty($title) || !empty($color_bg) || !empty($color_font) || !empty($layout)) {
+			$SQLString = "UPDATE portfolio SET title = '" . $title . "', layout = '" . $layout . "', bg_color = '" . $color_bg . "', font_color = '" . $color_font . "' WHERE id = " . $_SESSION["portfolio_id"];
+			$this->executeQuery($SQLString);
+
+			$SQLString = "SELECT owner_id FROM portfolio WHERE id = " . $_SESSION["portfolio_id"];
+			$QueryResult = $this->executeQuery($SQLString);
+			$row = mysqli_fetch_assoc($QueryResult);
+
+			$SQLString = "UPDATE persoonlijkeinfo SET Opleiding = '" . $study . "', Interesses = '" . $interests . "', Werkervaring = '" . $experience . "', Hobbies = '" . $hobby . "', Info = '" . $description . "' WHERE user_id = " . $row["owner_id"];
 			$this->executeQuery($SQLString);
 		}
 	}
