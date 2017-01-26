@@ -10,7 +10,7 @@ while($row = $stmt->fetch()){
 }
 
 if(isset($_GET["projectid"])){
-    $stmt4 = $db->prepare("SELECT * FROM file WHERE project_id = ?;");
+    $stmt4 = $db->prepare("SELECT * FROM file WHERE project_id = ? ORDER BY type ASC;");
     $stmt4->execute(array($_GET["projectid"]));
     $stmt5 = $db->prepare("SELECT * FROM project WHERE id = ?;");
     $stmt5->execute(array($_GET["projectid"]));
@@ -47,13 +47,14 @@ if(isset($_GET["projectid"])){
             . "                         </tr>"
             . "                     </thead>"
             . "                     <tbody>"
-            . "                         <tr>"
-            . "                             <td>"
             . "                                 ";
     while($row = $stmt4->fetch()){
-        
+        echo "<tr><td>" . $row["type"] . "</td>";
+        echo "<td>" . $row["title"] . "</td>";
+        echo "<td>" . $row["description"] . "</td></tr>";
     }
-    echo      "                 </table>"
+    echo      "                     </tbody>"
+            . "                 </table>"
             . "             </div>"
             . "             <div class='panel-footer'>"
             . "             </div>"
