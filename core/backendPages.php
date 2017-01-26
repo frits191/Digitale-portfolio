@@ -81,6 +81,9 @@ class Pages
 					echo "<label for='info_study'>Beschrijving:</label><br>";
 					echo "<input type='text' name='info_description' class='form-control' id='info_description' required>";
 				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo "<button type='submit' name='info_submit' class='btn btn-default'>Bewerken</button>";
+				echo "</div>";
 			echo "</form>";
 		echo "</div>";
 	}
