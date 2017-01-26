@@ -39,11 +39,10 @@ echo "<div class='container-fluid'>";
 						header('Location: backend.php?p=home');
 						exit();
 					}
-
 					echo "<div class='item-add'>";
 						echo "<div class='btn-group'>";
 							echo "<button type='button' class='btn btn-default' aria-label='Left Align'>";
-								echo "<span class='glyphicon glyphicon-file' aria-hidden='true' title='Add a new file' data-toggle='modal' data-target='#AddFile'></span>";
+								echo '<span data-toggle="modal" data-target="#AddFile"><img src="core/images/addfile.png" class="img-responsive" alt="new folder" width="25px">+</span>';
 							echo "</button>";					
 						echo "</div>";
 					echo "</div>";
@@ -51,7 +50,7 @@ echo "<div class='container-fluid'>";
 					echo "<div class='item-add'>";
 						echo "<div class='btn-group'>";
 							echo "<button type='button' class='btn btn-default' aria-label='Left Align'>";
-								echo "<span class='glyphicon glyphicon-folder-open' aria-hidden='true' title='Add a new folder' data-toggle='modal' data-target='#AddFolder'></span>";
+								echo '<span data-toggle="modal" data-target="#AddFolder"><img src="core/images/newfolder.png" class="img-responsive" alt="new folder" width="25px">+</span>';
 							echo "</button>";					
 						echo "</div>";
 					echo "</div>";

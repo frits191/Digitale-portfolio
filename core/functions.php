@@ -138,52 +138,30 @@ class functions {
 	function uploadFile() {
 		global $project;
 
-		$title = htmlspecialchars($_POST["fileTitle"]);
-		$title = str_replace("'", "&#39;", $title);
-
-		if (isset($_POST["fileDesc"])) {
-			$desc = htmlspecialchars($_POST["fileDesc"]);
-			$desc = str_replace("'", "&#39;", $desc);
-		} else {
-			$description = "";
-		}
-
-		if (empty($title)) {
-			header('Location: backend.php?p=projecten&project=' . $project);
-			exit();
-		}
-
         $target_dir = "front-end/res/portfolios/" . $_SESSION["portfolio_id"] . "/" . $project . "/";
+		$dir = "server/php/files/";
+		$scandir = scandir($dir);		
 
-        if(getimagesize($_FILES["file"]["tmp_name"]) !== false) {
-            if (isset($_FILES["file"])) {
-                $target_file = $target_dir . basename($_FILES["file"]["name"]);
-                $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
-                if ($this->imagecheck($imageFileType , $target_file, "file") === true) {
-                    move_uploaded_file($_FILES["file"]["tmp_name"], $target_file);
-                    rename($target_file, $target_dir . $title . "." . $imageFileType);
+		$key1 = array_search("thumbnail", $scandir);
+		$key2 = array_search(".gitignore", $scandir);
+		$key3 = array_search(".htaccess", $scandir);
+		unset($scandir[0], $scandir[1], $scandir[$key1], $scandir[$key2], $scandir[$key3]);
+		$scandir = array_values($scandir);
 
-					$SQLString = 'INSERT INTO file (`title`, `type`, `description`, `project_id`) VALUES ("' . $title . '", ".' . $imageFileType . '", "' . $desc . '", "' . $project . '")';
-					$this->executeQuery($SQLString);
-                } 
-            }
-        }
+		for ($i = 0; $i < count($scandir); $i++) {
+			$key = array_search($scandir[$i], $scandir);
+			$target_file = $dir . $scandir[$key];
+			$FileArray = explode(".", $scandir[$i]);
+			$title = $FileArray[0];
+			$imageFileType = "." . $FileArray[1];
+
+			rename($target_file, $target_dir . $title . $imageFileType);
+			array_map('unlink', glob("$dir/thumbnail/*.*"));
+
+			$SQLString = 'INSERT INTO file (`title`, `type`, `description`, `project_id`) VALUES ("' . $title . '", "' . $imageFileType . '", "", "' . $project . '")';
+			$this->executeQuery($SQLString);
+		}	
 	}
-
-	function imagecheck($imageFileType, $target_file, $ImageName) {
-        //check if the file does not exceed the max size
-		if ($_FILES[$ImageName]["size"] > 5000000) {
-			echo "Sorry, your file is too large.<br>";
-            return false;
-        }
-        //Check if the image is a jpg, png, jpeg or gif
-        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
-            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.<br>";
-            return false;
-        } else {
-            return true;
-        }
-    }
 
 	function editFolder() {
 		$title = htmlspecialchars($_POST["folderName"]);
@@ -319,18 +297,24 @@ class functions {
 						echo '<div class="modal-header">';
 							echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
 							echo '<h4 class="modal-title">Bewerk deze map.</h4>';
-						echo'</div>';
+						echo '</div>';
 						echo '<div class="modal-body">';
 							echo '<p>';
 								echo "<form action='backend.php?p=projecten' method='POST'>";
-									echo "<input type='hidden' name='folderID' value='" . $row[$i][0] . "' required>";
-									echo "<input type='text' name='folderName' value='" . $row[$i][1] . "' placeholder='Name' required><br><br>";
-									echo "<input type='text' name='folderDesc' value='" . $row[$i][2] . "' placeholder='Description'>";
+									echo "<input type='hidden' name='folderID' value='" . $row[$i][0] . "'>";
+									echo "<div class='form-group'>";
+										echo "<label for='EditFolderName'>Bestands Naam:</label><br>";
+										echo "<input type='text' class='form-control' id='EditFolderName' name='folderName' value='" . $row[$i][1] . "' placeholder='Name' required>";
+									echo "</div>";
+									echo "<div class='form-group'>";
+										echo "<label for='EditFolderDesc'>Beschrijving:</label><br>";
+										echo "<textarea name='folderDesc' class='form-control' id='EditFolderDesc' maxlength='500' placeholder='Description'>" . $row[$i][2] . "</textarea>";
+									echo "</div>";
+									echo "</div>";
+									echo '<div class="modal-footer">';
+									echo "<button type='submit' class='btn btn-default' name='folderEdit'>Bewerk</button></form>";
 							echo "</p>";
-						echo "</div>";
-						echo '<div class="modal-footer">';
-							echo "<input type='submit' value='Bewerk' name='folderEdit'></form>";
-						echo "</div>";
+						echo "</div>";				
 					echo "</div>";
 				echo "</div>";
 			echo "</div>";
@@ -341,38 +325,23 @@ class functions {
 					echo '<div class="modal-content">';
 						echo '<div class="modal-header">';
 							echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
-							echo '<h4 class="modal-title">Weet u zeker dat je de map: \'' . $row[$i][1] . '\' wilt verwijderen?<br>Hou er rekening mee dat alle onderliggende bestanden ook worden verwijdert.</h4>';
+							echo '<h4 class="modal-title">Weet u zeker dat u de map: \'' . $row[$i][1] . '\' wilt verwijderen?`</h4>';
 						echo'</div>';
 						echo '<div class="modal-body">';
 							echo '<p>';
+								echo '<h5><strong>Waarschuwing:</strong> alle onderliggende bestanden worden ook verwijderd.</h5>';
 								echo "<form action='backend.php?p=projecten' method='POST'>";
-									echo "<input type='hidden' name='folderToDelete' value='" . $row[$i][0] . "'required><br><br>";
-									echo "<input type='submit' value='Verwijder' name='folderDelete'></form>";
+									echo "<input type='hidden' name='folderToDelete' value='" . $row[$i][0] . "'><br><br>";
 							echo "</p>";
 						echo "</div>";
-						echo '<div class="modal-footer">';						
+						echo '<div class="modal-footer">';
+							echo "<button type='submit' class='btn btn-default' name='folderDelete'>Verwijder</button></form>";
+							echo "</p>";						
 						echo "</div>";
 					echo "</div>";
 				echo "</div>";
 			echo "</div>";
 		}
-		echo "<nav class='Pnav' aria-label='Page navigation'>";
-			echo "<ul class='pagination'>";
-				echo "<li>";
-					echo "<a href='#' title='Previous' aria-label='Previous'>";
-						echo "<span aria-hidden='true'>&laquo;</span>";
-					echo "</a>";
-				echo "</li>";
-				echo "<li>";
-					echo "<a href='#'>1</a>";
-				echo "</li>";
-				echo "<li>";
-					echo "<a href='#' title='Next' aria-label='Next'>";
-						echo "<span aria-hidden='true'>&raquo;</span>";
-					echo "</a>";
-				echo "</li>";
-			echo "</ul>";
-		echo "</nav>"; 
 	}
 
 	function getFiles() {
@@ -416,14 +385,20 @@ class functions {
 						echo '<div class="modal-body">';
 							echo '<p>';
 								echo "<form action='backend.php?p=projecten&project=" . $project . "' method='POST'>";
-									echo "<input type='hidden' name='fileID' value='" . $row[$i][0] . "' required>";
-									echo "<input type='hidden' name='projectID' value='" . $project . "' required>";
-									echo "<input type='text' name='fileName' value='" . $row[$i][1] . "' placeholder='Name' required><br><br>";
-									echo "<input type='text' name='fileDesc' value='" . $row[$i][3] . "' placeholder='Description'>";
+									echo "<input type='hidden' name='fileID' value='" . $row[$i][0] . "'>";
+									echo "<input type='hidden' name='projectID' value='" . $project . "'>";
+									echo "<div class='input-group'>";
+										echo "<label for='EditFileName'>Bestands Naam:</label><br>";
+										echo "<input type='text' class='form-control' id='EditFileName' name='fileName' value='" . $row[$i][1] . "' placeholder='Name' required><br><br>";
+									echo "</div>";
+									echo "<div class='input-group'>";
+										echo "<label for='EditFileDesc'>Beschrijving:</label><br>";
+										echo "<input type='text' class='form-control' id='EditFileDesc' name='fileDesc' value='" . $row[$i][3] . "' placeholder='Description'>";
+									echo "</div>";
 							echo "</p>";
 						echo "</div>";
 						echo '<div class="modal-footer">';
-							echo "<input type='submit' value='Bewerk' name='fileEdit'></form>";
+							echo "<button type='submit' class='btn btn-default' name='fileEdit'>Bewerken</button></form>";
 						echo "</div>";
 					echo "</div>";
 				echo "</div>";
@@ -435,66 +410,148 @@ class functions {
 					echo '<div class="modal-content">';
 						echo '<div class="modal-header">';
 							echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
-							echo '<h4 class="modal-title">Weet u zeker dat je het bestand: \'' . $row[$i][1] . '\' wilt verwijderen?</h4>';
+							echo '<h4 class="modal-title">Weet u zeker dat u het bestand: \'' . $row[$i][1] . $row[$i][2] . '\' wilt verwijderen?</h4>';
 						echo'</div>';
 						echo '<div class="modal-body">';
 							echo '<p>';
 								echo "<form action='backend.php?p=projecten&project=" . $project . "' method='POST'>";
-									echo "<input type='hidden' name='fileToDelete' value='" . $row[$i][0] . "'required><br><br>";
-									echo "<input type='hidden' name='projectID' value='" . $project . "' required>";
-									echo "<input type='submit' value='Verwijder' name='fileDelete'></form>";
-							echo "</p>";
+									echo "<input type='hidden' name='fileToDelete' value='" . $row[$i][0] . "'><br><br>";
+									echo "<input type='hidden' name='projectID' value='" . $project . "'>";
 						echo "</div>";
-						echo '<div class="modal-footer">';						
+						echo '<div class="modal-footer">';	
+								echo "<button type='submit' class='btn btn-default' name='fileDelete'>Verwijder</button></form>";
+							echo "</p>";								
 						echo "</div>";
 					echo "</div>";
 				echo "</div>";
 			echo "</div>";
 		}
-		echo "<nav class='Pnav' aria-label='Page navigation'>";
-			echo "<ul class='pagination'>";
-				echo "<li>";
-					echo "<a href='#' title='Previous' aria-label='Previous'>";
-						echo "<span aria-hidden='true'>&laquo;</span>";
-					echo "</a>";
-				echo "</li>";
-				echo "<li>";
-					echo "<a href='#'>1</a>";
-				echo "</li>";
-				echo "<li>";
-					echo "<a href='#' title='Next' aria-label='Next'>";
-						echo "<span aria-hidden='true'>&raquo;</span>";
-					echo "</a>";
-				echo "</li>";
-			echo "</ul>";
-		echo "</nav>";
 	}
 
-	function breadcrumbs() {
-		//"Portfolio Maurice->projecten->SLB Folder<br>";
-		$SQLString = "SELECT title FROM portfolio WHERE id = " . $_SESSION["portfolio_id"];
-		$QueryResult = $this->executeQuery($SQLString);
-		$row = mysqli_fetch_assoc($QueryResult);
-		$portfolio = $row["title"];
-
-		if (isset($_GET["project"])) {
-			$projectID = htmlspecialchars($_GET["project"]);
-			$projectID = str_replace("'", "&#39;", $projectID);
-
-			if (is_int($projectID !== true)) {
-				header('Location: backend.php?p=home');
-				exit();
-			}
-			$SQLString = "SELECT title FROM project WHERE id = " . $projectID . " AND portfolio_id = " . $_SESSION["portfolio_id"];
-			$QueryResult = $this->executeQuery($SQLString);
-			if (mysqli_num_rows($QueryResult) == 0) {
-				header('Location: backend.php?p=home');
-				exit();
-			}
-			$row = mysqli_fetch_assoc($QueryResult);
-			echo $portfolio . "-><a href='backend.php?p=projecten'>projecten</a>->" . $row["title"] . "<br>";
+	function edituser() {
+		$email = htmlspecialchars($_POST["email"]);
+		$fname = htmlspecialchars($_POST["fname"]);
+		$lname = htmlspecialchars($_POST["lname"]);
+		$phone = htmlspecialchars($_POST["phone"]);
+		$role = htmlspecialchars($_POST["role"]);
+		if (isset($_POST["following"])) {
+			$followingArray = $_POST["following"];
 		} else {
-			echo $portfolio . "->projecten<br>";
+			$following = "";
+		}
+		$userID = htmlspecialchars($_POST["userID"]);
+
+		if (!empty($email) && !empty($fname) && !empty($lname) && !empty($role) && !empty($userID)) {
+			$SQLString = "SELECT role FROM user WHERE id = " . $userID;
+			$QueryResult = $this->executeQuery($SQLString);
+			$row = mysqli_fetch_all($QueryResult);
+
+			if (isset($followingArray)) {
+				$following = implode(",", $followingArray);
+			}
+
+			if ($row[0][0] == "student" && $role != "student") {
+				//When a student becomes another role
+				$SQLString = "SELECT id FROM portfolio WHERE owner_id = " . $userID;
+				$QueryResult = $this->executeQuery($SQLString);
+				$row = mysqli_fetch_all($QueryResult);
+				$portfolioID = $row[0][0];				
+
+				$SQLString = "SELECT id FROM project WHERE portfolio_id = " . $portfolioID;
+				$QueryResult = $this->executeQuery($SQLString);
+				$row = mysqli_fetch_all($QueryResult);
+
+				if (mysqli_num_rows($QueryResult) > 0) {
+					foreach ($row as $index => $value) {
+						$SQLString = "DELETE FROM file WHERE project_id = " . $value[0];
+						$QueryResult = $this->executeQuery($SQLString);
+						$SQLString = "DELETE FROM rating WHERE project_id = " . $value[0];
+						$QueryResult = $this->executeQuery($SQLString);
+						$SQLString = "DELETE FROM project WHERE id = " . $value[0];
+						$QueryResult = $this->executeQuery($SQLString);			
+
+						$dirname = "front-end/res/portfolios/" . $portfolioID . "/" . $value[0];;
+						array_map('unlink', glob("$dirname/*.*"));
+						rmdir($dirname);						
+					}				
+				}
+				$portDir = "front-end/res/portfolios/" . $portfolioID;
+				rmdir($portDir);
+
+				$SQLString = "DELETE FROM portfolio WHERE id = " . $portfolioID;
+				$QueryResult = $this->executeQuery($SQLString); 
+
+			} elseif ($row[0][0] != "student" && $role == "student") {
+				//When another role becomes a student
+				$following = "";
+				$SQLString = 'INSERT INTO portfolio (`title`, `owner_id`) VALUES ("Portfolio ' . $fname . '", "' . $userID . '")';
+				$this->executeQuery($SQLString);
+
+				$SQLString = "SELECT id FROM portfolio WHERE owner_id = " . $userID;
+				$QueryResult = $this->executeQuery($SQLString);
+				$row = mysqli_fetch_assoc($QueryResult);
+
+				$folderPath = "front-end/res/portfolios/" . $row["id"] . "/";
+				mkdir($folderPath);
+			}			
+
+			$SQLString = "UPDATE user SET `e-mail` = '" . $email . "', `role` = '" . $role . "', `firstName` = '" . $fname . "', `lastName` = '" . $lname . "', `phone` = '" . $phone . "', `following` = '" . $following . "' WHERE id = " . $userID; 
+			$QueryResult = $this->executeQuery($SQLString);
+		}
+	}
+
+	function deleteUser() {
+		$userID = htmlspecialchars($_POST["userID"]);
+
+		$SQLString = "SELECT role FROM user WHERE id = " . $userID;
+		$QueryResult = $this->executeQuery($SQLString);
+		$row = mysqli_fetch_all($QueryResult);
+		$role = $row[0][0];
+
+		if ($role == "student") {
+			$SQLString = "SELECT id FROM portfolio WHERE owner_id = " . $userID;
+			$QueryResult = $this->executeQuery($SQLString);
+			$row = mysqli_fetch_all($QueryResult);
+			$portfolioID = $row[0][0];				
+
+			$SQLString = "SELECT id FROM project WHERE portfolio_id = " . $portfolioID;
+			$QueryResult = $this->executeQuery($SQLString);
+			$row = mysqli_fetch_all($QueryResult);
+
+			if (mysqli_num_rows($QueryResult) > 0) {
+				foreach ($row as $index => $value) {
+					$SQLString = "DELETE FROM file WHERE project_id = " . $value[0];
+					$QueryResult = $this->executeQuery($SQLString);
+					$SQLString = "DELETE FROM rating WHERE project_id = " . $value[0];
+					$QueryResult = $this->executeQuery($SQLString);
+					$SQLString = "DELETE FROM project WHERE id = " . $value[0];
+					$QueryResult = $this->executeQuery($SQLString);			
+
+					$dirname = "front-end/res/portfolios/" . $portfolioID . "/" . $value[0];;
+					array_map('unlink', glob("$dirname/*.*"));
+					rmdir($dirname);						
+				}				
+			}
+			$portDir = "front-end/res/portfolios/" . $portfolioID;
+			rmdir($portDir);
+
+			$SQLString = "DELETE FROM portfolio WHERE id = " . $portfolioID;
+			$QueryResult = $this->executeQuery($SQLString); 
+		}
+
+		$SQLString = "DELETE FROM user WHERE id = " . $userID;
+		$QueryResult = $this->executeQuery($SQLString);
+	}
+
+	function EditCijfer() {
+		$grade = htmlspecialchars($_POST["cijfer"]);
+		$remark = htmlspecialchars($_POST["cijferOpmerking"]);
+		$project_id = htmlspecialchars($_POST["projectID"]);
+		$giver_id = $_SESSION['id'];
+
+		if (!empty($grade) && !empty($project_id) && !empty($giver_id)) {
+			$SQLString = "UPDATE rating SET grade = '" . $grade . "', remark = '" . $remark . "', giver_id = '" . $giver_id . "' WHERE project_id = '" . $project_id . "'";
+			$this->executeQuery($SQLString);
 		}
 	}
 }
