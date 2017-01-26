@@ -46,7 +46,7 @@
     $id = "";
     if (isset($_GET["id"])) {
         $_SESSION["id"] = $_GET["id"];
-    } else {
+    } else if(!isset($_SESSION["id"])){
         $i = 0;
         while ($row = $stmt1->fetch()) {
             if ($i == 0) {
@@ -114,9 +114,9 @@
                             <ul class="sidebar-secondary">
                                 <?php
                                 
-                                $stmt = $db->prepare("SELECT title, id FROM Project WHERE portfolio_id = ?;");
-                                $stmt->execute(array($portfolioID));
-                                while($row = $stmt->fetch()){
+                                $stmt4 = $db->prepare("SELECT * FROM Project WHERE portfolio_id = ?;");
+                                $stmt4->execute(array($portfolioID));
+                                while($row = $stmt4->fetch()){
                                     echo "<li><a href='?page=portfolio&projectid=" . $row["id"] ."'>" . $row["title"] ."</li>";
                                 }
                                 
