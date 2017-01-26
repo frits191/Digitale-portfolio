@@ -544,7 +544,15 @@ class functions {
 	}
 
 	function EditCijfer() {
-		
+		$grade = htmlspecialchars($_POST["cijfer"]);
+		$remark = htmlspecialchars($_POST["cijferOpmerking"]);
+		$project_id = htmlspecialchars($_POST["projectID"]);
+		$giver_id = $_SESSION['id'];
+
+		if (!empty($grade) && !empty($project_id) && !empty($giver_id)) {
+			$SQLString = "UPDATE rating SET grade = '" . $grade . "', remark = '" . $remark . "', giver_id = '" . $giver_id . "' WHERE project_id = '" . $project_id . "'";
+			$this->executeQuery($SQLString);
+		}
 	}
 }
 ?>

@@ -66,7 +66,7 @@ echo "<html>";
 		echo '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>';
 		echo '<script src="js/scripts.js"></script>';
 
-		//CSS
+		//CSS 
 		echo '<link rel="stylesheet" type="text/css" href="../Digitale-portfolio/css/backend.css">';
 		echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">';
 		echo '<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">';
@@ -159,7 +159,7 @@ echo "<html>";
 						echo "<a href='backend.php?p=info'><li class='nav-item'>Persoonlijke gegevens</li></a>";
 						echo "<a href='backend.php?p=cijfers'><li class='nav-item'>Cijfers</li></a>";
 						echo "<a href='backend.php?p=projecten'><li class='nav-item'>Projecten</li></a>";
-						echo "<a href='backend.php?p=portfolio'><li class='nav-item'>Openbaar portfolio</li></a>";
+						echo "<a href='index.php?id=" . $_SESSION["portfolio_id"] . "'><li class='nav-item'>Openbaar portfolio</li></a>";
 						echo "<a href='backend.php?p=opmerkingen'><li class='nav-item'>Opmerkingen</li></a>";
 						if (isset($_SESSION["role"])) {
 					 		if ($role == "admin") {
@@ -190,9 +190,6 @@ echo "<html>";
 				}
 				elseif ($p == "projecten") {
 					$pages->projecten();
-				}
-				elseif ($p == "portfolio") {
-					$pages->portfolio();
 				}
 				elseif ($p == "opmerkingen") {
 					$pages->opmerkingen();
