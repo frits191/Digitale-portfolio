@@ -41,7 +41,48 @@ class Pages
 	}
 
 	function info() {
-
+		echo "<h4>Bewerk je profiel:</h4>";
+		echo "<div class='infoBlock'>";
+			echo "<form method='post' action='backend.php?p=info'>";
+				echo "<div class='input-group'>";
+					echo "<label for='info_titel'>Portfolio titel:</label><br>";
+					echo "<input type='text' class='form-control' name='title' id='info_title' placeholder='Portfolio titel' required>";
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo "<label for='info_bg_color'>Achtergrond kleur:</label><br>";
+					echo "<input type='color' name='color_bg' class='form-control' id='info_color' required>";
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo "<label for='info_font_color'>Font kleur:</label><br>";
+					echo "<input type='color' name='color_bg' class='form-control' id='info_color' required>";
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo '<label class="radio-inline"><input type="radio" name="optradio">Grid 1</label>';
+					echo '<label class="radio-inline"><input type="radio" name="optradio">Grid 2</label>';
+					echo '<label class="radio-inline"><input type="radio" name="optradio">Grid 3</label>';
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo "<label for='info_study'>Opleiding:</label><br>";
+					echo "<input type='text' name='info_study' class='form-control' id='info_study' required>";
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo "<label for='info_'>Interesses:</label><br>";
+					echo "<input type='text' name='info_interests' class='form-control' id='info_interests' required>";
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo "<label for='info_study'>Werkervaring:</label><br>";
+					echo "<input type='text' name='info_experience' class='form-control' id='info_experience' required>";
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo "<label for='info_study'>Hobbies:</label><br>";
+					echo "<input type='text' name='info_hobby' class='form-control' id='info_hobby' required>";
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo "<label for='info_study'>Beschrijving:</label><br>";
+					echo "<input type='text' name='info_description' class='form-control' id='info_description' required>";
+				echo "</div><br>";
+			echo "</form>";
+		echo "</div>";
 	}
 
 	function cijfers() {
@@ -97,35 +138,41 @@ class Pages
 							echo "<td>" . $grade . "</td>";
 							echo "<td>" . $fname . " " . $lname . "</td>";
 							echo "<td>" . $comment . "</td>";
-							echo "<td><button type='button' class='btn btn-default' data-toggle='modal' data-target='#EditGrade" . $index[0] . "'>Verander cijfer</button>"; 
-							echo '<div class="modal fade" id="EditGrade' . $index[0] . '" role="dialog">';
-							echo '<div class="modal-dialog">';
-								echo '<div class="modal-content">';
-									echo '<div class="modal-header">';
-										echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
-										echo '<h4 class="modal-title">Pas het cijfer aan.</h4>';
-									echo'</div>';
-									echo '<div class="modal-body">';
-										echo '<p>';
-											echo "<form action='backend.php?p=cijfers' method='POST'>";
-												echo "<div class='form-group'>";
-													echo "<label for='cijfer'>Cijfer</label>";
-													echo "<input type='number' name='cijfer' class='form-control' id='cijfer' min='1' max='10' step='0.1' value='" . $grade . "' required>";
-												echo "</div>";
-												echo "<div class='form-group'>";
-													echo "<label for='cijferOpmerking'>Opmerking:</label>";
-													echo "<textarea name='cijferOpmerking' placeholder='Opmerking' class='form-control' maxlength='500' id='cijferOpmerking'>" . $index[4] . "</textarea>";
-												echo "</div>";
-										echo "</p>";
-									echo "</div>";
-									echo '<div class="modal-footer">';
-										echo "<button type='submit' class='btn btn-default' value='Verzend' name='submitCijfer'>Verzend</button></form>";
+
+							$role = $_SESSION['role'];
+
+							echo "<td>";
+							if ($role == "admin" || $role == "docent" || $role == "SLB") {
+								echo "<button type='button' class='btn btn-default' data-toggle='modal' data-target='#EditGrade" . $index[0] . "'>Verander cijfer</button>"; 
+								echo '<div class="modal fade" id="EditGrade' . $index[0] . '" role="dialog">';
+								echo '<div class="modal-dialog">';
+									echo '<div class="modal-content">';
+										echo '<div class="modal-header">';
+											echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+											echo '<h4 class="modal-title">Pas het cijfer aan.</h4>';
+										echo'</div>';
+										echo '<div class="modal-body">';
+											echo '<p>';
+												echo "<form action='backend.php?p=cijfers' method='POST'>";
+													echo "<div class='form-group'>";
+														echo "<input type='hidden' name='projectID' value='" . $index[0] . "'>";
+														echo "<label for='cijfer'>Cijfer</label>";
+														echo "<input type='number' name='cijfer' class='form-control' id='cijfer' min='1' max='10' step='0.1' value='" . $grade . "' required>";
+													echo "</div>";
+													echo "<div class='form-group'>";
+														echo "<label for='cijferOpmerking'>Opmerking:</label>";
+														echo "<textarea name='cijferOpmerking' placeholder='Opmerking' class='form-control' maxlength='500' id='cijferOpmerking'>" . $index[4] . "</textarea>";
+													echo "</div>";
+											echo "</p>";
+										echo "</div>";
+										echo '<div class="modal-footer">';
+											echo "<button type='submit' class='btn btn-default' value='Verzend' name='submitCijfer'>Verzend</button></form>";
+										echo "</div>";
 									echo "</div>";
 								echo "</div>";
 							echo "</div>";
-						echo "</div>";
-						echo "</td></tr>";
-						
+						}
+						echo "</td></tr>";				
 					}
 				}
 			echo "</tbody>";
