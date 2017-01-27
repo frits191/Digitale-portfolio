@@ -371,6 +371,14 @@ nav {
     #loginPassword {
         width: 50%;
     }
+	.input-group textarea{
+    width:300px !important;
+  }
+ 
+  #commentForm textarea{
+    resize:none;
+    width:70%;
+  }
 }
 #backButton {
 	margin-top: 1%;
@@ -397,6 +405,27 @@ comments
   background-color:#c8d8ff;
   border-radius:15px;
   padding:10px;
+}
+
+#colorExample{
+  background-color:white;
+  color:black;
+  width:300px;
+  padding:10px;
+}
+ 
+#color_txt, #color_bg{
+  width:150px;
+}
+ 
+.input-group textarea{
+  resize:none;
+  width:30vw !important;
+}
+ 
+#gridimg{
+  width:300px;
+  margin-bottom:20px;
 }
 
 @media (max-width: 767px){
