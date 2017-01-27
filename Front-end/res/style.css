@@ -4,7 +4,7 @@ body {
 html, body{
     min-height: 100%;
     height: 100%;
-    
+    background-color: lightgrey !important;
 }
  
  
@@ -114,6 +114,7 @@ ul.dropdown-menu li a{
 }
 .navbtn{
     background: rgba(255, 255, 255, 0.3) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
 }
 .submit {
     background:rgba(255, 255, 255, 0.3) !important;
@@ -121,6 +122,9 @@ ul.dropdown-menu li a{
 .unspan{
     line-height: 5px;
 }
+.center{
+        text-align: center !important;
+    }
 /* PC only */
 
 @media(min-width:768px) {
@@ -214,5 +218,8 @@ ul.dropdown-menu li a{
         background-color: whitesmoke !important;
         float: left !important;
         margin-left: 10px;
+    }
+    .navbar{
+        background-image: url("img/background.png") !important;
     }
 }

@@ -54,6 +54,11 @@ if (isset($_POST["submitLogin"])) {
             $_SESSION['role'] = $role;
             $_SESSION['name'] = $name;
             $_SESSION['id'] = $id;
+            $stmt7 = $db->prepare("SELECT id FROM portfolio WHERE owner_id = ?;");
+            $stmt7 -> execute(array($id));
+            while($row = $stmt7->fetch()){
+                $_SESSION["portfolio_id"] = $row["id"];
+            }
             $_SESSION["message"]["Succes!"] = $_SESSION["name"] . ". U bent nu ingelogd";
         } else {
             $_SESSION["message"]["Sorry"] = "Deze combinatie van gebruikersnaam en wachtwoord is incorrect.";
