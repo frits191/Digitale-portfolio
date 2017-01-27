@@ -270,13 +270,13 @@ class functions {
 	}
 
 	function getFolders() {		
+		if (isset($_POST["submitVisible"])) {
+			$this->toggleVisibilityProject();
+		}
+
 		$SQLString = "SELECT id, title, description, visible FROM project WHERE portfolio_id = '" . $_SESSION["portfolio_id"] . "' ORDER BY id DESC";
 		$QueryResult = $this->executeQuery($SQLString);
 		$row = mysqli_fetch_all($QueryResult);
-
-		if (isset($_POST["submitVisible"])) {
-			$this->toggleVisibility();
-		}
 
 		for ($i = count($row) - 1;$i >= 0;$i--) {
 			echo "<form action='backend.php?p=projecten' method='post'>";
@@ -290,11 +290,13 @@ class functions {
 						echo "<div class='FolderTitle'>" . $row[$i][1] . "</div>";
 						echo "<div class='btn-group'>";	
 							echo "<button type='submit' name='submitVisible' class='btn btn-link'>";									
-								if ($row[$i][3] == true) {
-									echo "<input type='hidden' name='visible' value='false'>";									
+								if ($row[$i][3] == 1) {
+									echo "<input type='hidden' name='visible' value='false'>";		
+									echo "<input type='hidden' name='id' value='" . $row[$i][0] . "'>";							
 									echo "<span class='glyphicon glyphicon-eye-open' title='Openbaar' aria-hidden='true'></span>";
 								} else {
-									echo "<input type='hidden' name='visible' value='true'>";									
+									echo "<input type='hidden' name='visible' value='true'>";	
+									echo "<input type='hidden' name='id' value='" . $row[$i][0] . "'>";									
 									echo "<span class='glyphicon glyphicon-eye-close' title='Niet openbaar' aria-hidden='true'></span>";									
 								} 		
 							echo "</button>";				             
@@ -366,32 +368,46 @@ class functions {
 	function getFiles() {
 		global $project;
 
+		if (isset($_POST["submitVisible"])) {
+			$this->toggleVisibilityFile();
+		}
+
 		$SQLString = "SELECT * FROM file WHERE project_id = " . $project;
 		$QueryResult = $this->executeQuery($SQLString);
 		$row = mysqli_fetch_all($QueryResult);
 
 		for ($i = count($row) - 1;$i >= 0;$i--) {
-            echo "<div class='fileblock'>";
-                echo "<div class='file' title='". $row[$i][3] . "' onclick='window.open(\"front-end/res/portfolios/" . $_SESSION["portfolio_id"] . "/" . $project . "/" . $row[$i][1] . $row[$i][2] . "\")'>";
-                    echo "<button type='button' class='btn-link'>";
-                        echo "<span class='glyphicon glyphicon-file' aria-hidden='true'></span>";
-                    echo "</button>";
-                echo "</div>";
-                echo "<div class='filemenu'>";
-					echo "<div class='FolderTitle'>" . $row[$i][1] . $row[$i][2] . "</div>";
-                    echo "<div class='btn-group'>";
-						echo "<button type='button' class='btn btn-link'>";
-							echo "<span class='glyphicon glyphicon-open' aria-hidden='true' title='Download' onclick='window.open(\"front-end/res/portfolios/" . $_SESSION["portfolio_id"] . "/" . $project . "/" . $row[$i][1] . $row[$i][2] . "\")'></span>";
+			echo "<form action='backend.php?p=projecten&project=" . $row[$i][4] . "' method='post'>";
+				echo "<div class='fileblock'>";
+					echo "<div class='file' title='". $row[$i][3] . "' onclick='window.open(\"front-end/res/portfolios/" . $_SESSION["portfolio_id"] . "/" . $project . "/" . $row[$i][1] . $row[$i][2] . "\")'>";
+						echo "<button type='button' class='btn-link'>";
+							echo "<span class='glyphicon glyphicon-file' aria-hidden='true'></span>";
 						echo "</button>";
-                        echo "<button type='button' class='btn btn-link'>";
-                            echo "<span class='glyphicon glyphicon-pencil' aria-hidden='true' title='Edit' data-toggle='modal' data-target='#EditFile" . $row[$i][0] . "'></span>";
-                        echo "</button>";
-                        echo "<button type='button' class='btn btn-link'>";
-                            echo "<span class='glyphicon glyphicon-trash' aria-hidden='true' title='Delete' data-toggle='modal' data-target='#DeleteFile" . $row[$i][0] . "'></span>";
-                        echo "</button>";
-                    echo "</div>";
-                echo "</div>";	
-			echo "</div>";
+					echo "</div>";
+					echo "<div class='filemenu'>";
+						echo "<div class='FolderTitle'>" . $row[$i][1] . $row[$i][2] . "</div>";
+						echo "<div class='btn-group'>";	
+							echo "<button type='submit' name='submitVisible' class='btn btn-link'>";									
+								if ($row[$i][5] == 1) {
+									echo "<input type='hidden' name='visible' value='false'>";		
+									echo "<input type='hidden' name='id' value='" . $row[$i][4] . "'>";							
+									echo "<span class='glyphicon glyphicon-eye-open' title='Openbaar' aria-hidden='true'></span>";
+								} else {
+									echo "<input type='hidden' name='visible' value='true'>";	
+									echo "<input type='hidden' name='id' value='" . $row[$i][4] . "'>";									
+									echo "<span class='glyphicon glyphicon-eye-close' title='Niet openbaar' aria-hidden='true'></span>";									
+								} 		
+							echo "</button>";	                
+							echo "<button type='button' class='btn btn-link'>";
+								echo "<span class='glyphicon glyphicon-pencil' aria-hidden='true' title='Edit' data-toggle='modal' data-target='#EditFile" . $row[$i][0] . "'></span>";
+							echo "</button>";
+							echo "<button type='button' class='btn btn-link'>";
+								echo "<span class='glyphicon glyphicon-trash' aria-hidden='true' title='Delete' data-toggle='modal' data-target='#DeleteFile" . $row[$i][0] . "'></span>";
+							echo "</button>";
+						echo "</div>";
+					echo "</div>";	
+				echo "</div>";
+			echo "</form>";
 
 			//Edit File modal
 			echo '<div class="modal fade" id="EditFile' . $row[$i][0] . '" role="dialog">';
@@ -447,8 +463,25 @@ class functions {
 		}
 	}
 
-	function toggleVisibility() {
-		
+	function toggleVisibilityFile() {
+		$visible = htmlspecialchars($_POST["visible"]);
+		$id = htmlspecialchars($_POST["id"]);
+		if (!empty($visible) && !empty($id)) {
+			$SQLString = "UPDATE file SET visible = " . $visible . " WHERE project_id = " . $id;
+			$this->executeQuery($SQLString);
+		}
+	}
+
+	function toggleVisibilityProject() {
+		$visible = htmlspecialchars($_POST["visible"]);
+		$id = htmlspecialchars($_POST["id"]);
+		if (!empty($visible) && !empty($id)) {
+			$SQLString = "UPDATE project SET visible = " . $visible . " WHERE id = " . $id;
+			$this->executeQuery($SQLString);
+
+			$SQLString = "UPDATE file SET visible = " . $visible . " WHERE project_id = " . $id;
+			$this->executeQuery($SQLString);
+		}
 	}
 
 	function edituser() {
