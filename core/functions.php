@@ -591,6 +591,7 @@ class functions {
 		$title = htmlspecialchars($_POST["info_title"]);
 		$color_bg = htmlspecialchars($_POST["info_color_bg"]);
 		$color_font = htmlspecialchars($_POST["info_color_font"]);
+		$logo = htmlspecialchars($_POST["info_logo"]);
 		$layout = htmlspecialchars($_POST["info_layout"]);
 		$study = htmlspecialchars($_POST["info_study"]);
 		$interests = htmlspecialchars($_POST["info_interests"]);
@@ -598,8 +599,8 @@ class functions {
 		$hobby = htmlspecialchars($_POST["info_hobby"]);
 		$description = htmlspecialchars($_POST["info_description"]);
 
-		if (!empty($title) || !empty($color_bg) || !empty($color_font) || !empty($layout)) {
-			$SQLString = "UPDATE portfolio SET title = '" . $title . "', layout = '" . $layout . "', bg_color = '" . $color_bg . "', font_color = '" . $color_font . "' WHERE id = " . $_SESSION["portfolio_id"];
+		if (!empty($title) || !empty($color_bg) || !empty($color_font) || !empty($layout) || !empty($logo)) {
+			$SQLString = "UPDATE portfolio SET title = '" . $title . "', logo = '" . $logo . "', layout = '" . $layout . "', bg_color = '" . $color_bg . "', font_color = '" . $color_font . "' WHERE id = " . $_SESSION["portfolio_id"];
 			$this->executeQuery($SQLString);
 
 			$SQLString = "SELECT owner_id FROM portfolio WHERE id = " . $_SESSION["portfolio_id"];

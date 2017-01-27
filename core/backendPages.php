@@ -230,59 +230,131 @@ class Pages
 		if (isset($_POST["info_submit"])) {
 			$functions->submitInfo();
 		}
+		echo "<div class='infoBlock row'>";
+            echo "<div class='col-lg-5'>";
+			echo "<h4>Portfolio personaliseren</h4>";
+				echo "<form method='post' action='backend.php?p=info'>";
+					$SQLString = "SELECT title, layout, logo, bg_color, font_color, owner_id FROM portfolio WHERE id = " . $_SESSION["portfolio_id"];
+					$QueryResult = $functions->executeQuery($SQLString);
+					$rowPort = mysqli_fetch_assoc($QueryResult);
 
-		echo "<h4>Bewerk je profiel:</h4>";
-		echo "<div class='infoBlock'>";
-			echo "<form method='post' action='backend.php?p=info'>";
-				$SQLString = "SELECT title, layout, bg_color, font_color, owner_id FROM portfolio WHERE id = " . $_SESSION["portfolio_id"];
-				$QueryResult = $functions->executeQuery($SQLString);
-				$rowPort = mysqli_fetch_assoc($QueryResult);
+					$SQLString = "SELECT Opleiding, Interesses, Werkervaring, Hobbies, Info FROM persoonlijkeinfo WHERE user_id = " . $rowPort["owner_id"];
+					$QueryResult = $functions->executeQuery($SQLString);
+					$rowInfo = mysqli_fetch_assoc($QueryResult);
 
-				$SQLString = "SELECT Opleiding, Interesses, Werkervaring, Hobbies, Info FROM persoonlijkeinfo WHERE user_id = " . $rowPort["owner_id"];
-				$QueryResult = $functions->executeQuery($SQLString);
-				$rowInfo = mysqli_fetch_assoc($QueryResult);
+					echo "<div class='input-group'>";
+						echo "<label for='info_titel'>Portfolio titel:</label><br>";
+						echo "<input type='text' class='form-control' value='" . $rowPort["title"] . "' name='info_title' id='info_title' placeholder='Portfolio titel' required>";
+					echo "</div><br>";
 
-				echo "<div class='input-group'>";
-					echo "<label for='info_titel'>Portfolio titel:</label><br>";
-					echo "<input type='text' class='form-control' value='" . $rowPort["title"] . "' name='info_title' id='info_title' placeholder='Portfolio titel' required>";
-				echo "</div><br>";
-				echo "<div class='input-group'>";
-					echo "<label for='info_color_bg'>Achtergrond kleur:</label><br>";
-					echo "<input type='color' name='info_color_bg' value='" . $rowPort["bg_color"] . "' class='form-control' id='info_color_bg' required>";
-				echo "</div><br>";
-				echo "<div class='input-group'>";
-					echo "<label for='info_color_font'>Font kleur:</label><br>";
-					echo "<input type='color' name='info_color_font' value='" . $rowPort["font_color"] . "' class='form-control' id='info_color_font' required>";
-				echo "</div><br>";
-				echo "<div class='input-group'>";
-					echo '<label class="radio-inline"><input type="radio" value="list" name="info_layout" ' . ($rowPort["layout"] == "list" ? 'checked' : '') . ' required>List</label>';
-					echo '<label class="radio-inline"><input type="radio" value="grid1" name="info_layout" ' . ($rowPort["layout"] == "grid1" ? 'checked' : '') . ' required>Big grid</label>';
-					echo '<label class="radio-inline"><input type="radio" value="grid2" name="info_layout" ' . ($rowPort["layout"] == "grid2" ? 'checked' : '') . ' required>Small grid</label>';
-				echo "</div><br>";
-				echo "<div class='input-group'>";
-					echo "<label for='info_study'>Opleiding:</label><br>";
-					echo "<input type='text' name='info_study' value='" . $rowInfo["Opleiding"] . "' class='form-control' id='info_study'>";
-				echo "</div><br>";
-				echo "<div class='input-group'>";
-					echo "<label for='info_interests'>Interesses:</label><br>";
-					echo "<input type='text' name='info_interests' value='" . $rowInfo["Interesses"] . "' class='form-control' id='info_interests'>";
-				echo "</div><br>";
-				echo "<div class='input-group'>";
-					echo "<label for='info_experience'>Werkervaring:</label><br>";
-					echo "<input type='text' name='info_experience' value='" . $rowInfo["Werkervaring"] . "' class='form-control' id='info_experience'>";
-				echo "</div><br>";
-				echo "<div class='input-group'>";
-					echo "<label for='info_hobby'>Hobbies:</label><br>";
-					echo "<input type='text' name='info_hobby' value='" . $rowInfo["Hobbies"] . "' class='form-control' id='info_hobby'>";
-				echo "</div><br>";
-				echo "<div class='input-group'>";
-					echo "<label for='info_description'>Beschrijving:</label><br>";
-					echo "<textarea name='info_description' class='form-control' id='info_description'>" . $rowInfo["Info"] . " </textarea>";
-				echo "</div><br>";
-				echo "<div class='input-group'>";
-					echo "<button type='submit' name='info_submit' class='btn btn-default'>Bewerken</button>";
-				echo "</div>";
-			echo "</form>";
+					echo "<div class='input-group'>";
+						echo "<label for='color_bg'>Achtergrond kleur:</label><br>";
+						echo "<input type='color' name='info_color_bg' value='" . $rowPort["bg_color"] . "' class='form-control' id='color_bg' required>";
+					echo "</div><br>";
+
+					echo "<div class='input-group'>";
+						echo "<label for='color_txt'>Font kleur:</label><br>";
+						echo "<input type='color' name='info_color_font' value='" . $rowPort["font_color"] . "' class='form-control' id='color_txt' required>";
+					echo "</div><br>";
+					 echo "<div id='colorExample' style='background-color: " . $rowPort["bg_color"] . "'>
+						<h4 id='exampleTitle' style='color: " . $rowPort["font_color"] . "'>Voorbeeld</h4>
+						<p>Dit is hoe jouw portfolio er uit komt te zien.</p>
+					</div>";
+					echo "
+					<script>
+						var bginput = document.getElementById('color_bg');
+							bginput.addEventListener('input', function() {
+							document.getElementById('colorExample').style.backgroundColor = bginput.value;
+						}, false);
+
+						var textinput = document.getElementById('color_txt');
+							textinput.addEventListener('input', function() {
+							document.getElementById('colorExample').style.color = textinput.value;
+						}, false);
+
+						var titleinput = document.getElementById('info_title');
+							titleinput.addEventListener('input', function() {
+							if(titleinput.value === ''){
+								document.getElementById('exampleTitle').innerHTML = 'Voorbeeld';
+							}else{
+								document.getElementById('exampleTitle').innerHTML = titleinput.value;
+							}
+						}, false);
+					</script>";
+
+					echo "<h4>Logo kleur:</h4>";
+					echo "<div class='input-group'>";
+						echo "<label class='radio-inline'>";
+							echo "<input type='radio' value='white' name='info_logo' " . ($rowPort["logo"] == "white" ? 'checked' : '') . " required>Wit";
+						echo "</label>";
+						echo "<label class='radio-inline'>";
+							echo "<input type='radio' value='black' name='info_logo' " . ($rowPort["logo"] == "black" ? 'checked' : '') . " required>Blauw";
+						echo "</label>";
+					echo "</div><br>";
+
+					echo "<h4>Pagina layout</h4>";
+					echo "<div class='input-group'>";
+						echo '<label class="radio-inline" onchange="list()"><input type="radio" value="list" name="info_layout" ' . ($rowPort["layout"] == "list" ? 'checked' : '') . ' required>Lijst</label>';
+						echo '<label class="radio-inline" onchange="grid1()"><input type="radio" value="grid1" name="info_layout" ' . ($rowPort["layout"] == "grid1" ? 'checked' : '') . ' required>4 naast elkaar</label>';
+						echo '<label class="radio-inline" onchange="grid2()"><input type="radio" value="grid2" name="info_layout" ' . ($rowPort["layout"] == "grid2" ? 'checked' : '') . ' required>3 naast elkaar</label>';
+					echo "</div><br>";
+					echo "<img id='gridimg' src='core/images/list.png' alt='grid example' />";
+					echo "</div>";
+					echo "
+					<script>
+						function list(){
+						document.getElementById('gridimg').src='core/images/list.png';
+						}
+						function grid1(){
+						document.getElementById('gridimg').src='core/images/grid1.png';
+						}
+						function grid2(){
+						document.getElementById('gridimg').src='core/images/grid2.png';
+						}
+					</script>";
+
+					echo "<div class='col-lg-3'>";
+					echo "<h4>Jouw gegevens</h4>";
+					echo "<div class='input-group'>";
+						echo "<label for='info_study'>Opleiding:</label><br>";
+						echo "<textarea placeholder='Schrijf over je vooropleiding....' name='info_study' class='form-control' id='info_study'>";
+							echo $rowInfo["Opleiding"];
+						echo "</textarea>";
+					echo "</div><br>";
+
+					echo "<div class='input-group'>";
+						echo "<label for='info_interests'>Interesses:</label><br>";
+						echo "<textarea placeholder='Schrijf een stukje over je interesses...' name='info_interests' class='form-control' id='info_interests'>";
+							echo $rowInfo["Interesses"];
+						echo "</textarea>";
+					echo "</div><br>";
+
+					echo "<div class='input-group'>";
+						echo "<label for='info_experience'>Werkervaring:</label><br>";
+						echo "<textarea placeholder='Schrijf wat over je werkervaring...' name='info_experience' class='form-control' id='info_experience'>";
+							echo $rowInfo["Werkervaring"];
+						echo "</textarea>";
+					echo "</div><br>";
+
+					echo "<div class='input-group'>";
+						echo "<label for='info_hobby'>Hobbies:</label><br>";
+						echo "<textarea placeholder='Schrijf iets over je hobbies...' name='info_hobby' class='form-control' id='info_hobby'>";
+							echo $rowInfo["Hobbies"];
+						echo "</textarea>";
+					echo "</div><br>";
+
+					echo "<div class='input-group'>";
+						echo "<label for='info_description'>Beschrijving:</label><br>";
+						echo "<textarea placeholder='Schrijf een beschrijving voor je portfolio...' name='info_description' class='form-control' id='info_description'>"; 
+							echo $rowInfo["Info"];
+						echo "</textarea>";
+					echo "</div><br>";
+
+					echo "<div class='input-group'>";
+						echo "<button type='submit' name='info_submit' id='submitInfo' class='btn btn-default'>Bewerken</button>";
+					echo "</div>";
+				echo "</form>";
+			echo "</div>";
 		echo "</div>";
 	}
 

@@ -427,6 +427,9 @@ comments
   width:300px;
   margin-bottom:20px;
 }
+#submitInfo {
+	margin-bottom: 20%;
+}
 
 @media (max-width: 767px){
     .fileupload-buttonbar .toggle, .files .toggle, .files .btn span {
