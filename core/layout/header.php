@@ -77,7 +77,8 @@
             .sidebar-secondary {
                 color: <?php echo $fc; ?> !important;
             }
-            .navbottom {
+            .navbottom ,
+            .navbottom div button{
                 color: <?php echo $fc; ?> !important;
             }
             /*mobiel*/
@@ -146,7 +147,7 @@
                     <?php
                     if ($_SESSION["loggedIn"]) {
                         echo "      <div class='navbottom'>"
-                        . "     <p class='unspan pull-right'><b>" . $_SESSION["name"] . "</b></p> &nbsp;"
+                        . "     <div><p class='unspan pull-right'><b>" . $_SESSION["name"] . "</b></p> &nbsp;</div>"
                         . "     <div class='btn-group pull-right'>"
                         . "         <button class='btn btn-primary navbtn' onclick=\"window.location.href='backend.php'\">Back-end</button>"
                         . "         <button class='btn btn-primary navbtn' onclick=\"window.location.href='?page=logout'\">Uitloggen</button>"

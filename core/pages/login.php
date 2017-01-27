@@ -8,16 +8,16 @@
             <div class="panel-body">
                 <form method='post' id="login" action='#'>
                     <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"><span class=" glyphicon glyphicon-user"></span></span>
-                        <input type="email" name="E-mailadres" class="form-control" placeholder="E-mail"/>
-                    </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class=" glyphicon glyphicon-user"></span></span>
+                            <input type="email" name="mail" class="form-control" placeholder="E-mail"/>
+                        </div>
                     </div>
                     <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-                        <input type="text" name="Wachtwoord" class="form-control" placeholder="Wachtwoord"/>
-                    </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                            <input type="password" name="Wachtwoord" class="form-control" placeholder="Wachtwoord"/>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -31,36 +31,39 @@
 
 <?php
 if (isset($_POST["submitLogin"])) {
-    foreach ($_POST as $key => $value){
-        if(empty($value)){
+    foreach ($_POST as $key => $value) {
+        if (empty($value)) {
             $_SESSION["message"][$key] = "Dit veld is verplicht";
         }
     }
-    $stmt4 = $db->prepare("SELECT `e-mail`, password, role FROM user WHERE `e-mail` = ?;");
-        $stmt4 -> execute(array($_POST["user"]));
-        $mail = $pass = $role = "";
-        if($stmt4 -> rowCount() == 0){
-        while($row = $stmt4->fetch()){
+    $stmt4 = $db->prepare("SELECT * FROM user WHERE `e-mail` = ?;");
+    $stmt4->execute(array($_POST["mail"]));
+    $mail = $pass = $role = $name = "";
+    $id = 0;
+    if ($stmt4->rowCount() == 1) {
+        while ($row = $stmt4->fetch()) {
             $mail = $row["e-mail"];
             $pass = $row["password"];
             $role = $row["role"];
+            $name = $row["firstName"] . " " . $row["lastName"];
+            $id = $row["id"];
         }
-        if(password_verify($pass, $_POST["pass"])){
-                $_SESSION['loggedIn'] = true;
-		$_SESSION["e-mail"] = $email;
-		$_SESSION['role'] = $row["role"];
-		$_SESSION['name'] = $row["firstName"] . " " . $row["lastName"];
-		$_SESSION['id'] = $row["id"];
-                $_SESSION["message"]["Succes!"] = $_SESSION["name"] . ". U bent nu ingelogd";
-        }else{
+        if (password_verify($_POST["Wachtwoord"], $pass)) {
+            $_SESSION['loggedIn'] = true;
+            $_SESSION["e-mail"] = $mail;
+            $_SESSION['role'] = $role;
+            $_SESSION['name'] = $name;
+            $_SESSION['id'] = $id;
+            $_SESSION["message"]["Succes!"] = $_SESSION["name"] . ". U bent nu ingelogd";
+        } else {
             $_SESSION["message"]["Sorry"] = "Deze combinatie van gebruikersnaam en wachtwoord is incorrect.";
         }
-    }else if($stmt4->rowCount() > 1){
+    } else if ($stmt4->rowCount() > 1) {
         $_SESSION["message"]["0x0001"] = "Er zijn meerdere accounts met dit e-mailadres gevonden, contacteer alstublieft de administrator.";
-    }else{
-        $_SESSION["message"]["Sorry"] = "Deze combinatie van gebruikersnaam en wachtwoord is incorrect.";
+    } else {
+        $_SESSION["message"]["Sorry"] = "Deze combinatie van E-mailadres en Wachtwoord is incorrect.";
     }
-    if(isset($_SESSION["message"])){
-        redirect("?page=login");
+    if (isset($_SESSION["message"])) {
+        redirect("?page=home");
     }
 }
