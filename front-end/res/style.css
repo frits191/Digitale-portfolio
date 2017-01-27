@@ -57,7 +57,13 @@ ul.dropdown-menu li a{
     color: #fff;
     background: none;
 }
-
+.clickable {
+    cursor: pointer;
+}
+.grid-img {
+    margin: 0 auto !important;
+    width: 50%;
+}
 /* ID's */
 #sidebar-wrapper {
     z-index: 1000;
@@ -101,7 +107,20 @@ ul.dropdown-menu li a{
     position: absolute;
     margin-right: -250px;
 }
-
+.navbottom {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+.navbtn{
+    background: rgba(255, 255, 255, 0.3) !important;
+}
+.submit {
+    background:rgba(255, 255, 255, 0.3) !important;
+}
+.unspan{
+    line-height: 5px;
+}
 /* PC only */
 
 @media(min-width:768px) {
@@ -187,7 +206,10 @@ ul.dropdown-menu li a{
         margin-left: 10px;
         margin-right: 10px;
     }
-    
+    /* Classes */
+    .navmenu-secondary {
+        margin-left: 30px;
+    }
     .navbar-toggle {
         background-color: whitesmoke !important;
         float: left !important;

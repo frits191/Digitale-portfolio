@@ -22,8 +22,10 @@ if(isset($_GET["projectid"])){
         }
         $i++;
     }
+    $stmt5->closeCursor();
     if($layout == "list"){
     /* List style Layout */
+        
     echo ""
             . " <div class='row'>"
             . "     <div class='col-sm-12'>"
@@ -31,8 +33,9 @@ if(isset($_GET["projectid"])){
             . "             <div class='panel-heading'>"
             . "             $projecttitle"
             . "             </div>"
-            . "             <div class='panel-body'>"
-            . "                 <table class='table table-striped'>"
+            . "             <div class='panel-body'>";
+    if($stmt4->rowCount() > 0){
+         echo "                 <table class='table table-striped table-hover'>"
             . "                     <thead>"
             . "                         <tr>"
             . "                             <th>"
@@ -49,25 +52,87 @@ if(isset($_GET["projectid"])){
             . "                     <tbody>"
             . "                                 ";
     while($row = $stmt4->fetch()){
-        echo "<tr><td>" . $row["type"] . "</td>";
+        echo "<tr class='clickable' onclick=\"window.location.href='front-end/res/portfolios/" . $portfolioID . "/" . $row["project_id"] . "/" . $row["title"] . $row["type"] . "'\"><td><img height='40px' src='img/filetypes/" . str_replace(".", "", $row["type"]) . ".png' alt='" . $row["type"] . "'/></td>";
         echo "<td>" . $row["title"] . "</td>";
         echo "<td>" . $row["description"] . "</td></tr>";
     }
     echo      "                     </tbody>"
-            . "                 </table>"
-            . "             </div>"
-            . "             <div class='panel-footer'>"
-            . "             </div>"
+            . "                 </table>";
+    } else {
+    echo "<h2>Geen bestanden gevonden in dit project</h2>";
+}
+         echo "             </div>"
             . "         </div>"
             . "     </div>"
             . " </div>";
-    
 }else if($layout == "grid1"){
     /* Big grid style layout */
-    
+    echo "      <div class='page-header'>"
+    . "             <h1>$projecttitle <small>" . ucwords(str_replace("_", " ", $name)) . "</small></h1>"
+            . " </div>";
+    if($stmt4->rowCount() > 0){
+    echo "<div class='row'>";
+    $j = 1;
+    while($row = $stmt4->fetch()){
+        echo ""
+                . "     <div class='col-sm-4'>"
+                . "         <div onclick=\"window.location.href='front-end/res/portfolios/" . $portfolioID . "/" . $row["project_id"] . "/" . $row["title"] . $row["type"] . "'\" class='panel panel-default clickable'>"
+                . "             <div class='panel-heading'>"
+                .                   $row["title"]
+                . "             </div>"
+                . "             <div class='panel-body'>"
+                . "             <img class='img-responsive grid-img' src='img/filetypes/" . str_replace(".", "", $row["type"]) . ".png' alt='folder'/>"
+                . "             </div>";
+        if(!empty($row["description"])){
+            echo  "             <div class='panel-footer'>"
+                    .              $row["description"]
+                    . "         </div>";
+        }
+            echo  "         </div>"
+                . "     </div>";
+        if($j == 3){
+            echo "</div><div class='row'>";
+            $j = 0;
+        }
+        $j++;
+    }
+    } else {
+    echo "<h2>Geen bestanden gevonden in dit project</h2>";
+}
 }else if($layout == "grid2"){
     /* Small grid layout */
-    
+    echo "      <div class='page-header'>"
+    . "             <h1>$projecttitle <small>" . ucwords(str_replace("_", " ", $name)) . "</small></h1>"
+            . " </div>";
+    if($stmt4->rowCount() > 0){
+    echo "<div class='row'>";
+    $j = 1;
+    while($row = $stmt4->fetch()){
+        echo ""
+                . "     <div class='col-sm-3'>"
+                . "         <div onclick=\"window.location.href='front-end/res/portfolios/" . $portfolioID . "/" . $row["project_id"] . "/" . $row["title"] . $row["type"] . "'\" class='panel panel-default clickable'>"
+                . "             <div class='panel-heading'>"
+                .                   $row["title"]
+                . "             </div>"
+                . "             <div class='panel-body'>"
+                . "             <img class='img-responsive grid-img' src='img/filetypes/" . str_replace(".", "", $row["type"]) . ".png' alt='folder'/>"
+                . "             </div>";
+        if(!empty($row["description"])){
+            echo  "             <div class='panel-footer'>"
+                    .              $row["description"]
+                    . "         </div>";
+        }
+            echo  "         </div>"
+                . "     </div>";
+        if($j == 4){
+            echo "</div><div class='row'>";
+            $j = 0;
+        }
+        $j++;
+    }
+}
+} else {
+    echo "<h2>Geen bestanden gevonden in dit project</h2>";
 }
 }else{
     $stmt4->execute(array($portfolioID));
@@ -80,42 +145,102 @@ if(isset($_GET["projectid"])){
             . "             <div class='panel-heading'>"
             . "                 Projecten"
             . "             </div>"
-            . "             <div class='panel-body'>"
-            . "             </div>"
-            . "             <div class='panel-footer'>"
-            . "             </div>"
+            . "             <div class='panel-body'>";
+    if($stmt4->rowCount() > 0){
+         echo "                 <table class='table table-striped table-hover'>"
+            . "                     <thead>"
+            . "                         <tr>"
+            . "                             <th>"
+            . "                                 Titel"
+            . "                             </th>"
+            . "                             <th>"
+            . "                                 Beschrijving"
+            . "                             </th>"
+            . "                         </tr>"
+            . "                     </thead>"
+            . "                     <tbody>";
+    while($row = $stmt4->fetch()){
+        echo "<tr class='clickable' onclick=\"window.document.location='?page=portfolio&projectid=" . $row["id"] . "'\"><td>" . $row["title"] . "</td>";
+        echo "<td>" . $row["description"] . "</td></tr>";
+    }
+    echo      "                     </tbody>"
+            . "                 </table>";
+    }else{
+        echo "<h2>Geen projecten gevonden in dit portfolio.</h2>";
+    }
+         echo "             </div>"
             . "         </div>"
             . "     </div>"
             . " </div>";
     
 }else if($layout == "grid1"){
     /* Big grid style layout */
-    
-}else if($layout == "grid2"){
-    /* Small grid layout */
-    
-}
-}
-if($layout == "list"){
-    /* List style Layout */
-    echo ""
-            . " <div class='row'>"
-            . "     <div class='col-sm-12'>"
-            . "         <div class='panel panel-default'>"
-            . "             <div class='panel-heading'>"
-            . "             </div>"
-            . "             <div class='panel-body'>"
-            . "             </div>"
-            . "             <div class='panel-footer'>"
-            . "             </div>"
-            . "         </div>"
-            . "     </div>"
+    echo "      <div class='page-header'>"
+    . "             <h1>Projecten <small>" . ucwords(str_replace("_", " ", $name)) . "</small></h1>"
             . " </div>";
-    
-}else if($layout == "grid1"){
-    /* Big grid style layout */
-    
+    if($stmt4->rowCount() > 0){
+    echo "<div class='row'>";
+    $j = 1;
+    while($row = $stmt4->fetch()){
+        echo ""
+                . "     <div class='col-sm-4'>"
+                . "         <div onclick=\"window.document.location='?page=portfolio&projectid=" . $row["id"] . "'\" class='clickable panel panel-default'>"
+                . "             <div class='panel-heading'>"
+                .                   $row["title"]
+                . "             </div>"
+                . "             <div class='panel-body'>"
+                . "             <img class='img-responsive grid-img' src='img/filetypes/folder.png' alt='folder'/>"
+                . "             </div>";
+        if(!empty($row["description"])){
+            echo  "             <div class='panel-footer'>"
+                    .              $row["description"]
+                    . "         </div>";
+        }
+            echo  "         </div>"
+                . "     </div>";
+        if($j == 3){
+            echo "</div><div class='row'>";
+            $j = 0;
+        }
+        $j++;
+    }
+    } else {
+    echo "<h2>Geen projecten gevonden in dit portfolio</h2>";
+}
 }else if($layout == "grid2"){
     /* Small grid layout */
-    
+    echo "      <div class='page-header'>"
+    . "             <h1>Projecten <small>" . ucwords(str_replace("_", " ", $name)) . "</small></h1>"
+            . " </div>";
+    if($stmt4->rowCount() > 0){
+    echo "<div class='row'>";
+    $j = 1;
+    while($row = $stmt4->fetch()){
+        echo ""
+                . "     <div class='col-sm-3'>"
+                . "         <div onclick=\"window.document.location='?page=portfolio&projectid=" . $row["id"] . "'\" class='clickable panel panel-default'>"
+                . "             <div class='panel-heading'>"
+                .                   $row["title"]
+                . "             </div>"
+                . "             <div class='panel-body'>"
+                . "             <img class='img-responsive grid-img' src='img/filetypes/folder.png' alt='folder'/>"
+                . "             </div>";
+        if(!empty($row["description"])){
+            echo  "             <div class='panel-footer'>"
+                    .              $row["description"]
+                    . "         </div>";
+        }
+            echo  "         </div>"
+                . "     </div>";
+        if($j == 4){
+            echo "</div><div class='row'>";
+            $j = 0;
+        }
+        $j++;
+    }
 }
+} else {
+    echo "<h2>Geen projecten gevonden in dit portfolio</h2>";
+}
+}
+$stmt4->closeCursor();
