@@ -40,8 +40,250 @@ class Pages
 		header('refresh:2;url=backend.php?p=home');
 	}
 
-	function info() {
+	function search() {
+		global $functions;
+		global $project;
 
+		if (isset($_POST['submit'])) {
+			if (empty($_POST['search'])){
+				echo "U moet een zoekterm invullen.";
+			} else {
+				$search = htmlspecialchars($_POST['search']);
+				$SQLString = 'SELECT id, title, description FROM project WHERE portfolio_id = ' . $_SESSION['portfolio_id'] . ' AND title LIKE "%' . $search . '%"';
+				$QueryResult = $functions->executeQuery($SQLString);
+				$row = mysqli_fetch_all($QueryResult);
+				for ($i = count($row) - 1;$i >= 0;$i--) {
+		            echo "<div class='fileblock'>";
+		                echo "<div class='file' onclick='location.href = \"backend.php?p=projecten&project=" . $row[$i][0] . "\";'>";
+		                    echo "<button type='button' class='btn-link'>";
+		                        echo "<span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span>";
+		                    echo "</button>";
+		                echo "</div>";
+		                echo "<div class='filemenu'>";
+							echo "<div class='FolderTitle'>" . $row[$i][1] . "</div>";
+		                    echo "<div class='btn-group'>";
+		                        echo "<button type='button' class='btn btn-link'>";
+		                            echo "<span class='glyphicon glyphicon-pencil' aria-hidden='true' title='Edit' data-toggle='modal' data-target='#EditFolder" . $row[$i][0] . "'></span>";
+		                        echo "</button>";
+		                        echo "<button type='button' class='btn btn-link'>";
+		                            echo "<span class='glyphicon glyphicon-trash' aria-hidden='true' title='Delete' data-toggle='modal' data-target='#DeleteFolder" . $row[$i][0] . "'></span>";
+		                        echo "</button>";
+		                    echo "</div>";
+		                echo "</div>";	
+					echo "</div>";
+
+					//Edit Folder modal
+					echo '<div class="modal fade" id="EditFolder' . $row[$i][0] . '" role="dialog">';
+						echo '<div class="modal-dialog">';
+							echo '<div class="modal-content">';
+								echo '<div class="modal-header">';
+									echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+									echo '<h4 class="modal-title">Bewerk deze map.</h4>';
+								echo '</div>';
+								echo '<div class="modal-body">';
+									echo '<p>';
+										echo "<form action='backend.php?p=projecten' method='POST'>";
+											echo "<input type='hidden' name='folderID' value='" . $row[$i][0] . "'>";
+											echo "<div class='form-group'>";
+												echo "<label for='EditFolderName'>Bestands Naam:</label><br>";
+												echo "<input type='text' class='form-control' id='EditFolderName' name='folderName' value='" . $row[$i][1] . "' placeholder='Name' required>";
+											echo "</div>";
+											echo "<div class='form-group'>";
+												echo "<label for='EditFolderDesc'>Beschrijving:</label><br>";
+												echo "<textarea name='folderDesc' class='form-control' id='EditFolderDesc' maxlength='500' placeholder='Description'>" . $row[$i][2] . "</textarea>";
+											echo "</div>";
+											echo "</div>";
+											echo '<div class="modal-footer">';
+											echo "<button type='submit' class='btn btn-default' name='folderEdit'>Bewerk</button></form>";
+									echo "</p>";
+								echo "</div>";				
+							echo "</div>";
+						echo "</div>";
+					echo "</div>";
+
+					//Delete Folder modal
+					echo '<div class="modal fade" id="DeleteFolder' . $row[$i][0] . '" role="dialog">';
+						echo '<div class="modal-dialog">';
+							echo '<div class="modal-content">';
+								echo '<div class="modal-header">';
+									echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+									echo '<h4 class="modal-title">Weet u zeker dat u de map: \'' . $row[$i][1] . '\' wilt verwijderen?`</h4>';
+								echo'</div>';
+								echo '<div class="modal-body">';
+									echo '<p>';
+										echo '<h5><strong>Waarschuwing:</strong> alle onderliggende bestanden worden ook verwijderd.</h5>';
+										echo "<form action='backend.php?p=projecten' method='POST'>";
+											echo "<input type='hidden' name='folderToDelete' value='" . $row[$i][0] . "'><br><br>";
+									echo "</p>";
+								echo "</div>";
+								echo '<div class="modal-footer">';
+									echo "<button type='submit' class='btn btn-default' name='folderDelete'>Verwijder</button></form>";
+									echo "</p>";						
+								echo "</div>";
+							echo "</div>";
+						echo "</div>";
+					echo "</div>";
+				}
+				$SQLString = "SELECT 
+							  FILE.`id`,
+							  FILE.`title`,
+							  `type`
+							FROM FILE
+							JOIN
+							  project ON `project_id` = project.`id`
+							WHERE
+							  portfolio_id = '" . $_SESSION['portfolio_id'] . "' AND FILE.`title` LIKE '%" . $search .  "%'";
+				$queryresult = $functions->executeQuery($SQLString);
+				if (mysqli_num_rows($QueryResult) == 0 && mysqli_num_rows($queryresult) == 0) {
+					echo "Er zijn geen resultaten voor de zoekterm: " . $search;
+				}
+				$row = mysqli_fetch_all($queryresult);
+				for ($i = count($row) - 1;$i >= 0;$i--) {
+					$SQLString = "SELECT project_id FROM file WHERE id = " . $row[$i][0];
+					$Query = $functions->executeQuery($SQLString);
+					$rowProject = mysqli_fetch_assoc($Query);
+					$project = $rowProject['project_id'];
+
+		            echo "<div class='fileblock'>";
+		                echo "<div class='file' onclick='window.open(\"front-end/res/portfolios/" . $_SESSION["portfolio_id"] . "/" . $project . "/" . $row[$i][1] . $row[$i][2] . "\")'>";
+		                    echo "<button type='button' class='btn-link'>";
+		                        echo "<span class='glyphicon glyphicon-file' aria-hidden='true'></span>";
+		                    echo "</button>";
+		                echo "</div>";
+		                echo "<div class='filemenu'>";
+							echo "<div class='FolderTitle'>" . $row[$i][1] . $row[$i][2] . "</div>";
+		                    echo "<div class='btn-group'>";
+								echo "<button type='button' class='btn btn-link'>";
+									echo "<span class='glyphicon glyphicon-open' aria-hidden='true' title='Download' onclick='window.open(\"front-end/res/portfolios/" . $_SESSION["portfolio_id"] . "/" . $project . "/" . $row[$i][1] . $row[$i][2] . "\")'></span>";
+								echo "</button>";
+		                        echo "<button type='button' class='btn btn-link'>";
+		                            echo "<span class='glyphicon glyphicon-pencil' aria-hidden='true' title='Edit' data-toggle='modal' data-target='#EditFile" . $row[$i][0] . "'></span>";
+		                        echo "</button>";
+		                        echo "<button type='button' class='btn btn-link'>";
+		                            echo "<span class='glyphicon glyphicon-trash' aria-hidden='true' title='Delete' data-toggle='modal' data-target='#DeleteFile" . $row[$i][0] . "'></span>";
+		                        echo "</button>";
+		                    echo "</div>";
+		                echo "</div>";	
+					echo "</div>";
+
+					//Edit File modal
+					echo '<div class="modal fade" id="EditFile' . $row[$i][0] . '" role="dialog">';
+						echo '<div class="modal-dialog">';
+							echo '<div class="modal-content">';
+								echo '<div class="modal-header">';
+									echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+									echo '<h4 class="modal-title">Bewerk dit bestand.</h4>';
+								echo'</div>';
+								echo '<div class="modal-body">';
+									echo '<p>';
+										echo "<form action='backend.php?p=projecten&project=" . $project . "' method='POST'>";
+											echo "<input type='hidden' name='fileID' value='" . $row[$i][0] . "'>";
+											echo "<input type='hidden' name='projectID' value='" . $project . "'>";
+											echo "<div class='input-group'>";
+												echo "<label for='EditFileName'>Bestands Naam:</label><br>";
+												echo "<input type='text' class='form-control' id='EditFileName' name='fileName' value='" . $row[$i][1] . "' placeholder='Name' required><br><br>";
+											echo "</div>";
+											echo "<div class='input-group'>";
+												echo "<label for='EditFileDesc'>Beschrijving:</label><br>";
+												echo "<input type='text' class='form-control' id='EditFileDesc' name='fileDesc' value='" . $row[$i][3] . "' placeholder='Description'>";
+											echo "</div>";
+									echo "</p>";
+								echo "</div>";
+								echo '<div class="modal-footer">';
+									echo "<button type='submit' class='btn btn-default' name='fileEdit'>Bewerken</button></form>";
+								echo "</div>";
+							echo "</div>";
+						echo "</div>";
+					echo "</div>";
+
+					//Delete File modal
+					echo '<div class="modal fade" id="DeleteFile' . $row[$i][0] . '" role="dialog">';
+						echo '<div class="modal-dialog">';
+							echo '<div class="modal-content">';
+								echo '<div class="modal-header">';
+									echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+									echo '<h4 class="modal-title">Weet u zeker dat u het bestand: \'' . $row[$i][1] . $row[$i][2] . '\' wilt verwijderen?</h4>';
+								echo'</div>';
+								echo '<div class="modal-body">';
+									echo '<p>';
+										echo "<form action='backend.php?p=projecten&project=" . $project . "' method='POST'>";
+											echo "<input type='hidden' name='fileToDelete' value='" . $row[$i][0] . "'><br><br>";
+											echo "<input type='hidden' name='projectID' value='" . $project . "'>";
+								echo "</div>";
+								echo '<div class="modal-footer">';	
+										echo "<button type='submit' class='btn btn-default' name='fileDelete'>Verwijder</button></form>";
+									echo "</p>";								
+								echo "</div>";
+							echo "</div>";
+						echo "</div>";
+					echo "</div>";
+				}
+			}
+		} else {
+			echo "U moet een zoekterm invullen.";
+		}
+	}
+
+	function info() {
+		global $functions;
+
+		if (isset($_POST["info_submit"])) {
+			$functions->submitInfo();
+		}
+
+		echo "<h4>Bewerk je profiel:</h4>";
+		echo "<div class='infoBlock'>";
+			echo "<form method='post' action='backend.php?p=info'>";
+				$SQLString = "SELECT title, layout, bg_color, font_color, owner_id FROM portfolio WHERE id = " . $_SESSION["portfolio_id"];
+				$QueryResult = $functions->executeQuery($SQLString);
+				$rowPort = mysqli_fetch_assoc($QueryResult);
+
+				$SQLString = "SELECT Opleiding, Interesses, Werkervaring, Hobbies, Info FROM persoonlijkeinfo WHERE user_id = " . $rowPort["owner_id"];
+				$QueryResult = $functions->executeQuery($SQLString);
+				$rowInfo = mysqli_fetch_assoc($QueryResult);
+
+				echo "<div class='input-group'>";
+					echo "<label for='info_titel'>Portfolio titel:</label><br>";
+					echo "<input type='text' class='form-control' value='" . $rowPort["title"] . "' name='info_title' id='info_title' placeholder='Portfolio titel' required>";
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo "<label for='info_color_bg'>Achtergrond kleur:</label><br>";
+					echo "<input type='color' name='info_color_bg' value='" . $rowPort["bg_color"] . "' class='form-control' id='info_color_bg' required>";
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo "<label for='info_color_font'>Font kleur:</label><br>";
+					echo "<input type='color' name='info_color_font' value='" . $rowPort["font_color"] . "' class='form-control' id='info_color_font' required>";
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo '<label class="radio-inline"><input type="radio" value="list" name="info_layout" ' . ($rowPort["layout"] == "list" ? 'checked' : '') . ' required>List</label>';
+					echo '<label class="radio-inline"><input type="radio" value="grid1" name="info_layout" ' . ($rowPort["layout"] == "grid1" ? 'checked' : '') . ' required>Big grid</label>';
+					echo '<label class="radio-inline"><input type="radio" value="grid2" name="info_layout" ' . ($rowPort["layout"] == "grid2" ? 'checked' : '') . ' required>Small grid</label>';
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo "<label for='info_study'>Opleiding:</label><br>";
+					echo "<input type='text' name='info_study' value='" . $rowInfo["Opleiding"] . "' class='form-control' id='info_study'>";
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo "<label for='info_interests'>Interesses:</label><br>";
+					echo "<input type='text' name='info_interests' value='" . $rowInfo["Interesses"] . "' class='form-control' id='info_interests'>";
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo "<label for='info_experience'>Werkervaring:</label><br>";
+					echo "<input type='text' name='info_experience' value='" . $rowInfo["Werkervaring"] . "' class='form-control' id='info_experience'>";
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo "<label for='info_hobby'>Hobbies:</label><br>";
+					echo "<input type='text' name='info_hobby' value='" . $rowInfo["Hobbies"] . "' class='form-control' id='info_hobby'>";
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo "<label for='info_description'>Beschrijving:</label><br>";
+					echo "<textarea name='info_description' class='form-control' id='info_description'>" . $rowInfo["Info"] . " </textarea>";
+				echo "</div><br>";
+				echo "<div class='input-group'>";
+					echo "<button type='submit' name='info_submit' class='btn btn-default'>Bewerken</button>";
+				echo "</div>";
+			echo "</form>";
+		echo "</div>";
 	}
 
 	function cijfers() {
@@ -97,35 +339,41 @@ class Pages
 							echo "<td>" . $grade . "</td>";
 							echo "<td>" . $fname . " " . $lname . "</td>";
 							echo "<td>" . $comment . "</td>";
-							echo "<td><button type='button' class='btn btn-default' data-toggle='modal' data-target='#EditGrade" . $index[0] . "'>Verander cijfer</button>"; 
-							echo '<div class="modal fade" id="EditGrade' . $index[0] . '" role="dialog">';
-							echo '<div class="modal-dialog">';
-								echo '<div class="modal-content">';
-									echo '<div class="modal-header">';
-										echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
-										echo '<h4 class="modal-title">Pas het cijfer aan.</h4>';
-									echo'</div>';
-									echo '<div class="modal-body">';
-										echo '<p>';
-											echo "<form action='backend.php?p=cijfers' method='POST'>";
-												echo "<div class='form-group'>";
-													echo "<label for='cijfer'>Cijfer</label>";
-													echo "<input type='number' name='cijfer' class='form-control' id='cijfer' min='1' max='10' step='0.1' value='" . $grade . "' required>";
-												echo "</div>";
-												echo "<div class='form-group'>";
-													echo "<label for='cijferOpmerking'>Opmerking:</label>";
-													echo "<textarea name='cijferOpmerking' placeholder='Opmerking' class='form-control' maxlength='500' id='cijferOpmerking'>" . $index[4] . "</textarea>";
-												echo "</div>";
-										echo "</p>";
-									echo "</div>";
-									echo '<div class="modal-footer">';
-										echo "<button type='submit' class='btn btn-default' value='Verzend' name='submitCijfer'>Verzend</button></form>";
+
+							$role = $_SESSION['role'];
+
+							echo "<td>";
+							if ($role == "admin" || $role == "docent" || $role == "SLB") {
+								echo "<button type='button' class='btn btn-default' data-toggle='modal' data-target='#EditGrade" . $index[0] . "'>Verander cijfer</button>"; 
+								echo '<div class="modal fade" id="EditGrade' . $index[0] . '" role="dialog">';
+								echo '<div class="modal-dialog">';
+									echo '<div class="modal-content">';
+										echo '<div class="modal-header">';
+											echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+											echo '<h4 class="modal-title">Pas het cijfer aan.</h4>';
+										echo'</div>';
+										echo '<div class="modal-body">';
+											echo '<p>';
+												echo "<form action='backend.php?p=cijfers' method='POST'>";
+													echo "<div class='form-group'>";
+														echo "<input type='hidden' name='projectID' value='" . $index[0] . "'>";
+														echo "<label for='cijfer'>Cijfer</label>";
+														echo "<input type='number' name='cijfer' class='form-control' id='cijfer' min='1' max='10' step='0.1' value='" . $grade . "' required>";
+													echo "</div>";
+													echo "<div class='form-group'>";
+														echo "<label for='cijferOpmerking'>Opmerking:</label>";
+														echo "<textarea name='cijferOpmerking' placeholder='Opmerking' class='form-control' maxlength='500' id='cijferOpmerking'>" . $index[4] . "</textarea>";
+													echo "</div>";
+											echo "</p>";
+										echo "</div>";
+										echo '<div class="modal-footer">';
+											echo "<button type='submit' class='btn btn-default' value='Verzend' name='submitCijfer'>Verzend</button></form>";
+										echo "</div>";
 									echo "</div>";
 								echo "</div>";
 							echo "</div>";
-						echo "</div>";
-						echo "</td></tr>";
-						
+						}
+						echo "</td></tr>";				
 					}
 				}
 			echo "</tbody>";
@@ -175,7 +423,7 @@ class Pages
 		}	
 
 		if (isset($_GET["project"])) {
-			echo "<a href='backend.php?p=projecten'><button type='button' class='btn btn-default'>Terug</button></a>";
+			echo "<a href='backend.php?p=projecten'><button type='button' id='backButton' class='btn btn-default'>Terug</button></a>";
 		}
 
 		echo "<div class='files'>";
@@ -306,13 +554,56 @@ class Pages
         echo "</div>";	
 	}
 
-	function portfolio() {
-
-	}
-
 	function opmerkingen() {
-
-	}
+        //comments
+        global $functions;
+ 
+        //new comment
+        if(!empty($_POST['commentContent'])){
+            $commentContent = addslashes(htmlspecialchars($_POST['commentContent']));
+            $placer_id = $_SESSION['id'];
+            $portId = $_SESSION['portfolio_id'];
+            $SQLString = "INSERT INTO comment(message, placer_id, portfolio_id) VALUES('$commentContent','$placer_id','$portId')";
+            $QueryResult = $functions->executeQuery($SQLString);
+            if ($QueryResult) {
+                echo "<p>Je opmerking is geplaatst</p>";
+            }else {
+                echo "<p>Er was een fout bij het plaatsen van je opmerking.</p>";
+            }
+        }
+ 
+        //get placed comments
+        $portId = $_SESSION['portfolio_id'];
+        $SQLString = "SELECT comment.placement_date, comment.message, user.firstName, user.lastName FROM comment INNER JOIN user ON comment.placer_id=user.id WHERE portfolio_id = '$portId' ORDER BY placement_date desc";
+        $QueryResult = $functions->executeQuery($SQLString);
+        $row = mysqli_fetch_all($QueryResult);
+        if (mysqli_num_rows($QueryResult) > 0) {
+            $comments = $row;
+        }
+ 
+        echo "
+            <form method='POST' id='commentForm' action='backend.php?p=opmerkingen'>
+                <h4>Plaats opmerking</h4>
+                <textarea maxlength='255' name='commentContent'></textarea>
+                <button class='btn btn-default' type='submit'>plaatsen</button>
+            </form>
+            <h4>Opmerkingen geplaatst op deze portfolio</h4>
+        ";
+        if(!empty($comments)){
+            foreach($comments as $i => $comment){
+                echo "
+                <div class='comment'>
+                    <p >Geplaatst door: {$comment[2]} {$comment[3]} op {$comment[0]}</p>
+                    <div class='commentContent'>
+                        <p>{$comment[1]}</p>
+                    </div>
+                </div>
+                ";
+            }
+        }else{
+            echo "<p>Er zijn hier nog geen opmerkingen.</p>";
+        }
+    }
 
 	function gebruikers() {
 		global $functions;
@@ -437,10 +728,14 @@ class Pages
 													$QueryResult = $functions->executeQuery($SQLString);
 													$UserList = mysqli_fetch_all($QueryResult);
 
-													$followingArray = explode(',', $index[7]);
+													$followingArray = explode(',', $index[7]);					
 
 													foreach ($UserList as $index => $value) {
-														echo "<label class='checkbox-inline'><input type='checkbox' name='following[]' value='" . $value[2] . "' " . (in_array($value[2], $followingArray) ? 'checked' : '') . ">" . $value[0] . " " . $value[1] . "</label>";	
+														$SQLString = "SELECT id FROM portfolio WHERE owner_id = " . $value[2];
+														$QueryResult = $functions->executeQuery($SQLString);
+														$row = mysqli_fetch_assoc($QueryResult);
+
+														echo "<label class='checkbox-inline'><input type='checkbox' name='following[]' value='" . $row['id'] . "' " . (in_array($row['id'], $followingArray) ? 'checked' : '') . ">" . $value[0] . " " . $value[1] . "</label>";	
 													}
 											
 												echo "</div>";	

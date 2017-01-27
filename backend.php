@@ -37,9 +37,11 @@ if ($p !== "login" && $p !== "logout") {
 
 //When a user is already logged in they are not allowed to go to the login page
 if ($p == "login") {
-	if ($_SESSION["loggedIn"] == true) {
-		header('Location: backend.php?p=home');
-		exit();
+	if (isset($_SESSION["loggedIn"])) {
+		if ($_SESSION["loggedIn"] == true) {
+			header('Location: backend.php?p=home');
+			exit();
+		}
 	}
 }
 
@@ -66,7 +68,7 @@ echo "<html>";
 		echo '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>';
 		echo '<script src="js/scripts.js"></script>';
 
-		//CSS
+		//CSS 
 		echo '<link rel="stylesheet" type="text/css" href="../Digitale-portfolio/css/backend.css">';
 		echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">';
 		echo '<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">';
@@ -94,8 +96,8 @@ echo "<html>";
 					echo "<button class='navbar-toggler hidden-md-up' type='button' data-toggle='collapse' data-target='#exCollapsingNavbar2'>&#9776;</button>";
 						echo "<div class='collapse navbar-toggleable-sm' id='exCollapsingNavbar2'>";
 							echo "<div id='searchbar'>";
-								echo "<form class='form-inline' id='search' method='POST' action='#'>";
-									echo "<input type='text' class='searchinput' name='search' size='10' maxlength='120' placeholder='Search'><input type='submit' value='>' class='searchbutton' title='Search'>";
+								echo "<form class='form-inline' id='search' method='POST' action='backend.php?p=search'>";
+                                    echo "<input type='text' class='searchinput' name='search' size='10' maxlength='120' placeholder='Search' ><input type='submit' value='>' name='submit' class='searchbutton' title='Search'>";
 								echo "</form>";
 							echo "</div>";
 
@@ -159,7 +161,12 @@ echo "<html>";
 						echo "<a href='backend.php?p=info'><li class='nav-item'>Persoonlijke gegevens</li></a>";
 						echo "<a href='backend.php?p=cijfers'><li class='nav-item'>Cijfers</li></a>";
 						echo "<a href='backend.php?p=projecten'><li class='nav-item'>Projecten</li></a>";
-						echo "<a href='backend.php?p=portfolio'><li class='nav-item'>Openbaar portfolio</li></a>";
+						if (isset($_SESSION["portfolio_id"])) {
+							$SQLString = "SELECT owner_id FROM portfolio WHERE id = " . $_SESSION["portfolio_id"];
+							echo "<a href='index.php?id=" . $_SESSION["portfolio_id"] . "'><li class='nav-item'>Openbaar portfolio</li></a>";
+						} else {
+							echo "<li class='nav-item'>Openbaar portfolio</li>";
+						}
 						echo "<a href='backend.php?p=opmerkingen'><li class='nav-item'>Opmerkingen</li></a>";
 						if (isset($_SESSION["role"])) {
 					 		if ($role == "admin") {
@@ -191,12 +198,12 @@ echo "<html>";
 				elseif ($p == "projecten") {
 					$pages->projecten();
 				}
-				elseif ($p == "portfolio") {
-					$pages->portfolio();
-				}
 				elseif ($p == "opmerkingen") {
 					$pages->opmerkingen();
 				}
+				elseif ($p == "search") {
+                    $pages->search();
+                }
 				elseif ($p == "gebruikers") {
 					if ($role == "admin") {
 						$pages->gebruikers();
@@ -236,6 +243,8 @@ echo "<html>";
 			echo '<script src="js/app.js"></script>';
 
 		require ('core/layout/footerbackend.php');
+
+		mysqli_close($DBconnect);
 
 	echo "</div>";
 	echo "</body>";
