@@ -1,7 +1,7 @@
 <?php
 
 $stmt = $db->prepare("SELECT * FROM persoonlijkeInfo WHERE user_id = ?;");
-$stmt->execute(array($_SESSION["id"]));
+$stmt->execute(array($_SESSION["userid"]));
 $opleiding = $interesses = $werkervaring = $hobbies = $verder = "";
 while($row=$stmt->fetch()){
     $opleiding = $row["Opleiding"];
