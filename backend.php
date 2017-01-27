@@ -163,7 +163,11 @@ echo "<html>";
 						echo "<a href='backend.php?p=projecten'><li class='nav-item'>Projecten</li></a>";
 						if (isset($_SESSION["portfolio_id"])) {
 							$SQLString = "SELECT owner_id FROM portfolio WHERE id = " . $_SESSION["portfolio_id"];
-							echo "<a href='index.php?id=" . $_SESSION["portfolio_id"] . "'><li class='nav-item'>Openbaar portfolio</li></a>";
+							$QueryResult = $functions->executeQuery($SQLString);
+							$row = mysqli_fetch_assoc($QueryResult);
+							$id = $row["owner_id"];
+
+							echo "<a href='index.php?id=" . $id . "'><li class='nav-item'>Openbaar portfolio</li></a>";
 						} else {
 							echo "<li class='nav-item'>Openbaar portfolio</li>";
 						}

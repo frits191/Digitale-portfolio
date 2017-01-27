@@ -269,10 +269,14 @@ class functions {
 		}
 	}
 
-	function getFolders() {
+	function getFolders() {		
 		$SQLString = "SELECT id, title, description, visible FROM project WHERE portfolio_id = '" . $_SESSION["portfolio_id"] . "' ORDER BY id DESC";
 		$QueryResult = $this->executeQuery($SQLString);
 		$row = mysqli_fetch_all($QueryResult);
+
+		if (isset($_POST["submitVisible"])) {
+			$this->toggleVisibility();
+		}
 
 		for ($i = count($row) - 1;$i >= 0;$i--) {
 			echo "<form action='backend.php?p=projecten' method='post'>";
@@ -443,6 +447,10 @@ class functions {
 		}
 	}
 
+	function toggleVisibilty() {
+		
+	}
+
 	function edituser() {
 		$email = htmlspecialchars($_POST["email"]);
 		$fname = htmlspecialchars($_POST["fname"]);
@@ -602,13 +610,5 @@ class functions {
 			$this->executeQuery($SQLString);
 		}
 	}
-}
-function redirect($url)
-{
-    $string = '<script type="text/javascript">';
-    $string .= 'window.location = "' . $url . '"';
-    $string .= '</script>';
-
-    echo $string;
 }
 ?>
