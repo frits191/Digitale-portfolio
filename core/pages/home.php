@@ -12,7 +12,18 @@ while($row=$stmt->fetch()){
 }
 $stmt->closeCursor();
 ?>
-
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Iets over mij
+            </div>
+            <div class="panel-body center">
+                <?php echo ucfirst($verder); ?>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-sm-12">
         <div class="panel panel-default">
@@ -61,14 +72,6 @@ $stmt->closeCursor();
                             </td>
                             <td>
                                 <?php echo ucfirst($hobbies); ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Iets over jezelf
-                            </td>
-                            <td>
-                                <?php echo ucfirst($verder); ?>
                             </td>
                         </tr>
                     </tbody>

@@ -447,7 +447,7 @@ class functions {
 		}
 	}
 
-	function toggleVisibilty() {
+	function toggleVisibility() {
 		
 	}
 

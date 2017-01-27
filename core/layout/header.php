@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <title><?php if(isset($_GET["page"])){echo ucfirst($_GET["page"]);}else{echo "Home";} ?></title>
         <link rel="stylesheet" href="front-end/res/style.css"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
@@ -47,19 +47,16 @@
         $stmt2->closeCursor();
         $stmt = $db->prepare("SELECT firstName, lastName, id FROM user WHERE role='student' ORDER BY firstName ASC;");
 
-        $stmt6 = $db->prepare('SELECT bg_color, font_color FROM portfolio WHERE owner_id = ?');
+        $stmt6 = $db->prepare('SELECT bg_color, font_color, logo FROM portfolio WHERE owner_id = ?');
         $stmt6->execute(array($_SESSION["userid"]));
         $bgc = $fc = "";
         while ($row = $stmt6->fetch()) {
             $bgc = $row["bg_color"];
             $fc = $row["font_color"];
+            $color = $row["logo"];
         }
         ?>
         <style>
-            /*achtergrondkleur*/
-            html, body {
-                background-color: lightgrey !important;
-            }
             /*panel header en footer kleuren*/
             .panel-heading ,
             .panel-footer {
@@ -88,10 +85,6 @@
             .navmenu-nav li a{
                 color: <?php echo $fc; ?> !important;
             }
-            /*persoonlijke banner mobiel*/
-            .navbar {
-                background-image: url("front-end/res/img/background.png") !important;
-            }
         </style>
     </head>
     <body>
@@ -101,7 +94,7 @@
                     <ul class="sidebar-nav">
                         <li class="sidebar-brand">
                             <a href="?page=home">
-                                <img src="front-end/res/img/header-logo-pc.png" alt="Logo" height="70px"/>
+                                <img src="front-end/res/img/header-logo-<?php echo $color; ?>.png" alt="Logo" height="70px"/>
                             </a>
                         </li>
                         <li class="dropdown">
@@ -134,7 +127,11 @@
                             <a href="?page=portfolio"><?php echo $portfolioNaam; ?></a>
                             <ul class="sidebar-secondary">
                                 <?php
+                                if(isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"]){
                                 $stmt4 = $db->prepare("SELECT * FROM Project WHERE portfolio_id = ?;");
+                                }else{
+                                    $stmt4 = $db->prepare("SELECT * FROM Project WHERE portfolio_id = ?  AND visible = true;");
+                                }
                                 $stmt4->execute(array($portfolioID));
                                 while ($row = $stmt4->fetch()) {
                                     echo "<li><a href='?page=portfolio&projectid=" . $row["id"] . "'>" . $row["title"] . "</a></li>";
@@ -163,7 +160,7 @@
         </div><div class="visible-xs-block">
             <nav id="myNavmenu" class="navmenu navmenu-default navmenu-fixed-left offcanvas" role="navigation">
                 <a class="navmenu-brand" href="?page=home">
-                    <img src="front-end/res/img/header-logo-pc.png" alt="Logo" height="70px"/>
+                    <img src="front-end/res/img/header-logo-<?php echo $color; ?>.png" alt="Logo" height="70px"/>
                 </a>
                 <ul class="nav navmenu-nav">
                     <li class="dropdown">
@@ -181,10 +178,9 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="?page=portfolio">Portfolio</a>
+                        <a href="?page=portfolio"><?php echo $portfolioNaam; ?></a>
                         <ul class="nav navmenu-secondary">
                             <?php
-                            $stmt4 = $db->prepare("SELECT * FROM Project WHERE portfolio_id = ?;");
                             $stmt4->execute(array($portfolioID));
                             while ($row = $stmt4->fetch()) {
                                 echo "<li><a href='?page=portfolio&projectid=" . $row["id"] . "'>" . $row["title"] . "</a></li>";
@@ -216,7 +212,6 @@
                 </button>
             </div>
         </div>
-        <!-- persoonlijke banner pc -->
         <div class="banner hidden-xs"><img src="front-end/res/img/banner.png" alt="Banner"/></div>
         <div id="container">
 
