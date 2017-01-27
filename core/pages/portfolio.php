@@ -10,7 +10,7 @@ while($row = $stmt->fetch()){
 }
 
 if(isset($_GET["projectid"])){
-    $stmt4 = $db->prepare("SELECT * FROM file WHERE project_id = ? ORDER BY type ASC;");
+    $stmt4 = $db->prepare("SELECT * FROM file WHERE project_id = ? AND visible = true ORDER BY type ASC;");
     $stmt4->execute(array($_GET["projectid"]));
     $stmt5 = $db->prepare("SELECT * FROM project WHERE id = ?;");
     $stmt5->execute(array($_GET["projectid"]));

@@ -169,7 +169,7 @@ echo "<html>";
 
 							echo "<a href='index.php?id=" . $id . "'><li class='nav-item'>Openbaar portfolio</li></a>";
 						} else {
-							echo "<li class='nav-item'>Openbaar portfolio</li>";
+							echo "<a href='index.php'><li class='nav-item'>Openbaar portfolio</li></a>";
 						}
 						echo "<a href='backend.php?p=opmerkingen'><li class='nav-item'>Opmerkingen</li></a>";
 						if (isset($_SESSION["role"])) {
